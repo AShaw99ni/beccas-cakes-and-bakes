@@ -8,7 +8,6 @@ body {
 
 .navbar {
     background-color: #E4CBE9;
-    min-height: 120px;
     align-items: stretch;
 }
 
@@ -31,7 +30,7 @@ body {
 }
 
 .navbar-brand img {
-    height: 100px;
+    height: 70px;
     width: auto;
 }
 
@@ -58,6 +57,14 @@ body {
     .navbar-nav {
         gap: 1.75rem;
         align-items: center;
+    }
+
+    .navbar {
+        min-height: 120px;
+    }
+
+    .navbar-brand img {
+        height: 100px;
     }
 
     .navbar-nav .nav-link {

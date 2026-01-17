@@ -7,58 +7,68 @@ body {
 }
 
 .navbar {
-  background-color: #E4CBE9;
-  min-height: 120px;
-  align-items: stretch;
+    background-color: #E4CBE9;
+    min-height: 120px;
+    align-items: stretch;
 }
 
 .navbar-brand {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-padding {
-  padding-left: 3rem;
-  padding-right: 3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
 }
 
-/* True center logo */
 .navbar-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-/* Larger logo */
 .navbar-brand img {
-  height: 120px;
-  width: auto;
+    height: 100px;
+    width: auto;
 }
 
-/* Vertically align links */
 .navbar-collapse {
-  align-items: center;
+    align-items: center;
 }
 
 .navbar-nav {
-  gap: 1.75rem;
-  align-items: center;
+    gap: 0;
 }
 
-.navbar > .container-xl {
-  align-items: stretch;
+.navbar-nav .nav-link {
+    padding: 0.75rem 0;
 }
 
 
-/* Pull links closer to logo */
+.navbar>.container-xl {
+    align-items: stretch;
+}
+
+
+/* Desktop only */
 @media (min-width: 992px) {
-  .navbar-nav.me-auto {
-    margin-right: 5rem;
-  }
+    .navbar-nav {
+        gap: 1.75rem;
+        align-items: center;
+    }
 
-  .navbar-nav.ms-auto {
-    margin-left: 5rem;
-  }
+    .navbar-nav .nav-link {
+        padding: 0;
+    }
+
+    .navbar-nav.me-auto {
+        margin-right: 5rem;
+    }
+
+    .navbar-nav.ms-auto {
+        margin-left: 5rem;
+    }
 }

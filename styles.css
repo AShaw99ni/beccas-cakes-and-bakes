@@ -51,6 +51,14 @@ body {
     align-items: stretch;
 }
 
+.g-recaptcha,
+#recaptcha-container,
+.recaptcha {
+  display: flex !important;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
 
 /* Desktop only */
 @media (min-width: 992px) {

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -5,13 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome | Becca's Cakes and Bakes</title>
     <link rel="icon" type="image/png" href="./img/Logo circle.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Brevo Styles -->
     <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="text-dark">
+
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-xl position-relative navbar-padding">
 
@@ -51,95 +61,68 @@
     </nav>
 
 
-    <div class="container text-center">
-        <div class="logo m-3"><img src="img/Logo circle.png" alt="" style="max-width: 50%"></div>
-        <h1>Becca's Cakes and Bakes</h1>
-        <p>Gluten and dairy free cakes & bakes coming soon</p>
-        <div class="social-section">
-            <h5 class="mb-3 fw-bold">Connect with me</h5>
-            <div class="row justify-content-center">
-                <div class="col-auto">
-                    <a href="https://www.instagram.com/beccascakesandbakes.ni/" target="_blank"
-                        class="social_btn instagram-btn primary-button"><i class="fab fa-instagram fa-2x"></i></a>
-                </div>
-                <div class="col-auto">
-                    <a href="https://www.tiktok.com/@beccascakesandbakes.ni" target="_blank"
-                        class="social_btn tiktok-btn primary-button"><i class="fab fa-tiktok fa-2x"></i></a>
-                </div>
-                <div class="col-auto">
-                    <a href="mailto:beccascakesandbakes.ni@gmail.com" target="_blank"
-                        class="social_btn tiktok-btn  primary-button"><i class="fa fa-envelope fa-2x"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="contact-form w-50 m-auto mt-3">
-            <h3 style="margin-bottom: 20px;"> Get notified when we open</h3>
-            <div class="row justify-content-center">
-                <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-                    <form
-                        action="https://da693347.sibforms.com/serve/MUIFABDuSbicOn4fLWsaq-jHgzn2y-H0P6aDkhYRZGbT0QbwUqw3-hYc07iARWG6B_fBhxl8984dSa87SojzSu-MIEQoa2_dp32Mmiz7MQCdPAjhqAaCEeptJ0Nv5JRKynvTh_H4wc0bOMI9543apz4UHHaR8U9wegutvD1O2iJV-CgoShI4I1alYOICMD5dooeg3fmXnS_hS73mrQ=="
-                        method="POST" data-type="subscription" class="text-center">
+    <!-- Hero / Form Section -->
+    <div class="container text-center my-5">
+        <img src="img/Logo circle.png" alt="" class="img-fluid mb-3" style="max-width: 50%;">
+        <h1 class="fw-bold text-dark">Becca's Cakes and Bakes</h1>
+        <p class="lead text-secondary">Gluten and dairy free cakes & bakes coming soon</p>
 
-                        <!-- Brevo required hidden fields -->
-                        <input type="hidden" name="email_address_check" value="">
-                        <input type="hidden" name="locale" value="en">
-                        <input type="hidden" name="html_type" value="simple">
-
-                        <!-- Email input -->
-                        <div class="mb-3">
-                            <label class="form-label">Email address</label>
-                            <input type="email" name="EMAIL" class="form-control" required
-                                placeholder="Enter your email">
-                        </div>
-
-                        <!-- reCAPTCHA -->
-                        <div style="padding: 8px 0;">
-                            <div class="sib-captcha sib-form-block">
-                                <div class="form__entry entry_block">
-                                    <div class="form__label-row ">
-                                        <script>
-                                            function handleCaptchaResponse() {
-                                                var event = new Event('captchaChange');
-                                                document.getElementById('sib-captcha').dispatchEvent(event);
-                                            }
-                                        </script>
-                                        <div class="g-recaptcha sib-visible-recaptcha" id="sib-captcha"
-                                            data-sitekey="6Ld5t1YsAAAAAGUzrGfnzBpzdrTNPM7vXNlXNwdS"
-                                            data-callback="handleCaptchaResponse" style="direction:ltr"></div>
-                                    </div>
-                                    <label class="entry__error entry__error--primary"
-                                        style="font-size:16px; text-align:left; font-family:Helvetica, sans-serif; color:#661d1d; background-color:#ffeded; border-radius:3px; border-color:#ff4949;">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-
-                <!-- Submit -->
-                <button type="submit" class="btn btn-primary" style="background-color:#AB1D79;border:none;">
-                    Subscribe
-                </button>
-
-                <p class="small text-muted mt-2">
-                    We respect your privacy. Unsubscribe anytime.
-                </p>
-
-                </form>
-
+        <!-- Social Links -->
+        <div class="mb-4">
+            <h5 class="fw-bold mb-3">Connect with me</h5>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="https://www.instagram.com/beccascakesandbakes.ni/" target="_blank"
+                    class="btn btn-outline-brand rounded-circle p-3"><i class="fab fa-instagram fa-2x"></i></a>
+                <a href="https://www.tiktok.com/@beccascakesandbakes.ni" target="_blank"
+                    class="btn btn-outline-brand rounded-circle p-3"><i class="fab fa-tiktok fa-2x"></i></a>
+                <a href="mailto:beccascakesandbakes.ni@gmail.com" target="_blank"
+                    class="btn btn-outline-brand rounded-circle p-3"><i class="fa fa-envelope fa-2x"></i></a>
             </div>
         </div>
 
+        <!-- Subscription Form -->
+        <div class="mx-auto p-4 rounded shadow-sm" style="max-width: 500px;">
+            <h3 class="mb-4 fw-bold text-dark">Get notified when we open</h3>
+            <p class="text-secondary mb-4">Subscribe to our mailing list and stay updated</p>
+
+            <form id="sib-form" method="POST"
+                action="https://da693347.sibforms.com/serve/MUIFABDuSbicOn4fLWsaq-jHgzn2y-H0P6aDkhYRZGbT0QbwUqw3-hYc07iARWG6B_fBhxl8984dSa87SojzSu-MIEQoa2_dp32Mmiz7MQCdPAjhqAaCEeptJ0Nv5JRKynvTh_H4wc0bOMI9543apz4UHHaR8U9wegutvD1O2iJV-CgoShI4I1alYOICMD5dooeg3fmXnS_hS73mrQ=="
+                data-type="subscription">
+
+                <div class="mb-3">
+                    <label for="EMAIL" class="form-label fw-bold">Email Address</label>
+                    <input type="email" class="form-control" id="EMAIL" name="EMAIL" placeholder="abc@xyz.com" required>
+                </div>
+
+                <div class="mb-3 form-check text-start">
+                    <input type="checkbox" class="form-check-input" id="OPT_IN" name="OPT_IN" required>
+                    <label class="form-check-label" for="OPT_IN">
+                        I agree to receive your emails and accept the data privacy statement.
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <div class="g-recaptcha" id="sib-captcha" data-sitekey="6Ld5t1YsAAAAAGUzrGfnzBpzdrTNPM7vXNlXNwdS"
+                        data-callback="handleCaptchaResponse"></div>
+                </div>
+
+                <button type="submit" class="btn btn-brand d-block m-auto">Subscribe</button>
+
+                <input type="text" name="email_address_check" value="" class="d-none">
+                <input type="hidden" name="locale" value="en">
+            </form>
+        </div>
     </div>
-    </div>
+
+    <!-- Scripts -->
     <script src="https://www.google.com/recaptcha/api.js?hl=en"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-        crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function handleCaptchaResponse() {
+            var event = new Event('captchaChange');
+            document.getElementById('sib-captcha').dispatchEvent(event);
+        }
+    </script>
 
 </body>
 

@@ -1,5 +1,57 @@
+:root {
+    --light-pink: #FFEAFE;
+    --navbar-pink: #E4CBE9;
+    --brand-pink: #AB1D79;
+}
+
 body {
-    background-color: #FFEAFE;
+    background-color: var(--light-pink);
+}
+
+nav.navbar-custom {
+    background-color: var(--navbar-pink) !important;
+}
+
+.btn-brand {
+    background-color: var(--brand-pink);
+    color: #fff;
+}
+
+.btn-brand:hover {
+    background-color: #991766;
+    color: #fff;
+}
+
+/* Outline button using brand pink */
+.btn-outline-brand {
+    color: var(--brand-pink);          /* Icon color */
+    border: 2px solid var(--brand-pink); /* Border color */
+    background-color: transparent;     /* Keep it outline style */
+    transition: all 0.3s ease;
+}
+
+.btn-outline-brand:hover,
+.btn-outline-brand:focus {
+    background-color: var(--brand-pink); /* Fill pink on hover */
+    color: #fff;                         /* White icon on hover */
+    border-color: var(--brand-pink);
+}
+
+.navbar-brand img {
+    height: 70px;
+    width: auto;
+}
+
+.g-recaptcha {
+    display: flex !important;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+@media (min-width: 992px) {
+    .navbar-brand img {
+        height: 100px;
+    }
 }
 
 .primary-button {
@@ -7,7 +59,7 @@ body {
 }
 
 .navbar {
-    background-color: #E4CBE9;
+    background-color: #E4CBE9 !important;
     align-items: stretch;
 }
 
@@ -54,9 +106,9 @@ body {
 .g-recaptcha,
 #recaptcha-container,
 .recaptcha {
-  display: flex !important;
-  justify-content: center;
-  margin: 0 auto 1rem auto;
+    display: flex !important;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
 }
 
 

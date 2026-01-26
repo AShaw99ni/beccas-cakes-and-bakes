@@ -105,16 +105,40 @@
                     <div class="g-recaptcha" id="sib-captcha" data-sitekey="6Ld5t1YsAAAAAGUzrGfnzBpzdrTNPM7vXNlXNwdS"
                         data-callback="handleCaptchaResponse"></div>
                 </div>
-
-                <button type="submit" class="btn btn-brand d-block m-auto">Subscribe</button>
+                <button type="submit" form="sib-form" class="btn btn-brand d-block m-auto">Subscribe</button>
 
                 <input type="text" name="email_address_check" value="" class="d-none">
                 <input type="hidden" name="locale" value="en">
             </form>
         </div>
     </div>
+</body>
 
-    <!-- Scripts -->
+<footer>
+    <script>
+        window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
+        window.LOCALE = 'en';
+        window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+
+        window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank. ";
+
+        window.GENERIC_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+
+
+
+
+        window.translation = {
+            common: {
+                selectedList: '{quantity} list selected',
+                selectedLists: '{quantity} lists selected',
+                selectedOption: '{quantity} selected',
+                selectedOptions: '{quantity} selected',
+            }
+        };
+
+        var AUTOHIDE = Boolean(0);
+    </script>
+    <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?hl=en"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -123,7 +147,6 @@
             document.getElementById('sib-captcha').dispatchEvent(event);
         }
     </script>
-
-</body>
+</footer>
 
 </html>

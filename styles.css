@@ -127,6 +127,10 @@ nav.navbar-custom {
     margin: 0 auto 1rem auto;
 }
 
+hr.dotted {
+    border-top: 2px dotted #000000;
+}
+
 
 /* Desktop only */
 @media (min-width: 992px) {

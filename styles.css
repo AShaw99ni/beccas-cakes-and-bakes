@@ -1,6 +1,6 @@
 :root {
     --light-pink: #FFEAFE;
-    --navbar-pink: #E4CBE9;
+    --navbar-pink: #e2c4f9d8;
     --brand-pink: #AB1D79;
 }
 
@@ -10,6 +10,13 @@ body {
 
 nav.navbar-custom {
     background-color: var(--navbar-pink) !important;
+}
+
+.custom-section {
+    background: #FFEAFE;
+    padding: 20px 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .btn-brand {
@@ -24,16 +31,21 @@ nav.navbar-custom {
 
 /* Outline button using brand pink */
 .btn-outline-brand {
-    color: var(--brand-pink);          /* Icon color */
-    border: 2px solid var(--brand-pink); /* Border color */
-    background-color: transparent;     /* Keep it outline style */
+    color: var(--brand-pink);
+    /* Icon color */
+    border: 2px solid var(--brand-pink);
+    /* Border color */
+    background-color: transparent;
+    /* Keep it outline style */
     transition: all 0.3s ease;
 }
 
 .btn-outline-brand:hover,
 .btn-outline-brand:focus {
-    background-color: var(--brand-pink); /* Fill pink on hover */
-    color: #fff;                         /* White icon on hover */
+    background-color: var(--brand-pink);
+    /* Fill pink on hover */
+    color: #fff;
+    /* White icon on hover */
     border-color: var(--brand-pink);
 }
 
@@ -59,8 +71,12 @@ nav.navbar-custom {
 }
 
 .navbar {
-    background-color: #E4CBE9 !important;
+    background-color: var(--navbar-pink) !important;
     align-items: stretch;
+    z-index: 1000;
+    /* ensures it stays above content */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .navbar-brand {

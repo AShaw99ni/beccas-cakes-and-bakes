@@ -349,22 +349,34 @@
     <!-- First Visit Modal + Brevo init -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var firstVisitModal = new bootstrap.Modal(document.getElementById('firstVisitModal'));
-            firstVisitModal.show();
-            localStorage.setItem("firstVisitShown", "true");
+            var firstVisitModalEl = document.getElementById('firstVisitModal');
+            var firstVisitModal = new bootstrap.Modal(firstVisitModalEl);
 
-            // Initialize Brevo form AFTER modal is in DOM
-            var sibScript = document.createElement('script');
-            sibScript.src = "https://sibforms.com/forms/end-form/build/main.js";
-            sibScript.defer = true;
-            document.body.appendChild(sibScript);
+            // Only show if not already shown
+            if (!localStorage.getItem("firstVisitShown")) {
+                firstVisitModal.show();
+                localStorage.setItem("firstVisitShown", "true");
+            }
+
+            // Wait for modal to fully be inserted into DOM
+            firstVisitModalEl.addEventListener('shown.bs.modal', function () {
+                // Load Brevo script after modal is fully visible
+                var sibScript = document.createElement('script');
+                sibScript.src = "https://sibforms.com/forms/end-form/build/main.js";
+                sibScript.defer = true;
+                document.body.appendChild(sibScript);
+            });
         });
 
         function handleCaptchaResponse() {
-            var event = new Event('captchaChange');
-            document.getElementById('sib-captcha').dispatchEvent(event);
+            var captchaEl = document.getElementById('sib-captcha');
+            if (captchaEl) {
+                var event = new Event('captchaChange');
+                captchaEl.dispatchEvent(event);
+            }
         }
     </script>
+
 
     <script>
         window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';

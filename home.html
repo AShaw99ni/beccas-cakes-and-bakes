@@ -522,17 +522,17 @@
         document.addEventListener("DOMContentLoaded", function () {
             // Check if the popup has been shown before
             console.log("Checking popup")
-            // if (!localStorage.getItem("firstVisitShown")) {
-            console.log("First time")
-            // Show the Bootstrap modal
-            var firstVisitModal = new bootstrap.Modal(document.getElementById('firstVisitModal'));
-            firstVisitModal.show();
+            if (!localStorage.getItem("firstVisitShown")) {
+                console.log("First time")
+                // Show the Bootstrap modal
+                var firstVisitModal = new bootstrap.Modal(document.getElementById('firstVisitModal'));
+                firstVisitModal.show();
 
-            // Mark that the popup has been shown
-            //     localStorage.setItem("firstVisitShown", "true");
-            // } else {
-            //     console.log("Not First time")
-            // }
+                // Mark that the popup has been shown
+                localStorage.setItem("firstVisitShown", "true");
+            } else {
+                console.log("Not First time")
+            }
         });
     </script>
 

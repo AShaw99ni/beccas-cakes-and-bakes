@@ -6,15 +6,89 @@
 
 body {
     background-color: var(--light-pink);
+    margin: 0;
+    padding: 0;
 }
 
-nav.navbar-custom {
-    background-color: var(--navbar-pink) !important;
+/* Navbar on top of banner */
+.navbar {
+    position: absolute;
+    /* overlay navbar on banner */
+    top: 5%;
+    /* stick to top of banner */
+    left: 50%;
+    /* center horizontally */
+    transform: translateX(-50%);
+    width: 90%;
+    /* navbar width 90% of screen */
+    background-color: rgba(226, 196, 249, 0.85);
+    /* slightly transparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    /* nice blurred background */
+    min-height: 60px;
+    padding: 0 2rem;
+    overflow: visible;
+    border-radius: 15px;
+    /* optional: matches banner style */
+    transition: background-color 0.3s ease;
 }
 
+.navbar:hover {
+    background-color: rgba(226, 196, 249, 0.95);
+}
+
+/* Navbar links container */
+.navbar-nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* Navbar link styling */
+.navbar-nav .nav-link {
+    padding: 0.75rem 0;
+    font-weight: 500;
+}
+
+/* Center logo (desktop) - floating/overhang */
+.navbar-brand.navbar-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+}
+
+/* Logo image styling */
+.navbar-brand.navbar-center img,
+.navbar-brand.d-lg-none img {
+    width: auto;
+    border-radius: 15px;
+}
+
+/* Desktop logo size */
+.navbar-brand.navbar-center img {
+    height: 120px;
+    /* more dramatic overhang */
+}
+
+/* Hover effect */
+.navbar-brand img:hover {
+    transform: scale(1.05);
+}
+
+/* Sections & Buttons */
 .custom-section {
     background: #FFEAFE;
-    padding: 40px 40px;
+    padding: 40px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.369);
 }
 
@@ -42,99 +116,70 @@ nav.navbar-custom {
     border-color: var(--brand-pink);
 }
 
-.navbar-brand img {
-    height: 70px;
-    width: auto;
-}
-
-.g-recaptcha {
-    display: flex !important;
-    justify-content: center;
-    margin: 0 auto 1rem auto;
-}
-
-.modal-content {
-    position: relative;
-    /* establish positioning context */
-    background-color: #e2c4f9;
-    /* your current background */
-}
-
-.modal-content .btn-close {
-    position: absolute;
-    top: 10px;
-    /* distance from top */
-    right: 10px;
-    /* distance from right */
-}
-
-@media (min-width: 992px) {
-    .navbar-brand img {
-        height: 100px;
-    }
-}
-
 .primary-button {
-    color: #AB1D79;
+    color: var(--brand-pink);
 }
 
-.navbar {
-    background-color: var(--navbar-pink) !important;
-    align-items: stretch;
-    z-index: 1000;
-    /* ensures it stays above content */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+/* Banner */
+.banner {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    /* full viewport height */
+    overflow: hidden;
+    top: 5%;
 }
 
-.navbar-brand {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
+/* Banner image fills the container */
+.banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* maintain aspect ratio and cover entire area */
+    display: block;
 }
 
-.navbar-padding {
-    padding-left: 3rem;
-    padding-right: 3rem;
-}
-
-.navbar-center {
+/* Overlay Box */
+.banner-overlay {
     position: absolute;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+    background-color: var(--navbar-pink);
+    padding: 30px 40px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.navbar-brand img {
-    height: 70px;
-    width: auto;
+.banner-overlay h2 {
+    margin: 0 0 10px 0;
+    font-size: 2rem;
+    color: #333;
 }
 
-.navbar-collapse {
-    align-items: center;
+.banner-overlay p {
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    color: #555;
 }
 
-.navbar-nav {
-    gap: 0;
+.order-btn {
+    display: inline-block;
+    background-color: var(--brand-pink);
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.navbar-nav .nav-link {
-    padding: 0.75rem 0;
+.order-btn:hover {
+    background-color: #991766;
 }
 
-
-.navbar>.container-xl {
-    align-items: stretch;
-}
-
-.g-recaptcha,
-#recaptcha-container,
-.recaptcha {
-    display: flex !important;
-    justify-content: center;
-    margin: 0 auto 1rem auto;
-}
-
+/* Other utilities */
 hr.dotted {
     border-top: 2px dotted #000000;
 }
@@ -155,106 +200,50 @@ hr.dotted {
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, .12);
 }
 
-.banner {
+.g-recaptcha,
+#recaptcha-container,
+.recaptcha {
+    display: flex !important;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+.modal-content {
     position: relative;
-    width: 100%;
-    max-height: 500px;
-    /* adjust as needed */
-    overflow: hidden;
+    background-color: #e2c4f9;
 }
 
-/* Banner image */
-.banner-image {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Overlay box */
-.banner-overlay {
+.modal-content .btn-close {
     position: absolute;
-    top: 50%;
-    /* vertically center */
-    left: 50%;
-    /* horizontally center */
-    transform: translate(-50%, -50%);
-    background-color: var(--navbar-pink) ;
-    /* white with 70% opacity */
-    padding: 30px 40px;
-    text-align: center;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* Overlay text */
-.banner-overlay h2 {
-    margin: 0 0 10px 0;
-    font-size: 2rem;
-    color: #333;
-}
-
-.banner-overlay p {
-    margin: 0 0 20px 0;
-    font-size: 1.1rem;
-    color: #555;
+    top: 10px;
+    right: 10px;
 }
 
 
-/* Desktop only */
-@media (min-width: 992px) {
+/* Responsive adjustments for tablets & phones */
+/* Desktop: large overhang */
+.navbar-brand.navbar-center img {
+    height: 120px;
+    /* default desktop overhang */
+}
+
+/* Shrink navbar logo and activate mobile nav below 1080px */
+@media (max-width: 1079.98px) {
+
+    /* Center logo becomes small and stays fixed for all smaller screens */
+    .navbar-brand.navbar-center img {
+        height: 80px;
+        /* small logo */
+    }
+
+    /* Mobile logo shown for collapsed nav */
+    .navbar-brand.d-lg-none img {
+        height: 40px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Optional: reduce spacing of nav links to prevent overlap */
     .navbar-nav {
-        gap: 1.75rem;
-        align-items: center;
-    }
-
-    .navbar {
-        min-height: 120px;
-    }
-
-    .navbar-brand img {
-        height: 100px;
-    }
-
-    .navbar-nav .nav-link {
-        padding: 0;
-    }
-
-    .navbar-nav.me-auto {
-        margin-right: 5rem;
-    }
-
-    .navbar-nav.ms-auto {
-        margin-left: 5rem;
-    }
-}
-
-/* Responsive tweaks for smaller screens */
-@media (max-width: 768px) {
-    .banner {
-        max-height: 350px;
-        /* smaller height on mobile */
-    }
-
-    .banner-overlay {
-        padding: 20px 15px;
-        /* reduce padding */
-        width: 90%;
-        /* make overlay fit smaller screens */
-        border-radius: 10px;
-    }
-
-    .banner-overlay h2 {
-        font-size: 1.5rem;
-        /* smaller heading */
-    }
-
-    .banner-overlay p {
-        font-size: 1rem;
-        /* smaller paragraph */
-    }
-
-    .order-btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
+        gap: 1rem;
     }
 }

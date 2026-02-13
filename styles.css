@@ -14,7 +14,7 @@ body {
 .navbar {
     position: absolute;
     /* overlay navbar on banner */
-    top: 5%;
+    top: 10%;
     /* stick to top of banner */
     left: 50%;
     /* center horizontally */
@@ -128,6 +128,8 @@ body {
     /* full viewport height */
     overflow: hidden;
     top: 5%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.369);
+
 }
 
 /* Banner image fills the container */
@@ -223,12 +225,12 @@ hr.dotted {
 /* Responsive adjustments for tablets & phones */
 /* Desktop: large overhang */
 .navbar-brand.navbar-center img {
-    height: 120px;
+    height: 160px;
     /* default desktop overhang */
 }
 
 /* Shrink navbar logo and activate mobile nav below 1080px */
-@media (max-width: 1079.98px) {
+@media (max-width: 1109.98px) {
 
     /* Center logo becomes small and stays fixed for all smaller screens */
     .navbar-brand.navbar-center img {

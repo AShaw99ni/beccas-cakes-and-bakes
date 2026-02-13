@@ -238,8 +238,7 @@ hr.dotted {
 
     /* Mobile logo shown for collapsed nav */
     .navbar-brand.d-lg-none img {
-        height: 40px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        height: 60px;
     }
 
     /* Optional: reduce spacing of nav links to prevent overlap */

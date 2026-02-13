@@ -14,9 +14,8 @@ nav.navbar-custom {
 
 .custom-section {
     background: #FFEAFE;
-    padding: 20px 20px;
-    margin-bottom: 40px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    padding: 40px 40px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.369);
 }
 
 .btn-brand {
@@ -156,6 +155,50 @@ hr.dotted {
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, .12);
 }
 
+.banner {
+    position: relative;
+    width: 100%;
+    max-height: 500px;
+    /* adjust as needed */
+    overflow: hidden;
+}
+
+/* Banner image */
+.banner-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Overlay box */
+.banner-overlay {
+    position: absolute;
+    top: 50%;
+    /* vertically center */
+    left: 50%;
+    /* horizontally center */
+    transform: translate(-50%, -50%);
+    background-color: var(--navbar-pink) ;
+    /* white with 70% opacity */
+    padding: 30px 40px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Overlay text */
+.banner-overlay h2 {
+    margin: 0 0 10px 0;
+    font-size: 2rem;
+    color: #333;
+}
+
+.banner-overlay p {
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    color: #555;
+}
+
 
 /* Desktop only */
 @media (min-width: 992px) {
@@ -182,5 +225,36 @@ hr.dotted {
 
     .navbar-nav.ms-auto {
         margin-left: 5rem;
+    }
+}
+
+/* Responsive tweaks for smaller screens */
+@media (max-width: 768px) {
+    .banner {
+        max-height: 350px;
+        /* smaller height on mobile */
+    }
+
+    .banner-overlay {
+        padding: 20px 15px;
+        /* reduce padding */
+        width: 90%;
+        /* make overlay fit smaller screens */
+        border-radius: 10px;
+    }
+
+    .banner-overlay h2 {
+        font-size: 1.5rem;
+        /* smaller heading */
+    }
+
+    .banner-overlay p {
+        font-size: 1rem;
+        /* smaller paragraph */
+    }
+
+    .order-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
     }
 }

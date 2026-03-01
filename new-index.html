@@ -14,12 +14,14 @@
 
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
-<!-- data-page tells components.js which nav link to mark as active -->
 <body class="text-dark" data-page="home">
 
-    <!-- ── First Visit Modal ── -->
+    <!-- ══════════════════════════════════════════════════════════
+         FIRST VISIT MODAL — email signup (Brevo / reCAPTCHA)
+    ══════════════════════════════════════════════════════════ -->
     <div class="modal fade" id="firstVisitModal" tabindex="-1"
          aria-labelledby="firstVisitModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -78,7 +80,7 @@
                                                     <input type="checkbox" class="input_replaced" value="1"
                                                            id="OPT_IN" name="OPT_IN" required>
                                                     <span class="checkbox checkbox_tick_positive"></span>
-                                                    <span class="modal-optin-text">
+                                                    <span>
                                                         <p>I agree to receive your emails and accept the data privacy statement.</p>
                                                     </span>
                                                 </label>
@@ -106,7 +108,8 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-brand" data-bs-dismiss="modal">Got it!</button>
-                    <button class="sib-form-block__button sib-form-block__button-with-loader btn btn-brand" form="sib-form" type="submit">
+                    <button class="sib-form-block__button sib-form-block__button-with-loader btn btn-brand"
+                            form="sib-form" type="submit">
                         <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512">
                             <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z"/>
                         </svg>
@@ -120,43 +123,206 @@
     <!-- ── Navbar (injected by components.js) ── -->
     <div id="site-nav"></div>
 
-    <!-- ── Homepage Banner ── -->
-    <div class="banner">
-        <img src="img/mock-banner-small.png" alt="Delicious baked goods" class="banner-image">
-        <div class="banner-overlay">
-            <h2>Becca's Cakes and Bakes</h2>
-            <div class="banner-hero-divider"></div>
-            <h6 class="fst-italic">Gluten and dairy free bakes, made locally, with care</h6>
-            <a href="#order" class="btn btn-brand">Order Now</a>
+    <!-- ══════════════════════════════════════════════════════════
+         HERO — full-height image banner with gradient overlay
+    ══════════════════════════════════════════════════════════ -->
+    <div class="hero">
+        <img src="img/mock-banner-small.png" alt="Becca's Cakes and Bakes" class="hero__img">
+        <div class="hero__gradient"></div>
+        <div class="hero__content">
+            <span class="hero__eyebrow">Gluten &amp; dairy free · Made in Northern Ireland</span>
+            <h1 class="hero__title">
+                Becca's Cakes<br>
+                <em>and Bakes</em>
+            </h1>
+            <div class="hero__divider"></div>
+            <p class="hero__tagline">Bakes so good, you won't miss a thing</p>
+            <div class="hero__actions">
+                <a href="./contact.html" class="btn btn-brand btn-lg rounded-pill px-4">Place an Order</a>
+                <a href="./our-story.html" class="hero__ghost-btn">Our Story →</a>
+            </div>
+        </div>
+        <a href="#about" class="hero__scroll-cue" aria-label="Scroll down">
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         TRUST STRIP — four quick reassurance signals
+    ══════════════════════════════════════════════════════════ -->
+    <div class="trust-strip" id="about">
+        <div class="container">
+            <div class="trust-strip__grid">
+                <div class="trust-item">
+                    <i class="fas fa-seedling trust-item__icon"></i>
+                    <div class="trust-item__text">
+                        <div class="trust-item__heading">100% Gluten Free</div>
+                        <div class="trust-item__sub">Every single bake</div>
+                    </div>
+                </div>
+                <div class="trust-divider"></div>
+                <div class="trust-item">
+                    <i class="fas fa-heart trust-item__icon"></i>
+                    <div class="trust-item__text">
+                        <div class="trust-item__heading">100% Dairy Free</div>
+                        <div class="trust-item__sub">No compromise on taste</div>
+                    </div>
+                </div>
+                <div class="trust-divider"></div>
+                <div class="trust-item">
+                    <i class="fas fa-map-marker-alt trust-item__icon"></i>
+                    <div class="trust-item__text">
+                        <div class="trust-item__heading">Made Locally</div>
+                        <div class="trust-item__sub">Northern Ireland</div>
+                    </div>
+                </div>
+                <div class="trust-divider"></div>
+                <div class="trust-item">
+                    <i class="fas fa-birthday-cake trust-item__icon"></i>
+                    <div class="trust-item__text">
+                        <div class="trust-item__heading">Custom Orders</div>
+                        <div class="trust-item__sub">Made just for you</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ── Our Story teaser ── -->
-    <section class="custom-section text-center">
+    <!-- ══════════════════════════════════════════════════════════
+         OUR STORY TEASER — two column, text + image
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-story">
         <div class="container">
-            <span class="section-label">Who we are</span>
-            <h2>Our Story</h2>
-            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...</p>
-            <a href="./our-story.html" class="btn btn-brand mt-2">Find out more</a>
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="section-label">Who we are</span>
+                    <h2 class="section-heading">A bakery born from<br><em>necessity and love</em></h2>
+                    <p class="section-body">
+                        When Becca discovered she could no longer eat gluten or dairy, she refused to settle for
+                        tasteless alternatives. After months of experimenting in her kitchen, she created something
+                        truly special — bakes that nobody could tell were free from anything at all.
+                    </p>
+                    <p class="section-body mt-3">
+                        Based in Northern Ireland, every bake leaves Becca's kitchen made with care, creativity,
+                        and an obsessive commitment to flavour. Because everyone deserves a proper slice.
+                    </p>
+                    <a href="./our-story.html" class="btn btn-brand mt-4 rounded-pill px-4">Read our story</a>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="story-img-wrap">
+                        <div class="img-placeholder story-img-placeholder">
+                            <i class="fas fa-camera"></i>
+                            <span>Add a photo here</span>
+                        </div>
+                        <div class="story-badge">
+                            <strong>100%</strong>
+                            Free from<br>gluten &amp; dairy
+                        </div>
+                        <div class="story-img-accent"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- ── Allergen Advice teaser ── -->
-    <section class="custom-section text-center">
+    <!-- ══════════════════════════════════════════════════════════
+         WHAT WE BAKE — four category cards
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-categories">
         <div class="container">
-            <span class="section-label">Eating with confidence</span>
-            <h2>Allergen Advice</h2>
-            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...</p>
-            <a href="./allergen-advice.html" class="btn btn-brand mt-2">Find out more</a>
+            <div class="text-center mb-5">
+                <span class="section-label">What we bake</span>
+                <h2 class="section-heading">Something for every occasion</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-lg-3">
+                    <a href="./gallery.html" class="cat-card">
+                        <div class="cat-card__icon">🎂</div>
+                        <div class="cat-card__name">Celebration<br>Cakes</div>
+                        <div class="cat-card__arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <a href="./gallery.html" class="cat-card">
+                        <div class="cat-card__icon">🍫</div>
+                        <div class="cat-card__name">Traybakes<br>&amp; Brownies</div>
+                        <div class="cat-card__arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <a href="./gallery.html" class="cat-card">
+                        <div class="cat-card__icon">🍪</div>
+                        <div class="cat-card__name">Biscuits<br>&amp; Cookies</div>
+                        <div class="cat-card__arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <a href="./gallery.html" class="cat-card">
+                        <div class="cat-card__icon">🍞</div>
+                        <div class="cat-card__name">Breads<br>&amp; Scones</div>
+                        <div class="cat-card__arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- ── TikTok videos ── -->
-    <section class="custom-section custom-section--lavender">
+    <!-- ══════════════════════════════════════════════════════════
+         ALLERGEN ADVICE TEASER
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-allergen">
         <div class="container">
-            <div class="text-center mb-4">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-5">
+                    <!-- Visual pill grid to hint at the allergen page UI -->
+                    <div class="allergen-preview">
+                        <div class="allergen-pill allergen-pill--free">
+                            <i class="fas fa-check-circle"></i> Gluten free
+                        </div>
+                        <div class="allergen-pill allergen-pill--free">
+                            <i class="fas fa-check-circle"></i> Dairy free
+                        </div>
+                        <div class="allergen-pill allergen-pill--may">
+                            <i class="fas fa-exclamation-circle"></i> May contain nuts
+                        </div>
+                        <div class="allergen-pill allergen-pill--may">
+                            <i class="fas fa-exclamation-circle"></i> May contain soya
+                        </div>
+                        <div class="allergen-pill allergen-pill--contains">
+                            <i class="fas fa-info-circle"></i> Contains eggs
+                        </div>
+                        <div class="allergen-pill allergen-pill--contains">
+                            <i class="fas fa-info-circle"></i> Full list available
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 offset-lg-1">
+                    <span class="section-label">Eating with confidence</span>
+                    <h2 class="section-heading">Know exactly what's<br>in every bake</h2>
+                    <p class="section-body">
+                        Every product comes with a full ingredients list and allergen breakdown.
+                        We're committed to transparency so you can eat with total confidence —
+                        whether you have a serious allergy or simply want to know what you're eating.
+                    </p>
+                    <a href="./allergen-advice.html" class="btn btn-brand mt-4 rounded-pill px-4">
+                        View Allergen Advice
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         TIKTOK SECTION
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-tiktok">
+        <div class="container">
+            <div class="text-center mb-5">
                 <span class="section-label">Behind the scenes</span>
-                <h2>Watch Our Bakes in Action</h2>
+                <h2 class="section-heading">Watch our bakes in action</h2>
+                <p class="section-body mx-auto tiktok-intro">
+                    Follow along on TikTok for recipes, behind-the-scenes content, and live baking sessions.
+                </p>
             </div>
             <div class="row g-4">
                 <div class="col-12 col-sm-6 col-lg-3">
@@ -164,7 +330,10 @@
                        target="_blank" class="tiktok-link text-decoration-none text-dark"
                        data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7598640369152183574">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
-                            <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                            <div class="tiktok-thumb-wrap">
+                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                                <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
+                            </div>
                             <div class="card-body text-center">
                                 <span class="btn btn-outline-dark btn-sm">Watch on TikTok ▶</span>
                             </div>
@@ -176,7 +345,10 @@
                        target="_blank" class="tiktok-link text-decoration-none text-dark"
                        data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7606069897482964246">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
-                            <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                            <div class="tiktok-thumb-wrap">
+                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                                <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
+                            </div>
                             <div class="card-body text-center">
                                 <span class="btn btn-outline-dark btn-sm">Watch on TikTok ▶</span>
                             </div>
@@ -188,7 +360,10 @@
                        target="_blank" class="tiktok-link text-decoration-none text-dark"
                        data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7600133259111959830">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
-                            <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                            <div class="tiktok-thumb-wrap">
+                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                                <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
+                            </div>
                             <div class="card-body text-center">
                                 <span class="btn btn-outline-dark btn-sm">Watch on TikTok ▶</span>
                             </div>
@@ -200,13 +375,46 @@
                        target="_blank" class="tiktok-link text-decoration-none text-dark"
                        data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7597880738809236758">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
-                            <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                            <div class="tiktok-thumb-wrap">
+                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok" loading="lazy">
+                                <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
+                            </div>
                             <div class="card-body text-center">
                                 <span class="btn btn-outline-dark btn-sm">Watch on TikTok ▶</span>
                             </div>
                         </div>
                     </a>
                 </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="https://www.tiktok.com/@beccascakesandbakes.ni"
+                   target="_blank" class="btn btn-brand-outline rounded-pill px-4">
+                    <i class="fab fa-tiktok me-2"></i>Follow us on TikTok
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ORDER CTA BANNER
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-cta" id="order">
+        <div class="section-cta__inner container">
+            <span class="section-label">Ready to order?</span>
+            <h2 class="section-heading section-cta__heading">
+                Let's bake something<br><em>just for you</em>
+            </h2>
+            <p class="section-cta__body">
+                Custom cakes, traybake batches, gifting boxes — all made to order and all gluten and
+                dairy free. Get in touch and we'll make it happen.
+            </p>
+            <div class="section-cta__actions">
+                <a href="./contact.html" class="btn btn-light text-dark fw-bold rounded-pill px-4 py-2">
+                    Place an Order
+                </a>
+                <a href="./upcoming-events.html" class="section-cta__ghost-btn">
+                    Find us at a market →
+                </a>
             </div>
         </div>
     </section>
@@ -220,7 +428,7 @@
     <script src="https://www.google.com/recaptcha/api.js?hl=en"></script>
     <script src="./components.js"></script>
 
-    <!-- TikTok thumbnails -->
+    <!-- TikTok thumbnails via oEmbed API -->
     <script>
         document.querySelectorAll('.tiktok-link').forEach(link => {
             const videoUrl = link.dataset.tiktokUrl;
@@ -232,7 +440,7 @@
         });
     </script>
 
-    <!-- First visit modal -->
+    <!-- First visit modal — show once per browser session -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const modalEl = document.getElementById('firstVisitModal');
@@ -262,17 +470,25 @@
         window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
         window.LOCALE = 'en';
         window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = 'The information provided is invalid. Please review the field format and try again.';
-        window.REQUIRED_ERROR_MESSAGE = 'This field cannot be left blank. ';
+        window.REQUIRED_ERROR_MESSAGE  = 'This field cannot be left blank. ';
         window.GENERIC_INVALID_MESSAGE = 'The information provided is invalid. Please review the field format and try again.';
         window.translation = {
             common: {
-                selectedList: '{quantity} list selected',
-                selectedLists: '{quantity} lists selected',
-                selectedOption: '{quantity} selected',
-                selectedOptions: '{quantity} selected',
+                selectedList: '{quantity} list selected', selectedLists: '{quantity} lists selected',
+                selectedOption: '{quantity} selected',   selectedOptions: '{quantity} selected',
             }
         };
         var AUTOHIDE = Boolean(0);
+    </script>
+
+    <!-- Scroll reveal for content sections -->
+    <script>
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.section-story, .section-categories, .section-allergen, .section-tiktok, .section-cta').forEach(el => io.observe(el));
     </script>
 
 </body>

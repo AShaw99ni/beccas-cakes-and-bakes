@@ -17,7 +17,7 @@
 
     /* ── Navigation links ─────────────────────────────────────────────────── */
     const NAV_LINKS = [
-        { label: 'Home',            href: './index.html',            page: 'home' },
+        { label: 'Home',            href: './new-index.html',            page: 'home' },
         { label: 'Our Story',       href: './our-story.html',        page: 'our-story' },
         { label: 'Allergen Advice', href: './allergen-advice.html',  page: 'allergen-advice' },
         { label: 'Upcoming Events', href: './upcoming-events.html',  page: 'upcoming-events' },
@@ -77,7 +77,7 @@
                     </ul>
 
                     <!-- Center logo (desktop only, overhangs navbar) -->
-                    <a class="navbar-brand navbar-center d-none d-lg-block" href="./index.html">
+                    <a class="navbar-brand navbar-center d-none d-lg-block" href="./new-index.html">
                         <img src="./img/Logo circle.png" alt="Becca's Cakes and Bakes">
                     </a>
 

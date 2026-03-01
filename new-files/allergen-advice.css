@@ -1,0 +1,250 @@
+/* =============================================================================
+   allergen-advice.css
+   Page-specific styles for allergen-advice.html.
+   Shared styles live in shared.css.
+   ============================================================================= */
+
+
+/* ── Main content area ── */
+.allergen-page {
+    background: var(--cream);
+    padding: 60px 0 80px;
+}
+
+
+/* ── Search bar ── */
+.search-wrap {
+    max-width: 480px;
+    margin: 0 auto 40px;
+    position: relative;
+}
+
+.search-wrap input {
+    width: 100%;
+    padding: 0.85rem 1.2rem 0.85rem 3rem;
+    border: 2px solid var(--pink-light);
+    border-radius: 50px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    background: white;
+    outline: none;
+    color: var(--deep);
+    transition: border-color 0.25s;
+}
+
+.search-wrap input:focus {
+    border-color: var(--pink);
+}
+
+.search-wrap .search-icon {
+    position: absolute;
+    left: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--pink);
+    font-size: 0.95rem;
+}
+
+
+/* ── Category filter tabs ── */
+.category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.cat-btn {
+    border: 2px solid var(--pink-light);
+    background: white;
+    color: var(--muted);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 0.45rem 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-btn:hover,
+.cat-btn.active {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+}
+
+
+/* ── Product grid ── */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+
+/* ── Product card ── */
+.product-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(171, 29, 121, 0.12);
+    border-color: var(--pink-light);
+}
+
+.product-card.expanded {
+    border-color: var(--pink);
+}
+
+.product-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--deep);
+    margin: 0 0 4px;
+    line-height: 1.3;
+}
+
+.product-category {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-family: 'Lato', sans-serif;
+}
+
+.expand-icon {
+    color: var(--pink);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 4px;
+    transition: transform 0.2s ease;
+}
+
+.product-card.expanded .expand-icon {
+    transform: rotate(180deg);
+}
+
+
+/* ── Allergen pills ── */
+.allergen-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.pill {
+    font-size: 0.75rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50px;
+    letter-spacing: 0.04em;
+}
+
+.pill-free     { background: #edf7f0; color: #1a7a3a; border: 1px solid #b5e2c4; }
+.pill-contains { background: #fff3f0; color: #b33a1a; border: 1px solid #f5c2b4; }
+.pill-may      { background: #fffbec; color: #8a6400; border: 1px solid #f0dfa0; }
+
+
+/* ── Expanded ingredient detail ── */
+.product-detail {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #f0e4f8;
+}
+
+.product-card.expanded .product-detail {
+    display: block;
+}
+
+.detail-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 4px;
+    margin-top: 10px;
+}
+
+.detail-label:first-child { margin-top: 0; }
+
+.ingredients-list {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--body-text);
+    line-height: 1.6;
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+}
+
+
+/* ── Pill legend ── */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 36px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.85rem;
+    font-family: 'Lato', sans-serif;
+    color: var(--body-text);
+}
+
+
+/* ── No results state ── */
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8a6a96;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    display: none;
+}
+
+
+/* ── Cross-contamination notice ── */
+.notice-banner {
+    background: #fff8e7;
+    border: 1px solid #f0dfa0;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 0.88rem;
+    color: #6b5000;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    max-width: 700px;
+    margin: 0 auto 44px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.notice-banner strong { font-weight: 700; }

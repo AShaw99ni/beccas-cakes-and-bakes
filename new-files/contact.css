@@ -1,0 +1,523 @@
+/* =============================================================================
+   contact.css
+   Page-specific styles for contact.html.
+   Shared styles live in shared.css.
+   ============================================================================= */
+
+
+/* ── Page wrapper ── */
+.contact-page {
+    padding: 72px 0 100px;
+}
+
+
+/* =============================================================================
+   STEP INDICATOR
+   ============================================================================= */
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 52px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--pink-light);
+    background: white;
+    color: var(--muted);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.step.active .step-num {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+    box-shadow: 0 4px 14px rgba(171, 29, 121, 0.3);
+}
+
+.step.done .step-num {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+}
+
+.step-label {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.step.active .step-label { color: var(--pink); }
+
+.step-line {
+    width: 80px;
+    height: 2px;
+    background: var(--pink-light);
+    margin-bottom: 22px;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+}
+
+.step-line.done { background: var(--pink); }
+
+@media (max-width: 480px) {
+    .step-line  { width: 40px; }
+    .step-label { font-size: 0.62rem; }
+}
+
+
+/* =============================================================================
+   FORM CARD
+   ============================================================================= */
+
+.form-card {
+    background: white;
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow: 0 8px 40px rgba(171, 29, 121, 0.08);
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    .form-card { padding: 28px 20px; }
+}
+
+.form-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    color: var(--deep);
+    margin-bottom: 6px;
+}
+
+.step-desc {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+
+/* =============================================================================
+   TOPIC CARDS (Step 1)
+   ============================================================================= */
+
+.topic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 500px) {
+    .topic-grid { grid-template-columns: 1fr; }
+}
+
+.topic-card {
+    border: 2px solid var(--pink-light);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    background: white;
+    user-select: none;
+    transition: all 0.22s ease;
+}
+
+.topic-card:hover {
+    border-color: var(--pink);
+    background: #fdf5ff;
+    transform: translateY(-2px);
+}
+
+.topic-card.selected {
+    border-color: var(--pink);
+    background: linear-gradient(135deg, #fdf5ff, #fff0fa);
+    box-shadow: 0 4px 18px rgba(171, 29, 121, 0.13);
+}
+
+.topic-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.topic-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--deep);
+    margin-bottom: 4px;
+}
+
+.topic-desc {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.4;
+}
+
+.topic-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--pink-light);
+    margin: 10px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.topic-card.selected .topic-check {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+}
+
+.topic-check i            { font-size: 0.65rem; opacity: 0; transition: opacity 0.2s; }
+.topic-card.selected .topic-check i { opacity: 1; }
+
+
+/* =============================================================================
+   FORM FIELDS
+   ============================================================================= */
+
+.field-group {
+    margin-bottom: 22px;
+}
+
+.field-group--top-gap {
+    margin-top: 24px;
+}
+
+.field-group label {
+    display: block;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+}
+
+.req      { color: var(--pink); margin-left: 2px; }
+.optional { color: #aaa; font-weight: 300; }
+
+.form-control,
+.form-select {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.98rem;
+    color: var(--deep);
+    border: 2px solid var(--pink-light);
+    border-radius: 12px;
+    padding: 0.7rem 1rem;
+    background: white;
+    width: 100%;
+    transition: border-color 0.22s, box-shadow 0.22s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px rgba(171, 29, 121, 0.1);
+    outline: none;
+}
+
+.form-control.error,
+.form-select.error { border-color: #e05050; }
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Two-column row */
+.date-time-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+@media (max-width: 500px) {
+    .date-time-row { grid-template-columns: 1fr; }
+}
+
+/* Extra fields (custom / traybake) — hidden until topic selected */
+.extra-fields {
+    display: none;
+}
+
+.field-divider {
+    border-color: var(--pink-light);
+    margin: 28px 0;
+}
+
+/* Serving counter */
+.serving-picker {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--pink-light);
+    border-radius: 12px;
+    overflow: hidden;
+    width: fit-content;
+    background: white;
+}
+
+.serving-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: white;
+    color: var(--pink);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.serving-btn:hover { background: #fdf0ff; }
+
+.serving-val {
+    min-width: 56px;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--deep);
+    border-left: 2px solid var(--pink-light);
+    border-right: 2px solid var(--pink-light);
+    padding: 0 12px;
+    line-height: 44px;
+}
+
+/* Pill option selectors */
+.pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.pill-option {
+    border: 2px solid var(--pink-light);
+    border-radius: 50px;
+    padding: 5px 16px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.18s ease;
+}
+
+.pill-option:hover   { border-color: var(--pink); color: var(--pink); }
+.pill-option.selected { background: var(--pink); border-color: var(--pink); color: white; }
+
+/* Character counter */
+.char-counter {
+    font-size: 0.75rem;
+    color: #aaa;
+    text-align: right;
+    margin-top: 4px;
+    font-family: 'Lato', sans-serif;
+}
+
+/* Validation error message */
+.error-msg {
+    font-size: 0.78rem;
+    color: #c0392b;
+    font-family: 'Lato', sans-serif;
+    margin-top: 4px;
+    display: none;
+}
+
+.error-msg.show { display: block; }
+
+
+/* =============================================================================
+   FORM NAVIGATION BUTTONS
+   ============================================================================= */
+
+.form-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 36px;
+    gap: 12px;
+}
+
+.form-nav--end {
+    justify-content: flex-end;
+}
+
+.btn-back {
+    border: 2px solid var(--pink-light);
+    background: white;
+    color: var(--muted);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.65rem 1.6rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover { border-color: var(--pink); color: var(--pink); }
+
+.btn-next,
+.btn-submit {
+    background: var(--pink);
+    color: white;
+    border: none;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.65rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+    background: var(--pink-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(171, 29, 121, 0.3);
+}
+
+
+/* =============================================================================
+   STEP PANELS
+   ============================================================================= */
+
+.step-panel        { display: none; }
+.step-panel.active { display: block; animation: fadeUp 0.35s ease both; }
+
+
+/* =============================================================================
+   REVIEW BOX (Step 3)
+   ============================================================================= */
+
+.review-box {
+    background: #fdf5ff;
+    border: 2px solid var(--pink-light);
+    border-radius: 16px;
+    padding: 24px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--deep);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+
+/* =============================================================================
+   SUCCESS PANEL
+   ============================================================================= */
+
+.success-panel {
+    text-align: center;
+    padding: 20px 0;
+    display: none;
+}
+
+.success-panel.active {
+    display: block;
+    animation: fadeUp 0.5s ease both;
+}
+
+.success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(171, 29, 121, 0.3);
+}
+
+.success-panel h2 { color: var(--deep); margin-bottom: 12px; }
+.success-panel p  { font-weight: 300; color: var(--muted); line-height: 1.7; max-width: 400px; margin: 0 auto 28px; }
+
+
+/* =============================================================================
+   SOCIAL STRIP
+   ============================================================================= */
+
+.social-strip {
+    background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
+    padding: 48px 0;
+    text-align: center;
+}
+
+.social-strip h3 {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.social-strip p {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+.social-strip a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    margin: 0 5px;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.social-strip a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+}

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Us | Becca's Cakes and Bakes</title>
+    <link rel="icon" type="image/png" href="./img/Logo circle.png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="contact.css">
+</head>
+
+<body class="text-dark" data-page="contact">
+
+    <!-- ── Navbar (injected by components.js) ── -->
+    <div id="site-nav"></div>
+
+    <!-- ── Page Hero ── -->
+    <div class="page-hero">
+        <div class="page-hero__content">
+            <span class="hero-subtitle">Let's make something together</span>
+            <div class="hero-divider"></div>
+            <h1>Get in Touch</h1>
+            <p class="hero-body">
+                Whether it's a custom cake, a question about allergens, or just a hello — we'd love to hear from you.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Contact form ── -->
+    <section class="contact-page">
+        <div class="container">
+
+            <!-- Step indicator -->
+            <div class="step-indicator" id="stepIndicator">
+                <div class="step active" id="si-1">
+                    <div class="step-num">1</div>
+                    <div class="step-label">Topic</div>
+                </div>
+                <div class="step-line" id="sl-1"></div>
+                <div class="step" id="si-2">
+                    <div class="step-num">2</div>
+                    <div class="step-label">Details</div>
+                </div>
+                <div class="step-line" id="sl-2"></div>
+                <div class="step" id="si-3">
+                    <div class="step-num">3</div>
+                    <div class="step-label">Review</div>
+                </div>
+            </div>
+
+            <!-- Form card -->
+            <div class="form-card">
+
+                <!-- Step 1: Topic selection -->
+                <div class="step-panel active" id="panel-1">
+                    <h2>What can we help with?</h2>
+                    <p class="step-desc">Choose a topic and we'll tailor the form to get Becca everything she needs.</p>
+
+                    <div class="topic-grid" id="topicGrid">
+                        <div class="topic-card" data-topic="custom" tabindex="0">
+                            <span class="topic-icon">🎂</span>
+                            <div class="topic-title">Custom Cake Order</div>
+                            <div class="topic-desc">Birthday, wedding, celebration — let's design your dream cake</div>
+                            <div class="topic-check"><i class="fas fa-check"></i></div>
+                        </div>
+                        <div class="topic-card" data-topic="traybake" tabindex="0">
+                            <span class="topic-icon">🍫</span>
+                            <div class="topic-title">Traybake / Batch Order</div>
+                            <div class="topic-desc">Brownies, blondies, millionaire's and more for events or gifting</div>
+                            <div class="topic-check"><i class="fas fa-check"></i></div>
+                        </div>
+                        <div class="topic-card" data-topic="event" tabindex="0">
+                            <span class="topic-icon">🎉</span>
+                            <div class="topic-title">Event / Market Enquiry</div>
+                            <div class="topic-desc">Interested in a collaboration, market, or pop-up event</div>
+                            <div class="topic-check"><i class="fas fa-check"></i></div>
+                        </div>
+                        <div class="topic-card" data-topic="other" tabindex="0">
+                            <span class="topic-icon">💬</span>
+                            <div class="topic-title">General Enquiry</div>
+                            <div class="topic-desc">Allergen questions, feedback, press, or anything else</div>
+                            <div class="topic-check"><i class="fas fa-check"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="form-nav form-nav--end">
+                        <button class="btn-next" id="step1Next">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Details -->
+                <div class="step-panel" id="panel-2">
+                    <h2 id="step2Title">Tell us more</h2>
+                    <p class="step-desc">Fill in as much detail as you can — the more info Becca has, the better she can help.</p>
+
+                    <!-- Base fields (always shown) -->
+                    <div class="date-time-row">
+                        <div class="field-group">
+                            <label for="fname">First name <span class="req">*</span></label>
+                            <input type="text" id="fname" class="form-control" placeholder="e.g. Sarah">
+                            <div class="error-msg" id="err-fname">Please enter your first name.</div>
+                        </div>
+                        <div class="field-group">
+                            <label for="lname">Last name</label>
+                            <input type="text" id="lname" class="form-control" placeholder="e.g. Murphy">
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="email">Email address <span class="req">*</span></label>
+                        <input type="email" id="email" class="form-control" placeholder="e.g. sarah@email.com">
+                        <div class="error-msg" id="err-email">Please enter a valid email address.</div>
+                    </div>
+                    <div class="field-group">
+                        <label for="phone">Phone number <span class="optional">(optional)</span></label>
+                        <input type="tel" id="phone" class="form-control" placeholder="e.g. 07700 900123">
+                    </div>
+
+                    <!-- Custom cake extra fields (shown only for custom topic) -->
+                    <div id="extraFields-custom" class="extra-fields">
+                        <hr class="field-divider">
+                        <div class="field-group">
+                            <label>Occasion <span class="req">*</span></label>
+                            <div class="pill-group" id="occasionPills">
+                                <div class="pill-option" data-val="Birthday">Birthday</div>
+                                <div class="pill-option" data-val="Wedding">Wedding</div>
+                                <div class="pill-option" data-val="Anniversary">Anniversary</div>
+                                <div class="pill-option" data-val="Baby shower">Baby Shower</div>
+                                <div class="pill-option" data-val="Graduation">Graduation</div>
+                                <div class="pill-option" data-val="Other">Other</div>
+                            </div>
+                            <div class="error-msg" id="err-occasion">Please select an occasion.</div>
+                        </div>
+                        <div class="date-time-row">
+                            <div class="field-group">
+                                <label for="eventDate">Date needed <span class="req">*</span></label>
+                                <input type="date" id="eventDate" class="form-control">
+                                <div class="error-msg" id="err-date">Please select a date.</div>
+                            </div>
+                            <div class="field-group">
+                                <label>Number of servings</label>
+                                <div class="serving-picker">
+                                    <button class="serving-btn" id="servDown" type="button">−</button>
+                                    <div class="serving-val" id="servVal">12</div>
+                                    <button class="serving-btn" id="servUp" type="button">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label>Cake flavour(s)</label>
+                            <div class="pill-group" id="flavourPills">
+                                <div class="pill-option" data-val="Victoria Sponge">Victoria Sponge</div>
+                                <div class="pill-option" data-val="Chocolate Fudge">Chocolate Fudge</div>
+                                <div class="pill-option" data-val="Lemon Drizzle">Lemon Drizzle</div>
+                                <div class="pill-option" data-val="Carrot Cake">Carrot Cake</div>
+                                <div class="pill-option" data-val="Not sure yet">Not sure yet</div>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="cakeDesc">Design / decoration ideas</label>
+                            <textarea id="cakeDesc" class="form-control" placeholder="Describe colours, themes, wording, tiers, or share a photo idea…" maxlength="500"></textarea>
+                            <div class="char-counter"><span id="cakeDescCount">0</span> / 500</div>
+                        </div>
+                    </div>
+
+                    <!-- Traybake extra fields (shown only for traybake topic) -->
+                    <div id="extraFields-traybake" class="extra-fields">
+                        <hr class="field-divider">
+                        <div class="field-group">
+                            <label>What would you like?</label>
+                            <div class="pill-group" id="traybakePills">
+                                <div class="pill-option" data-val="Brownies">Brownies</div>
+                                <div class="pill-option" data-val="Blondies">Blondies</div>
+                                <div class="pill-option" data-val="Millionaire's Shortbread">Millionaire's</div>
+                                <div class="pill-option" data-val="Flapjacks">Flapjacks</div>
+                                <div class="pill-option" data-val="Biscuits">Biscuits</div>
+                                <div class="pill-option" data-val="Mixed selection">Mixed selection</div>
+                            </div>
+                        </div>
+                        <div class="date-time-row">
+                            <div class="field-group">
+                                <label for="traybakeDate">Date needed</label>
+                                <input type="date" id="traybakeDate" class="form-control">
+                            </div>
+                            <div class="field-group">
+                                <label for="traybakeQty">Approx. quantity</label>
+                                <select class="form-select" id="traybakeQty">
+                                    <option value="">Select…</option>
+                                    <option>Up to 12 pieces</option>
+                                    <option>12–24 pieces</option>
+                                    <option>24–48 pieces</option>
+                                    <option>48+ pieces</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message (always shown) -->
+                    <div class="field-group field-group--top-gap">
+                        <label for="message">Your message <span class="req">*</span></label>
+                        <textarea id="message" class="form-control" placeholder="Anything else you'd like Becca to know…" maxlength="800"></textarea>
+                        <div class="char-counter"><span id="msgCount">0</span> / 800</div>
+                        <div class="error-msg" id="err-message">Please add a message.</div>
+                    </div>
+
+                    <div class="form-nav">
+                        <button class="btn-back" id="step2Back">← Back</button>
+                        <button class="btn-next" id="step2Next">Review <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Review & Send -->
+                <div class="step-panel" id="panel-3">
+                    <h2>Review &amp; Send</h2>
+                    <p class="step-desc">Check everything looks right, then hit send. This will open your email app with everything pre-filled and addressed to Becca.</p>
+                    <div id="reviewBox" class="review-box"></div>
+                    <div class="form-nav">
+                        <button class="btn-back" id="step3Back">← Edit</button>
+                        <button class="btn-submit" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i> Send to Becca
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Success screen -->
+                <div class="success-panel" id="successPanel">
+                    <div class="success-icon"><i class="fas fa-check"></i></div>
+                    <h2>You're all set!</h2>
+                    <p>Your email app should have opened with everything ready to send. Becca typically replies within 48 hours.</p>
+                    <a href="./index.html" class="btn btn-brand px-4 py-2 rounded-pill">Back to Home</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Social strip ── -->
+    <div class="social-strip">
+        <h3>Or find us on social media</h3>
+        <p>DMs are always open on Instagram and TikTok for quick questions</p>
+        <a href="https://www.facebook.com/profile.php?id=61586782277669" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/beccascakesandbakes.ni/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@beccascakesandbakes.ni" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="mailto:beccascakesandbakes.ni@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+
+    <!-- ── Footer (injected by components.js) ── -->
+    <div id="site-footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./components.js"></script>
+
+    <script>
+        const BECCA_EMAIL = 'beccascakesandbakes.ni@gmail.com';
+
+        const TOPIC_LABELS = {
+            custom:   '🎂 Custom Cake Order',
+            traybake: '🍫 Traybake / Batch Order',
+            event:    '🎉 Event / Market Enquiry',
+            other:    '💬 General Enquiry',
+        };
+
+        let state = { topic: null, occasion: null, flavours: [], traybakes: [], servings: 12 };
+        let currentStep = 1;
+
+        /* ── Step navigation ──────────────────────────────────────────────── */
+        function goTo(step) {
+            document.getElementById(`panel-${currentStep}`).classList.remove('active');
+            document.getElementById(`panel-${step}`).classList.add('active');
+
+            [1, 2, 3].forEach(n => {
+                const si = document.getElementById(`si-${n}`);
+                si.classList.remove('active', 'done');
+                if (n === step) si.classList.add('active');
+                if (n < step)  si.classList.add('done');
+
+                const num = document.querySelector(`#si-${n} .step-num`);
+                num.innerHTML = n < step ? '<i class="fas fa-check" style="font-size:0.7rem;"></i>' : String(n);
+            });
+
+            [1, 2].forEach(n => document.getElementById(`sl-${n}`).classList.toggle('done', n < step));
+
+            currentStep = step;
+            window.scrollTo({ top: document.querySelector('.form-card').offsetTop - 80, behavior: 'smooth' });
+        }
+
+        /* ── Step 1 ───────────────────────────────────────────────────────── */
+        document.getElementById('topicGrid').addEventListener('click', e => {
+            const card = e.target.closest('.topic-card');
+            if (!card) return;
+            document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            state.topic = card.dataset.topic;
+        });
+
+        document.getElementById('topicGrid').addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const card = e.target.closest('.topic-card');
+                if (card) { card.click(); e.preventDefault(); }
+            }
+        });
+
+        document.getElementById('step1Next').addEventListener('click', () => {
+            if (!state.topic) {
+                const grid = document.getElementById('topicGrid');
+                grid.style.outline       = '2px solid var(--pink)';
+                grid.style.borderRadius  = '12px';
+                setTimeout(() => grid.style.outline = '', 1200);
+                return;
+            }
+            ['custom', 'traybake'].forEach(t => {
+                document.getElementById(`extraFields-${t}`).style.display = state.topic === t ? 'block' : 'none';
+            });
+            const titles = {
+                custom: 'Tell us about your cake', traybake: 'Tell us about your order',
+                event:  'Tell us about the event', other:    'What would you like to know?',
+            };
+            document.getElementById('step2Title').textContent = titles[state.topic];
+            goTo(2);
+        });
+
+        /* ── Step 2 ───────────────────────────────────────────────────────── */
+        function setupPills(containerId, multiSelect, stateKey) {
+            document.getElementById(containerId).addEventListener('click', e => {
+                const pill = e.target.closest('.pill-option');
+                if (!pill) return;
+                if (multiSelect) {
+                    pill.classList.toggle('selected');
+                    const val = pill.dataset.val;
+                    state[stateKey] = state[stateKey].includes(val)
+                        ? state[stateKey].filter(v => v !== val)
+                        : [...state[stateKey], val];
+                } else {
+                    document.querySelectorAll(`#${containerId} .pill-option`).forEach(p => p.classList.remove('selected'));
+                    pill.classList.add('selected');
+                    state[stateKey] = pill.dataset.val;
+                }
+            });
+        }
+
+        setupPills('occasionPills', false, 'occasion');
+        setupPills('flavourPills',  true,  'flavours');
+        setupPills('traybakePills', true,  'traybakes');
+
+        let servings = 12;
+        document.getElementById('servDown').addEventListener('click', () => {
+            if (servings > 4) { servings -= 2; document.getElementById('servVal').textContent = servings; }
+        });
+        document.getElementById('servUp').addEventListener('click', () => {
+            if (servings < 200) { servings += 2; document.getElementById('servVal').textContent = servings; }
+        });
+
+        document.getElementById('message').addEventListener('input', function () {
+            document.getElementById('msgCount').textContent = this.value.length;
+        });
+        document.getElementById('cakeDesc').addEventListener('input', function () {
+            document.getElementById('cakeDescCount').textContent = this.value.length;
+        });
+
+        function showError(fieldId, errId) {
+            document.getElementById(fieldId).classList.add('error');
+            document.getElementById(errId).classList.add('show');
+        }
+
+        ['fname', 'email', 'message'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function () {
+                this.classList.remove('error');
+                const err = document.getElementById(`err-${id}`);
+                if (err) err.classList.remove('show');
+            });
+        });
+
+        function validateStep2() {
+            let ok    = true;
+            const rx  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!document.getElementById('fname').value.trim())        { showError('fname',     'err-fname');   ok = false; }
+            if (!rx.test(document.getElementById('email').value.trim())) { showError('email',  'err-email');   ok = false; }
+            if (!document.getElementById('message').value.trim())      { showError('message', 'err-message'); ok = false; }
+            if (state.topic === 'custom') {
+                if (!state.occasion) { document.getElementById('err-occasion').classList.add('show'); ok = false; }
+                if (!document.getElementById('eventDate').value) { showError('eventDate', 'err-date'); ok = false; }
+            }
+            return ok;
+        }
+
+        document.getElementById('step2Back').addEventListener('click', () => goTo(1));
+        document.getElementById('step2Next').addEventListener('click', () => {
+            if (!validateStep2()) return;
+            buildReview();
+            goTo(3);
+        });
+
+        /* ── Step 3 ───────────────────────────────────────────────────────── */
+        function buildReview() {
+            const g = id => document.getElementById(id).value.trim();
+            const lines = [
+                `📋 ENQUIRY TYPE: ${TOPIC_LABELS[state.topic]}`, '',
+                `👤 Name:  ${g('fname')}${g('lname') ? ' ' + g('lname') : ''}`,
+                `✉️  Email: ${g('email')}`,
+                ...(g('phone') ? [`📞 Phone: ${g('phone')}`] : []),
+            ];
+
+            if (state.topic === 'custom') {
+                lines.push('',
+                    `🎉 Occasion: ${state.occasion || '—'}`,
+                    `📅 Date:     ${document.getElementById('eventDate').value || '—'}`,
+                    `🍰 Servings: ${servings}`,
+                    `🎂 Flavours: ${state.flavours.length ? state.flavours.join(', ') : '—'}`
+                );
+                const desc = document.getElementById('cakeDesc').value.trim();
+                if (desc) lines.push('', `🎨 Design ideas:\n${desc}`);
+            }
+
+            if (state.topic === 'traybake') {
+                const td = document.getElementById('traybakeDate').value;
+                lines.push('',
+                    `🍫 Items:    ${state.traybakes.length ? state.traybakes.join(', ') : '—'}`,
+                    `📦 Quantity: ${document.getElementById('traybakeQty').value || '—'}`,
+                    ...(td ? [`📅 Date:     ${td}`] : [])
+                );
+            }
+
+            lines.push('', `💬 Message:\n${g('message')}`);
+            document.getElementById('reviewBox').textContent = lines.join('\n');
+        }
+
+        document.getElementById('step3Back').addEventListener('click', () => goTo(2));
+
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            const fname   = document.getElementById('fname').value.trim();
+            const lname   = document.getElementById('lname').value.trim();
+            const subject = encodeURIComponent(`Website Enquiry — ${TOPIC_LABELS[state.topic].replace(/^[^\w]+/, '')} from ${fname}${lname ? ' ' + lname : ''}`);
+            const body    = encodeURIComponent(document.getElementById('reviewBox').textContent);
+
+            window.location.href = `mailto:${BECCA_EMAIL}?subject=${subject}&body=${body}`;
+
+            setTimeout(() => {
+                document.getElementById(`panel-${currentStep}`).classList.remove('active');
+                document.getElementById('stepIndicator').style.display = 'none';
+                document.getElementById('successPanel').classList.add('active');
+            }, 800);
+        });
+    </script>
+</body>
+</html>

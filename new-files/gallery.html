@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gallery | Becca's Cakes and Bakes</title>
+    <link rel="icon" type="image/png" href="./img/Logo circle.png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="gallery.css">
+</head>
+
+<body class="text-dark" data-page="gallery">
+
+    <!-- ── Navbar (injected by components.js) ── -->
+    <div id="site-nav"></div>
+
+    <!-- ── Page Hero ── -->
+    <div class="page-hero">
+        <div class="page-hero__content">
+            <span class="hero-subtitle">Fresh from the kitchen</span>
+            <div class="hero-divider"></div>
+            <h1>The Gallery</h1>
+            <p class="hero-body">
+                Every bake, captured. Browse for inspiration or find your perfect custom cake idea.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Gallery ── -->
+    <section class="gallery-section">
+        <div class="container-xl">
+
+            <!-- Filter bar -->
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-cat="all">
+                    All <span class="count-badge" id="count-all">0</span>
+                </button>
+                <button class="filter-btn" data-cat="cakes">
+                    Celebration Cakes <span class="count-badge" id="count-cakes">0</span>
+                </button>
+                <button class="filter-btn" data-cat="traybakes">
+                    Traybakes <span class="count-badge" id="count-traybakes">0</span>
+                </button>
+                <button class="filter-btn" data-cat="biscuits">
+                    Biscuits &amp; Cookies <span class="count-badge" id="count-biscuits">0</span>
+                </button>
+                <button class="filter-btn" data-cat="bread">
+                    Breads &amp; Scones <span class="count-badge" id="count-bread">0</span>
+                </button>
+                <button class="filter-btn" data-cat="custom">
+                    Custom Orders <span class="count-badge" id="count-custom">0</span>
+                </button>
+            </div>
+
+            <!-- Masonry grid (populated by JS) -->
+            <div class="masonry-grid" id="masonryGrid"></div>
+            <div class="gallery-empty" id="galleryEmpty">
+                <i class="fas fa-camera gallery-empty__icon"></i>
+                No photos in this category yet — check back soon!
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ── Inspire CTA ── -->
+    <div class="inspire-banner">
+        <h2>Seen something you love?</h2>
+        <p>All our bakes can be made to order. Get in touch and let's create something special together.</p>
+        <a href="./contact.html" class="btn btn-light text-dark fw-bold">Get in Touch</a>
+    </div>
+
+    <!-- ── Footer (injected by components.js) ── -->
+    <div id="site-footer"></div>
+
+    <!-- ── Lightbox ── -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+        <div class="lb-close" id="lbClose" title="Close (Esc)"><i class="fas fa-times"></i></div>
+        <div class="lb-stage">
+            <div class="lb-arrow lb-prev" id="lbPrev" title="Previous (←)"><i class="fas fa-chevron-left"></i></div>
+            <div class="lb-img-wrap" id="lbImgWrap">
+                <div class="lb-info" id="lbInfo"></div>
+            </div>
+            <div class="lb-arrow lb-next" id="lbNext" title="Next (→)"><i class="fas fa-chevron-right"></i></div>
+        </div>
+        <div class="lb-thumbs" id="lbThumbs"></div>
+        <div class="lb-counter" id="lbCounter"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./components.js"></script>
+
+    <script>
+        /* ── GALLERY DATA ──────────────────────────────────────────────────────
+           To add real photos: set  src: './img/your-photo.jpg'
+           Fields:
+             src   — image path (leave empty for placeholder)
+             alt   — accessibility text
+             title — shown in lightbox and hover overlay
+             cat   — "cakes" | "traybakes" | "biscuits" | "bread" | "custom"
+             tall  — true = taller placeholder (good for portrait photos)
+             ph    — placeholder height in px
+        ─────────────────────────────────────────────────────────────────────── */
+        const photos = [
+            { src: '', alt: 'Victoria Sponge Cake',          title: 'Classic Victoria Sponge',          cat: 'cakes',     tall: true, ph: 420 },
+            { src: '', alt: 'Chocolate Fudge Cake',          title: 'Chocolate Fudge Celebration Cake', cat: 'cakes',                ph: 300 },
+            { src: '', alt: 'Lemon Drizzle',                 title: 'Lemon Drizzle Loaf',               cat: 'cakes',                ph: 280 },
+            { src: '', alt: 'Carrot Cake with cream cheese', title: 'Carrot Cake',                      cat: 'cakes',     tall: true, ph: 400 },
+            { src: '', alt: 'Strawberry layer cake',         title: 'Summer Strawberry Layer Cake',     cat: 'cakes',                ph: 320 },
+            { src: '', alt: 'Coffee and walnut cake',        title: 'Coffee & Walnut Cake',             cat: 'cakes',                ph: 260 },
+            { src: '', alt: 'Chocolate brownies',            title: 'Dark Chocolate Brownies',          cat: 'traybakes',            ph: 260 },
+            { src: '', alt: 'Raspberry blondies',            title: 'Raspberry Blondies',               cat: 'traybakes', tall: true, ph: 360 },
+            { src: '', alt: "Millionaire's shortbread",      title: "Millionaire's Shortbread",         cat: 'traybakes',            ph: 280 },
+            { src: '', alt: 'Flapjacks with oats',           title: 'Golden Flapjacks',                 cat: 'traybakes',            ph: 240 },
+            { src: '', alt: 'Lemon bars',                    title: 'Zesty Lemon Bars',                 cat: 'traybakes',            ph: 300 },
+            { src: '', alt: 'Shortbread rounds',             title: 'Vanilla Shortbread Rounds',        cat: 'biscuits',             ph: 280 },
+            { src: '', alt: 'Chocolate chip cookies',        title: 'Chunky Chocolate Chip Cookies',    cat: 'biscuits',  tall: true, ph: 380 },
+            { src: '', alt: 'Gingerbread biscuits',          title: 'Iced Gingerbread Biscuits',        cat: 'biscuits',             ph: 300 },
+            { src: '', alt: 'Decorated sugar cookies',       title: 'Decorated Sugar Cookies',          cat: 'biscuits',             ph: 260 },
+            { src: '', alt: 'White sandwich loaf',           title: 'Gluten-Free White Loaf',           cat: 'bread',     tall: true, ph: 360 },
+            { src: '', alt: 'Cheese and herb scones',        title: 'Cheese & Herb Scones',             cat: 'bread',                ph: 280 },
+            { src: '', alt: 'Plain scones with jam',         title: 'Plain Scones with Jam & Cream',    cat: 'bread',                ph: 300 },
+            { src: '', alt: 'Soda bread',                    title: 'Irish Soda Bread',                 cat: 'bread',                ph: 260 },
+            { src: '', alt: 'Custom birthday cake',          title: 'Custom 21st Birthday Cake',        cat: 'custom',    tall: true, ph: 460 },
+            { src: '', alt: 'Wedding cake tiers',            title: 'Three-Tier Wedding Cake',          cat: 'custom',    tall: true, ph: 500 },
+            { src: '', alt: 'Personalised cupcakes',         title: 'Personalised Cupcake Box',         cat: 'custom',               ph: 300 },
+            { src: '', alt: 'Custom character cake',         title: 'Character Cake — Custom Order',    cat: 'custom',               ph: 340 },
+            { src: '', alt: 'Hamper gift box of bakes',      title: 'Gifting Hamper Box',               cat: 'custom',               ph: 280 },
+        ];
+
+        const CAT_LABELS = {
+            cakes: 'Celebration Cakes', traybakes: 'Traybakes',
+            biscuits: 'Biscuits & Cookies', bread: 'Breads & Scones', custom: 'Custom Orders',
+        };
+
+        /* ── Grid ─────────────────────────────────────────────────────────── */
+        const grid  = document.getElementById('masonryGrid');
+        const empty = document.getElementById('galleryEmpty');
+
+        function updateCounts() {
+            const counts = { all: photos.length };
+            photos.forEach(p => { counts[p.cat] = (counts[p.cat] || 0) + 1; });
+            Object.entries(counts).forEach(([k, v]) => {
+                const el = document.getElementById(`count-${k}`);
+                if (el) el.textContent = v;
+            });
+        }
+        updateCounts();
+
+        function buildItem(photo, index) {
+            const hasImg = photo.src && photo.src !== '';
+            const imgEl  = hasImg
+                ? `<img src="${photo.src}" alt="${photo.alt}" loading="lazy">`
+                : `<div class="img-placeholder gallery-placeholder" style="min-height:${photo.ph || 260}px;">
+                       <i class="fas fa-camera"></i><span>Add photo here</span>
+                   </div>`;
+
+            return `
+                <div class="g-item${photo.tall ? ' tall' : ''}"
+                     data-cat="${photo.cat}" data-index="${index}"
+                     role="button" tabindex="0" aria-label="View ${photo.title}">
+                    ${imgEl}
+                    <div class="g-overlay">
+                        <div class="g-overlay-title">${photo.title}</div>
+                        <div class="g-overlay-tag">${CAT_LABELS[photo.cat]}</div>
+                    </div>
+                    <div class="g-expand-icon"><i class="fas fa-expand-alt"></i></div>
+                </div>`;
+        }
+
+        function renderGrid(cat) {
+            const list = cat === 'all' ? photos : photos.filter(p => p.cat === cat);
+            if (!list.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+            empty.style.display = 'none';
+            grid.innerHTML = list.map((p, i) => buildItem(p, photos.indexOf(p))).join('');
+
+            const items = grid.querySelectorAll('.g-item');
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((entry, idx) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => entry.target.classList.add('visible'), idx * 55);
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08 });
+            items.forEach(el => {
+                io.observe(el);
+                el.addEventListener('click',   () => openLightbox(parseInt(el.dataset.index), cat));
+                el.addEventListener('keydown', e  => { if (e.key === 'Enter' || e.key === ' ') openLightbox(parseInt(el.dataset.index), cat); });
+            });
+        }
+
+        let activeFilter = 'all';
+        document.getElementById('filterBar').addEventListener('click', e => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = btn.dataset.cat;
+            renderGrid(activeFilter);
+        });
+
+        /* ── Lightbox ─────────────────────────────────────────────────────── */
+        const lb        = document.getElementById('lightbox');
+        const lbImgWrap = document.getElementById('lbImgWrap');
+        const lbInfo    = document.getElementById('lbInfo');
+        const lbThumbs  = document.getElementById('lbThumbs');
+        const lbCounter = document.getElementById('lbCounter');
+        let lbList  = [];
+        let lbIndex = 0;
+
+        function openLightbox(photoIndex, cat) {
+            lbList  = cat === 'all' ? [...photos] : photos.filter(p => p.cat === cat);
+            lbIndex = lbList.findIndex(p => photos.indexOf(p) === photoIndex);
+            if (lbIndex < 0) lbIndex = 0;
+            buildThumbs();
+            setLbImage(lbIndex, false);
+            lb.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lb.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function setLbImage(idx, animate = true) {
+            lbIndex = (idx + lbList.length) % lbList.length;
+            const photo = lbList[lbIndex];
+            if (animate) lbImgWrap.classList.add('animating');
+
+            setTimeout(() => {
+                const existing = lbImgWrap.querySelector('img, .lb-placeholder');
+                if (existing) existing.remove();
+
+                if (photo.src && photo.src !== '') {
+                    const img = document.createElement('img');
+                    img.src = photo.src;
+                    img.alt = photo.alt;
+                    lbImgWrap.prepend(img);
+                } else {
+                    const ph = document.createElement('div');
+                    ph.className = 'lb-placeholder';
+                    ph.innerHTML = `<i class="fas fa-camera"></i><span>${photo.title}</span>`;
+                    lbImgWrap.prepend(ph);
+                }
+
+                lbInfo.innerHTML = `<div class="lb-title">${photo.title}</div><div class="lb-tag">${CAT_LABELS[photo.cat]}</div>`;
+                lbCounter.textContent = `${lbIndex + 1} / ${lbList.length}`;
+
+                lbThumbs.querySelectorAll('.lb-thumb').forEach((t, i) => t.classList.toggle('active', i === lbIndex));
+                const activeThumb = lbThumbs.querySelectorAll('.lb-thumb')[lbIndex];
+                if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+                if (animate) requestAnimationFrame(() => lbImgWrap.classList.remove('animating'));
+            }, animate ? 220 : 0);
+        }
+
+        function buildThumbs() {
+            lbThumbs.innerHTML = lbList.map((p, i) => {
+                const inner = (p.src && p.src !== '')
+                    ? `<img src="${p.src}" alt="${p.alt}" class="lb-thumb-img">`
+                    : `<div class="thumb-ph"><i class="fas fa-camera"></i></div>`;
+                return `<div class="lb-thumb" data-i="${i}">${inner}</div>`;
+            }).join('');
+            lbThumbs.querySelectorAll('.lb-thumb').forEach(t => {
+                t.addEventListener('click', () => setLbImage(parseInt(t.dataset.i)));
+            });
+        }
+
+        document.getElementById('lbClose').addEventListener('click', closeLightbox);
+        document.getElementById('lbPrev').addEventListener('click', () => setLbImage(lbIndex - 1));
+        document.getElementById('lbNext').addEventListener('click', () => setLbImage(lbIndex + 1));
+        lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+        document.addEventListener('keydown', e => {
+            if (!lb.classList.contains('open')) return;
+            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === 'ArrowLeft')  setLbImage(lbIndex - 1);
+            if (e.key === 'ArrowRight') setLbImage(lbIndex + 1);
+        });
+
+        let touchStartX = 0;
+        lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        lb.addEventListener('touchend',   e => {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(dx) > 50) dx < 0 ? setLbImage(lbIndex + 1) : setLbImage(lbIndex - 1);
+        });
+
+        renderGrid('all');
+    </script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+/* =============================================================================
+   gallery.css
+   Page-specific styles for gallery.html.
+   Shared styles live in shared.css.
+   ============================================================================= */
+
+
+/* ── Gallery section wrapper ── */
+.gallery-section {
+    padding: 64px 0 100px;
+}
+
+
+/* ── Filter bar ── */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 52px;
+}
+
+.filter-btn {
+    border: 2px solid var(--pink-light);
+    background: white;
+    color: var(--muted);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 0.5rem 1.4rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    letter-spacing: 0.04em;
+}
+
+.filter-btn:hover {
+    border-color: var(--pink);
+    color: var(--pink);
+}
+
+.filter-btn.active {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+    box-shadow: 0 4px 16px rgba(171, 29, 121, 0.25);
+}
+
+/* Count badge inside filter buttons */
+.count-badge {
+    display: inline-block;
+    background: white;
+    color: var(--pink);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 50px;
+    border: 1.5px solid var(--pink-light);
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.filter-btn.active .count-badge {
+    background: rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.4);
+    color: white;
+}
+
+
+/* ── Masonry grid ── */
+.masonry-grid {
+    columns: 4;
+    column-gap: 16px;
+}
+
+@media (max-width: 1199px) { .masonry-grid { columns: 3; } }
+@media (max-width: 767px)  { .masonry-grid { columns: 2; } }
+@media (max-width: 479px)  { .masonry-grid { columns: 1; } }
+
+
+/* ── Gallery item ── */
+.g-item {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.g-item.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.g-item img,
+.g-item .gallery-placeholder {
+    width: 100%;
+    display: block;
+    border-radius: 14px;
+    transition: transform 0.5s cubic-bezier(.25, .46, .45, .94);
+}
+
+.g-item:hover img,
+.g-item:hover .gallery-placeholder {
+    transform: scale(1.06);
+}
+
+/* Placeholder styling (overrides shared .img-placeholder for gallery context) */
+.gallery-placeholder {
+    font-size: 0.9rem;
+    border-radius: 14px;
+}
+
+.gallery-placeholder i {
+    font-size: 1.8rem;
+    opacity: 0.45;
+}
+
+/* Taller placeholder for portrait photos */
+.g-item.tall .gallery-placeholder {
+    min-height: 480px;
+}
+
+
+/* ── Hover overlay ── */
+.g-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(43,10,56,0.82) 0%, rgba(43,10,56,0.15) 50%, transparent 100%);
+    border-radius: 14px;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 18px;
+}
+
+.g-item:hover .g-overlay {
+    opacity: 1;
+}
+
+.g-overlay-title {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    transform: translateY(8px);
+    transition: transform 0.3s ease;
+}
+
+.g-overlay-tag {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink-light);
+    transform: translateY(8px);
+    transition: transform 0.3s ease 0.04s;
+}
+
+.g-item:hover .g-overlay-title,
+.g-item:hover .g-overlay-tag {
+    transform: translateY(0);
+}
+
+
+/* ── Expand icon ── */
+.g-expand-icon {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s ease, background 0.2s ease;
+}
+
+.g-item:hover .g-expand-icon { opacity: 1; }
+.g-expand-icon:hover          { background: rgba(171, 29, 121, 0.6); }
+
+
+/* ── Empty state ── */
+.gallery-empty {
+    text-align: center;
+    padding: 80px 20px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1.2rem;
+    display: none;
+}
+
+.gallery-empty__icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+    display: block;
+    margin-bottom: 16px;
+}
+
+
+/* ── Inspire CTA banner ── */
+.inspire-banner {
+    background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
+    padding: 64px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.inspire-banner::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    top: -200px;
+    left: -150px;
+}
+
+.inspire-banner::after {
+    content: '';
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    bottom: -120px;
+    right: -80px;
+}
+
+.inspire-banner h2 {
+    color: white;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.inspire-banner p {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 300;
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin: 0 auto 1.8rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+.inspire-banner .btn-light {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    border-radius: 50px;
+    padding: 0.65rem 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =============================================================================
+   LIGHTBOX
+   ============================================================================= */
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(20, 6, 28, 0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+.lightbox.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Stage wraps arrows + image */
+.lb-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Main image wrapper */
+.lb-img-wrap {
+    position: relative;
+    max-width: min(700px, 90vw);
+    max-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lb-img-wrap img,
+.lb-img-wrap .lb-placeholder {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    display: block;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.lb-img-wrap .lb-placeholder {
+    width: 500px;
+    height: 400px;
+    background: linear-gradient(135deg, #3a1a4e, #6b2070);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.lb-img-wrap .lb-placeholder i { font-size: 3rem; }
+
+/* Fade animation on image change */
+.lb-img-wrap.animating img,
+.lb-img-wrap.animating .lb-placeholder {
+    opacity: 0;
+    transform: scale(0.96);
+}
+
+/* Title / category below image */
+.lb-info {
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.lb-title {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+}
+
+.lb-tag {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pink-light);
+}
+
+/* Navigation arrows */
+.lb-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 10;
+}
+
+.lb-arrow:hover { background: rgba(171, 29, 121, 0.5); transform: translateY(-50%) scale(1.1); }
+.lb-prev { left: -68px; }
+.lb-next { right: -68px; }
+
+@media (max-width: 900px) {
+    .lb-prev { left: 8px; }
+    .lb-next { right: 8px; }
+}
+
+/* Close button */
+.lb-close {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 10;
+}
+
+.lb-close:hover { background: rgba(171, 29, 121, 0.5); transform: scale(1.1) rotate(90deg); }
+
+/* Counter */
+.lb-counter {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.45);
+    z-index: 10;
+}
+
+/* Thumbnail strip */
+.lb-thumbs {
+    position: fixed;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    max-width: 90vw;
+    overflow-x: auto;
+    padding: 6px 10px;
+    scrollbar-width: none;
+}
+
+.lb-thumbs::-webkit-scrollbar { display: none; }
+
+.lb-thumb {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.5;
+    flex-shrink: 0;
+    transition: border-color 0.2s, opacity 0.2s, transform 0.2s;
+}
+
+.lb-thumb:hover        { opacity: 0.8; transform: scale(1.05); }
+.lb-thumb.active       { border-color: var(--pink); opacity: 1; }
+
+.lb-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumb-ph {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #3a1a4e, #6b2070);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.7rem;
+}

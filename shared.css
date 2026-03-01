@@ -133,7 +133,7 @@ h1, h2, h3, h4, h5, h6 {
 .page-hero {
     position: relative;
     width: 100%;
-    height: 55vh;
+    height: 80vh;
     overflow: hidden;
     background: linear-gradient(135deg, var(--pink-light) 0%, #f9d4ec 50%, var(--cream) 100%);
     display: flex;

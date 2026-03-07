@@ -9,7 +9,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
@@ -31,6 +33,7 @@
                 Find Becca at a market stall near you, catch a special order window,
                 or tune in for a TikTok live.
             </p>
+            <a href="./contact.html" class="btn btn-brand btn-hero-order mt-3 rounded-pill px-4">Order Now</a>
         </div>
     </div>
 
@@ -70,8 +73,20 @@
                 </button>
             </div>
 
+            <!-- Loading spinner (shown while CSV fetches) -->
+            <div id="eventsSpinner" class="events-spinner">
+                <div class="events-spinner__ring"></div>
+                <p class="events-spinner__text">Loading events…</p>
+            </div>
+
+            <!-- Error state (shown if sheet can't be reached) -->
+            <div id="eventsError" class="events-error">
+                <i class="fas fa-exclamation-circle events-error__icon"></i>
+                <p>Couldn't load events right now — please check back soon!</p>
+            </div>
+
             <!-- Event list (populated by JS) -->
-            <div id="eventList"></div>
+            <div id="eventList" style="display:none;"></div>
             <div class="no-events" id="noEvents">No events to show — check back soon!</div>
 
         </div>
@@ -84,50 +99,67 @@
     <script src="./components.js"></script>
 
     <script>
-        /* ── EVENT DATA ────────────────────────────────────────────────────────
-           Add, remove or edit events here.
-           Fields:
-             date     "YYYY-MM-DD"
-             type     "stall" | "order" | "tiktok"
-             title    event name
-             time     e.g. "10:00am – 3:00pm"  (optional)
-             location venue / platform          (optional)
-             note     extra info                (optional)
-        ─────────────────────────────────────────────────────────────────────── */
-        const events = [
-            { date: "2026-03-07", type: "order",  title: "Mother's Day Special Orders Open",  time: "Opens midnight",  note: "Limited slots — order early to avoid disappointment. DM on Instagram to reserve." },
-            { date: "2026-03-08", type: "tiktok", title: "TikTok Live — Baking Q&A",          time: "7:00pm",          location: "@beccascakesandbakes.ni", note: "Come chat, ask questions, and watch a batch of brownies being made live." },
-            { date: "2026-03-15", type: "stall",  title: "Belfast Farmers' Market",           time: "9:00am – 2:00pm", location: "St. George's Market, Belfast", note: "Full range available including weekend specials. Cash and card accepted." },
-            { date: "2026-03-21", type: "order",  title: "Mother's Day Order Deadline",       time: "11:59pm",         note: "Last chance to place a Mother's Day order for guaranteed delivery by 22 March." },
-            { date: "2026-03-28", type: "stall",  title: "Lisburn Spring Market",             time: "10:00am – 4:00pm",location: "Lisburn Market Square",        note: "Easter bakes will be available — hot cross bun traybakes and simnel-inspired slices." },
-            { date: "2026-03-29", type: "tiktok", title: "TikTok Live — Easter Baking",       time: "6:30pm",          location: "@beccascakesandbakes.ni" },
-            { date: "2026-04-04", type: "stall",  title: "Belfast Farmers' Market",           time: "9:00am – 2:00pm", location: "St. George's Market, Belfast" },
-            { date: "2026-04-10", type: "order",  title: "Easter Special Orders Open",        time: "Opens 9:00am",    note: "Easter gifting boxes available this year. Limited to 20 orders." },
-            { date: "2026-04-16", type: "order",  title: "Easter Order Deadline",             time: "11:59pm",         note: "Orders must be placed by midnight for collection/delivery before Easter weekend." },
-            { date: "2026-04-19", type: "tiktok", title: "TikTok Live — Easter Special",      time: "5:00pm",          location: "@beccascakesandbakes.ni" },
-            { date: "2026-05-02", type: "stall",  title: "Belfast Farmers' Market",           time: "9:00am – 2:00pm", location: "St. George's Market, Belfast" },
-            { date: "2026-05-16", type: "stall",  title: "Hillsborough Artisan Market",       time: "10:00am – 3:00pm",location: "Hillsborough Village Square",  note: "First time at this market — come and say hello!" },
-            { date: "2026-05-22", type: "tiktok", title: "TikTok Live — New Summer Menu",     time: "7:00pm",          location: "@beccascakesandbakes.ni",     note: "Sneak peek at the new summer range before it launches." },
-        ];
+        /* ══════════════════════════════════════════════════════════════════════
+           EVENTS — loaded from Google Sheet (published as CSV)
+
+           TO UPDATE EVENTS:
+             1. Open the Google Sheet linked below
+             2. Add / edit / remove rows
+             3. Changes appear on the site within ~1 minute, no redeploy needed
+
+           SHEET COLUMNS (row 1 must be these exact headers):
+             date      | YYYY-MM-DD        e.g. 2026-03-15
+             type      | stall / order / tiktok
+             title     | Event name
+             time      | e.g. 9:00am – 2:00pm   (leave blank if n/a)
+             location  | Venue or @handle        (leave blank if n/a)
+             note      | Extra info              (leave blank if n/a)
+        ══════════════════════════════════════════════════════════════════════ */
+
+        // ← Paste your published CSV URL here after setting up the sheet
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT-kIFQwvjk_x7STv0jUdxriDphvpaeo6PRqRupEIDYgFI_VlgfcHYBXZPJAkubcOkgFWibNaaB-bBl/pub?gid=1254188784&single=true&output=csv';
 
         /* ── Helpers ──────────────────────────────────────────────────────── */
-        const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-        const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         const TYPE_LABELS = { stall: 'Market Stall', order: 'Special Orders', tiktok: 'TikTok Live' };
-        const TYPE_ICONS  = { stall: 'fas fa-map-marker-alt', order: 'fas fa-shopping-bag', tiktok: 'fab fa-tiktok' };
+        const TYPE_ICONS = { stall: 'fas fa-map-marker-alt', order: 'fas fa-shopping-bag', tiktok: 'fab fa-tiktok' };
 
         function parseDate(str) {
-            const [y, m, d] = str.split('-').map(Number);
+            const [y, m, d] = str.trim().split('-').map(Number);
             return new Date(y, m - 1, d);
+        }
+
+        /* ── Parse raw CSV text → array of event objects ─────────────────── */
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            // First row is headers — normalise them to lowercase trimmed keys
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            return lines.slice(1).map(line => {
+                // Handle quoted fields that may contain commas
+                const cols = [];
+                let cur = '', inQuote = false;
+                for (const ch of line) {
+                    if (ch === '"') { inQuote = !inQuote; }
+                    else if (ch === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; }
+                    else { cur += ch; }
+                }
+                cols.push(cur.trim());
+
+                // Map to object using header names
+                const obj = {};
+                headers.forEach((h, i) => { obj[h] = (cols[i] || '').replace(/^"|"$/g, '').trim(); });
+                return obj;
+            }).filter(ev => ev.date && ev.type && ev.title); // skip empty/malformed rows
         }
 
         /* ── Build a single event card ────────────────────────────────────── */
         function buildCard(ev) {
-            const d    = parseDate(ev.date);
+            const d = parseDate(ev.date);
             const past = d < new Date(new Date().setHours(0, 0, 0, 0));
 
             const metaParts = [
-                ev.time     ? `<span><i class="far fa-clock"></i> ${ev.time}</span>`                 : '',
+                ev.time ? `<span><i class="far fa-clock"></i> ${ev.time}</span>` : '',
                 ev.location ? `<span><i class="fas fa-map-marker-alt"></i> ${ev.location}</span>` : '',
             ].filter(Boolean).join('');
 
@@ -141,21 +173,25 @@
                         <div class="event-type-badge">
                             <span class="badge-dot"></span>
                             <i class="${TYPE_ICONS[ev.type]}"></i>
-                            ${TYPE_LABELS[ev.type]}
+                            ${TYPE_LABELS[ev.type] || ev.type}
                         </div>
                         <div class="event-title">${ev.title}</div>
                         ${metaParts ? `<div class="event-meta">${metaParts}</div>` : ''}
-                        ${ev.note   ? `<div class="event-note">${ev.note}</div>`   : ''}
+                        ${ev.note ? `<div class="event-note">${ev.note}</div>` : ''}
                     </div>
                 </div>`;
         }
 
-        /* ── Render grouped by month ──────────────────────────────────────── */
+        /* ── Render events grouped by month ───────────────────────────────── */
+        let allEvents = [];
+        let activeFilter = 'all';
+
         function render(typeFilter) {
-            const list     = document.getElementById('eventList');
+            activeFilter = typeFilter;
+            const list = document.getElementById('eventList');
             const noEvents = document.getElementById('noEvents');
 
-            const filtered = events
+            const filtered = allEvents
                 .filter(ev => typeFilter === 'all' || ev.type === typeFilter)
                 .sort((a, b) => parseDate(a.date) - parseDate(b.date));
 
@@ -168,7 +204,7 @@
 
             const groups = {};
             filtered.forEach(ev => {
-                const d   = parseDate(ev.date);
+                const d = parseDate(ev.date);
                 const key = `${d.getFullYear()}-${d.getMonth()}`;
                 if (!groups[key]) groups[key] = { label: `${MONTHS[d.getMonth()]} ${d.getFullYear()}`, evs: [] };
                 groups[key].evs.push(ev);
@@ -184,6 +220,40 @@
                 </div>`).join('');
         }
 
+        /* ── Show / hide spinner ──────────────────────────────────────────── */
+        function showSpinner() {
+            document.getElementById('eventsSpinner').style.display = 'flex';
+            document.getElementById('eventList').style.display = 'none';
+            document.getElementById('noEvents').style.display = 'none';
+        }
+
+        function hideSpinner() {
+            document.getElementById('eventsSpinner').style.display = 'none';
+            document.getElementById('eventList').style.display = 'block';
+        }
+
+        /* ── Show error state ─────────────────────────────────────────────── */
+        function showError() {
+            hideSpinner();
+            document.getElementById('eventsError').style.display = 'block';
+        }
+
+        /* ── Fetch CSV from Google Sheet ──────────────────────────────────── */
+        showSpinner();
+        fetch(SHEET_CSV_URL + '&t=' + Date.now()).then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.text();
+        })
+            .then(csv => {
+                allEvents = parseCSV(csv);
+                hideSpinner();
+                render('all');
+            })
+            .catch(err => {
+                console.error('Failed to load events:', err);
+                showError();
+            });
+
         /* ── Filter tabs ──────────────────────────────────────────────────── */
         document.getElementById('filterTabs').addEventListener('click', e => {
             const btn = e.target.closest('.filter-btn');
@@ -192,8 +262,7 @@
             btn.classList.add('active');
             render(btn.dataset.type);
         });
-
-        render('all');
     </script>
 </body>
+
 </html>

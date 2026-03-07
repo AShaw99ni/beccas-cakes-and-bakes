@@ -133,7 +133,7 @@ h1, h2, h3, h4, h5, h6 {
 .page-hero {
     position: relative;
     width: 100%;
-    height: 80vh;
+    padding: 30vh 0 10vh;
     overflow: hidden;
     background: linear-gradient(135deg, var(--pink-light) 0%, #f9d4ec 50%, var(--cream) 100%);
     display: flex;
@@ -474,4 +474,18 @@ footer p {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+
+/* ── Order Now button inside page heroes ── */
+.btn-hero-order {
+    font-size: 0.92rem;
+    padding: 0.55rem 1.6rem;
+    box-shadow: 0 4px 16px rgba(171, 29, 121, 0.3);
+    transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-hero-order:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(171, 29, 121, 0.4);
 }

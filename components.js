@@ -77,7 +77,7 @@
                     </ul>
 
                     <!-- Center logo (desktop only, overhangs navbar) -->
-                    <a class="navbar-brand navbar-center d-none d-lg-block" href="./new-index.html">
+                    <a class="navbar-brand navbar-center d-none d-lg-block" href="./index.html">
                         <img src="./img/Logo circle.png" alt="Becca's Cakes and Bakes">
                     </a>
 

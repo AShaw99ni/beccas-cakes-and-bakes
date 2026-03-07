@@ -90,56 +90,125 @@
     <script src="./components.js"></script>
 
     <script>
-        /* ── Product data ────────────────────────────────────────────────────
-           Edit this array to add, remove, or update products.
-           allergens  — confirmed present (red pill)
-           mayContain — possible traces  (yellow pill)
-           Gluten free + dairy free pills are added automatically.
-        ─────────────────────────────────────────────────────────────────── */
+        /* ── Product data ─────────────────────────────────────────────────────
+           image: replace placeholder URLs with real product photo paths, e.g.:
+                  image: "./img/products/victoria-sponge.jpg"
+        ──────────────────────────────────────────────────────────────────── */
         const products = [
-            { name: "Classic Victoria Sponge",  category: "cake",     ingredients: "Gluten-free self-raising flour blend, caster sugar, dairy-free butter (coconut oil, palm oil), free-range eggs, vanilla extract, dairy-free jam, dairy-free cream.", allergens: ["Eggs"], mayContain: ["Soya", "Tree nuts"] },
-            { name: "Chocolate Fudge Cake",      category: "cake",     ingredients: "Gluten-free plain flour, cocoa powder, caster sugar, dairy-free butter, free-range eggs, dairy-free dark chocolate, vanilla extract, bicarbonate of soda.",          allergens: ["Eggs"], mayContain: ["Tree nuts", "Soya"] },
-            { name: "Lemon Drizzle Cake",        category: "cake",     ingredients: "Gluten-free self-raising flour, caster sugar, dairy-free butter, free-range eggs, lemon zest, fresh lemon juice, icing sugar.",                                       allergens: ["Eggs"], mayContain: [] },
-            { name: "Carrot Cake",               category: "cake",     ingredients: "Gluten-free flour, grated carrots, soft brown sugar, sunflower oil, free-range eggs, cinnamon, mixed spice, walnuts, dairy-free cream cheese frosting.",              allergens: ["Eggs", "Tree nuts (walnuts)"], mayContain: ["Soya"] },
-            { name: "Raspberry Blondies",        category: "traybake", ingredients: "Gluten-free plain flour, dairy-free white chocolate chips, caster sugar, dairy-free butter, free-range eggs, vanilla extract, fresh raspberries.",                    allergens: ["Eggs", "Soya"], mayContain: [] },
-            { name: "Chocolate Brownies",        category: "traybake", ingredients: "Gluten-free plain flour, dairy-free dark chocolate, cocoa powder, caster sugar, dairy-free butter, free-range eggs, vanilla extract.",                                allergens: ["Eggs"], mayContain: ["Tree nuts", "Soya"] },
-            { name: "Millionaire's Shortbread",  category: "traybake", ingredients: "Gluten-free plain flour, dairy-free butter, icing sugar, dairy-free caramel (golden syrup, coconut cream, dairy-free butter), dairy-free dark chocolate.",            allergens: [], mayContain: ["Soya", "Tree nuts"] },
-            { name: "Flapjacks",                 category: "traybake", ingredients: "Gluten-free certified oats, dairy-free butter, golden syrup, soft brown sugar.",                                                                                      allergens: ["Oats (gluten-free certified)"], mayContain: ["Tree nuts"] },
-            { name: "Shortbread Rounds",         category: "biscuit",  ingredients: "Gluten-free plain flour, dairy-free butter, icing sugar, vanilla extract.",                                                                                           allergens: [], mayContain: ["Eggs", "Soya"] },
-            { name: "Chocolate Chip Cookies",    category: "biscuit",  ingredients: "Gluten-free plain flour, dairy-free butter, soft brown sugar, caster sugar, free-range egg, vanilla extract, dairy-free chocolate chips, bicarbonate of soda.",       allergens: ["Eggs", "Soya"], mayContain: ["Tree nuts"] },
-            { name: "Gingerbread Biscuits",      category: "biscuit",  ingredients: "Gluten-free plain flour, dairy-free butter, soft brown sugar, golden syrup, ground ginger, mixed spice, bicarbonate of soda.",                                        allergens: [], mayContain: ["Eggs", "Tree nuts"] },
-            { name: "White Sandwich Loaf",       category: "bread",    ingredients: "Gluten-free white bread flour blend, yeast, salt, dairy-free butter, water, free-range egg.",                                                                         allergens: ["Eggs"], mayContain: ["Soya"] },
-            { name: "Cheese & Herb Scones",      category: "bread",    ingredients: "Gluten-free self-raising flour, dairy-free cheese (coconut oil, tapioca starch, flavourings), dairy-free butter, mixed herbs, free-range egg, dairy-free milk.",      allergens: ["Eggs"], mayContain: ["Soya", "Tree nuts"] },
-            { name: "Plain Scones",              category: "bread",    ingredients: "Gluten-free self-raising flour, dairy-free butter, caster sugar, free-range egg, dairy-free milk.",                                                                   allergens: ["Eggs"], mayContain: ["Soya"] },
+            {
+                name: "Classic Victoria Sponge", category: "cake",
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80",
+                ingredients: "Gluten-free self-raising flour blend, caster sugar, dairy-free butter (coconut oil, palm oil), free-range eggs, vanilla extract, dairy-free jam, dairy-free cream.",
+                allergens: ["Eggs"], mayContain: ["Soya", "Tree nuts"]
+            },
+            {
+                name: "Chocolate Fudge Cake", category: "cake",
+                image: "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=600&q=80",
+                ingredients: "Gluten-free plain flour, cocoa powder, caster sugar, dairy-free butter, free-range eggs, dairy-free dark chocolate, vanilla extract, bicarbonate of soda.",
+                allergens: ["Eggs"], mayContain: ["Tree nuts", "Soya"]
+            },
+            {
+                name: "Lemon Drizzle Cake", category: "cake",
+                image: "https://images.unsplash.com/photo-1514910457252-414ca0571010?w=600&q=80",
+                ingredients: "Gluten-free self-raising flour, caster sugar, dairy-free butter, free-range eggs, lemon zest, fresh lemon juice, icing sugar.",
+                allergens: ["Eggs"], mayContain: []
+            },
+            {
+                name: "Carrot Cake", category: "cake",
+                image: "https://images.unsplash.com/photo-1621955511250-41e67f3194ec?w=600&q=80",
+                ingredients: "Gluten-free flour, grated carrots, soft brown sugar, sunflower oil, free-range eggs, cinnamon, mixed spice, walnuts, dairy-free cream cheese frosting.",
+                allergens: ["Eggs", "Tree nuts (walnuts)"], mayContain: ["Soya"]
+            },
+            {
+                name: "Raspberry Blondies", category: "traybake",
+                image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80",
+                ingredients: "Gluten-free plain flour, dairy-free white chocolate chips, caster sugar, dairy-free butter, free-range eggs, vanilla extract, fresh raspberries.",
+                allergens: ["Eggs", "Soya"], mayContain: []
+            },
+            {
+                name: "Chocolate Brownies", category: "traybake",
+                image: "https://images.unsplash.com/photo-1606101273945-e9eba03a4b36?w=600&q=80",
+                ingredients: "Gluten-free plain flour, dairy-free dark chocolate, cocoa powder, caster sugar, dairy-free butter, free-range eggs, vanilla extract.",
+                allergens: ["Eggs"], mayContain: ["Tree nuts", "Soya"]
+            },
+            {
+                name: "Millionaire's Shortbread", category: "traybake",
+                image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80",
+                ingredients: "Gluten-free plain flour, dairy-free butter, icing sugar, dairy-free caramel (golden syrup, coconut cream, dairy-free butter), dairy-free dark chocolate.",
+                allergens: [], mayContain: ["Soya", "Tree nuts"]
+            },
+            {
+                name: "Flapjacks", category: "traybake",
+                image: "https://images.unsplash.com/photo-1490567674331-8a1b0f13a273?w=600&q=80",
+                ingredients: "Gluten-free certified oats, dairy-free butter, golden syrup, soft brown sugar.",
+                allergens: ["Oats (gluten-free certified)"], mayContain: ["Tree nuts"]
+            },
+            {
+                name: "Shortbread Rounds", category: "biscuit",
+                image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80",
+                ingredients: "Gluten-free plain flour, dairy-free butter, icing sugar, vanilla extract.",
+                allergens: [], mayContain: ["Eggs", "Soya"]
+            },
+            {
+                name: "Chocolate Chip Cookies", category: "biscuit",
+                image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80",
+                ingredients: "Gluten-free plain flour, dairy-free butter, soft brown sugar, caster sugar, free-range egg, vanilla extract, dairy-free chocolate chips, bicarbonate of soda.",
+                allergens: ["Eggs", "Soya"], mayContain: ["Tree nuts"]
+            },
+            {
+                name: "Gingerbread Biscuits", category: "biscuit",
+                image: "https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=600&q=80",
+                ingredients: "Gluten-free plain flour, dairy-free butter, soft brown sugar, golden syrup, ground ginger, mixed spice, bicarbonate of soda.",
+                allergens: [], mayContain: ["Eggs", "Tree nuts"]
+            }
         ];
 
-        /* ── Render ───────────────────────────────────────────────────────── */
-        const CAT_LABELS = { cake: 'Cake', traybake: 'Traybake', biscuit: 'Biscuits & Cookies', bread: 'Breads & Scones' };
+        /* ── Render ─────────────────────────────────────────────────────────── */
+        const CAT_LABELS = {
+            cake:     'Cake',
+            traybake: 'Traybake',
+            biscuit:  'Biscuits & Cookies',
+            bread:    'Breads & Scones'
+        };
 
-        function buildCard(product) {
-            const containsPills = product.allergens.map(a  => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
-            const mayPills      = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
+        function buildCard(p) {
+            const containsPills = p.allergens.map(a  => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
+            const mayPills      = p.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
 
             return `
-                <div class="product-card" data-category="${product.category}" data-name="${product.name.toLowerCase()}">
-                    <div class="product-card-header">
-                        <div>
-                            <div class="product-category">${CAT_LABELS[product.category]}</div>
-                            <div class="product-name">${product.name}</div>
-                        </div>
+            <div class="product-card" data-category="${p.category}" data-name="${p.name.toLowerCase()}">
+
+                <!-- Photo strip with category badge -->
+                <div class="product-img-strip">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    <span class="product-category-badge">${CAT_LABELS[p.category]}</span>
+                </div>
+
+                <!-- Card body -->
+                <div class="product-body">
+
+                    <!-- Name + expand chevron -->
+                    <div class="product-body-header">
+                        <h3 class="product-name">${p.name}</h3>
                         <i class="fas fa-chevron-down expand-icon"></i>
                     </div>
+
+                    <!-- Allergen pills — always visible -->
                     <div class="allergen-pills">
                         <span class="pill pill-free">Gluten free</span>
                         <span class="pill pill-free">Dairy free</span>
                         ${containsPills}
                         ${mayPills}
                     </div>
+
+                    <!-- Ingredients — revealed on expand -->
                     <div class="product-detail">
                         <div class="detail-label">Ingredients</div>
-                        <p class="ingredients-list">${product.ingredients}</p>
+                        <p class="ingredients-list">${p.ingredients}</p>
                     </div>
-                </div>`;
+
+                </div>
+            </div>`;
         }
 
         function renderGrid(list) {
@@ -157,7 +226,7 @@
             });
         }
 
-        /* ── Filter logic ─────────────────────────────────────────────────── */
+        /* ── Filter logic ──────────────────────────────────────────────────── */
         let activeCategory = 'all';
         let searchTerm     = '';
 

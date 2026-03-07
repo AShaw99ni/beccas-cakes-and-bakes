@@ -80,8 +80,9 @@
 /* ── Product grid ── */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    align-items: start;
 }
 
 
@@ -89,16 +90,18 @@
 .product-card {
     background: white;
     border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
     border: 2px solid transparent;
     cursor: pointer;
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    overflow: hidden;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(171, 29, 121, 0.12);
+    box-shadow: 0 12px 28px rgba(171, 29, 121, 0.13);
     border-color: var(--pink-light);
 }
 
@@ -106,36 +109,77 @@
     border-color: var(--pink);
 }
 
-.product-card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0.5rem;
+
+/* ── Image header strip ── */
+.product-img-strip {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background: #f5eaf5;
+    position: relative;
 }
 
-.product-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--deep);
-    margin: 0 0 4px;
-    line-height: 1.3;
+.product-img-strip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
 }
 
-.product-category {
-    font-size: 0.75rem;
+.product-card:hover .product-img-strip img {
+    transform: scale(1.04);
+}
+
+/* Category badge floated over the photo */
+.product-category-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--pink);
     font-family: 'Lato', sans-serif;
+    padding: 3px 10px;
+    border-radius: 50px;
+}
+
+
+/* ── Card body ── */
+.product-body {
+    padding: 1rem 1.25rem 1.25rem;
+    flex: 1;
+    min-height: 12rem;
+}
+
+.product-body-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 10px;
+}
+
+.product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--deep);
+    margin: 0;
+    line-height: 1.3;
+    flex: 1;
 }
 
 .expand-icon {
     color: var(--pink);
     font-size: 0.85rem;
     flex-shrink: 0;
-    margin-top: 4px;
-    transition: transform 0.2s ease;
+    margin-top: 3px;
+    transition: transform 0.22s ease;
 }
 
 .product-card.expanded .expand-icon {
@@ -147,15 +191,14 @@
 .allergen-pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
+    gap: 5px;
 }
 
 .pill {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-family: 'Lato', sans-serif;
     font-weight: 700;
-    padding: 3px 10px;
+    padding: 3px 9px;
     border-radius: 50px;
     letter-spacing: 0.04em;
 }
@@ -168,35 +211,38 @@
 /* ── Expanded ingredient detail ── */
 .product-detail {
     display: none;
-    margin-top: 14px;
-    padding-top: 14px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid #f0e4f8;
 }
 
 .product-card.expanded .product-detail {
     display: block;
+    animation: fadeSlideIn 0.28s ease both;
 }
 
 .detail-label {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--pink);
     font-family: 'Lato', sans-serif;
     margin-bottom: 4px;
-    margin-top: 10px;
 }
 
-.detail-label:first-child { margin-top: 0; }
-
 .ingredients-list {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 300;
     color: var(--body-text);
     line-height: 1.6;
     font-family: 'Lato', sans-serif;
     margin: 0;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 

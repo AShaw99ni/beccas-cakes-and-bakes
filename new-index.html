@@ -457,41 +457,7 @@
 
     <!-- First visit modal — show once per browser session -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const modalEl = document.getElementById('firstVisitModal');
-            const modal = new bootstrap.Modal(modalEl);
-
-            if (!localStorage.getItem('firstVisitShown')) {
-                modal.show();
-                localStorage.setItem('firstVisitShown', 'true');
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-                const modalEl = document.getElementById('firstVisitModal');
-                const modal = new bootstrap.Modal(modalEl);
-
-                if (!localStorage.getItem('firstVisitShown')) {
-                    modal.show();
-                    localStorage.setItem('firstVisitShown', 'true');
-                }
-            });
-
-            // Load Brevo script once, after page is ready — not tied to modal open
-            window.addEventListener('load', function () {
-                const s = document.createElement('script');
-                s.src = 'https://sibforms.com/forms/end-form/build/main.js';
-                document.body.appendChild(s);
-            });
-        });
-
-        function handleCaptchaResponse() {
-            const el = document.getElementById('sib-captcha');
-            if (el) el.dispatchEvent(new Event('captchaChange'));
-        }
-    </script>
-
-    <!-- Brevo config -->
-    <script>
+        // Brevo config must be set before main.js loads
         window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
         window.LOCALE = 'en';
         window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = 'The information provided is invalid. Please review the field format and try again.';
@@ -504,6 +470,27 @@
             }
         };
         var AUTOHIDE = Boolean(0);
+
+        function handleCaptchaResponse() {
+            const el = document.getElementById('sib-captcha');
+            if (el) el.dispatchEvent(new Event('captchaChange'));
+        }
+
+        // Load Brevo's script after the full page (including hidden modal DOM) is ready
+        window.addEventListener('load', function () {
+            const s = document.createElement('script');
+            s.src = 'https://sibforms.com/forms/end-form/build/main.js';
+            document.body.appendChild(s);
+
+            // Show modal after Brevo has had a moment to initialise
+            if (!localStorage.getItem('firstVisitShown')) {
+                setTimeout(function () {
+                    const modal = new bootstrap.Modal(document.getElementById('firstVisitModal'));
+                    modal.show();
+                    localStorage.setItem('firstVisitShown', 'true');
+                }, 300);
+            }
+        });
     </script>
 
     <!-- Scroll reveal for content sections -->

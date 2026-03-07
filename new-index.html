@@ -457,7 +457,6 @@
 
     <!-- First visit modal — show once per browser session -->
     <script>
-        // Brevo config must be set before main.js loads
         window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
         window.LOCALE = 'en';
         window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = 'The information provided is invalid. Please review the field format and try again.';
@@ -476,20 +475,30 @@
             if (el) el.dispatchEvent(new Event('captchaChange'));
         }
 
-        // Load Brevo's script after the full page (including hidden modal DOM) is ready
         window.addEventListener('load', function () {
-            const s = document.createElement('script');
-            s.src = 'https://sibforms.com/forms/end-form/build/main.js';
-            document.body.appendChild(s);
+            const modalEl = document.getElementById('firstVisitModal');
 
-            // Show modal after Brevo has had a moment to initialise
-            if (!localStorage.getItem('firstVisitShown')) {
-                setTimeout(function () {
-                    const modal = new bootstrap.Modal(document.getElementById('firstVisitModal'));
+            // Brevo's main.js crashes on display:none elements — briefly make the
+            // modal visible-but-invisible so Brevo can querySelector into it.
+            modalEl.style.display = 'block';
+            modalEl.style.opacity = '0';
+            modalEl.style.pointerEvents = 'none';
+
+            const s = document.createElement('script');
+            s.onload = function () {
+                // Brevo has now initialised — restore and optionally open modal
+                modalEl.style.display = '';
+                modalEl.style.opacity = '';
+                modalEl.style.pointerEvents = '';
+
+                if (!localStorage.getItem('firstVisitShown')) {
+                    const modal = new bootstrap.Modal(modalEl);
                     modal.show();
                     localStorage.setItem('firstVisitShown', 'true');
-                }, 300);
-            }
+                }
+            };
+            s.src = 'https://sibforms.com/forms/end-form/build/main.js';
+            document.body.appendChild(s);
         });
     </script>
 

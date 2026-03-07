@@ -478,19 +478,26 @@
         window.addEventListener('load', function () {
             const modalEl = document.getElementById('firstVisitModal');
 
-            // Brevo's main.js crashes on display:none elements — briefly make the
-            // modal visible-but-invisible so Brevo can querySelector into it.
-            modalEl.style.display = 'block';
-            modalEl.style.opacity = '0';
-            modalEl.style.pointerEvents = 'none';
+            // Move the form OUT of the modal and into the body, hidden,
+            // so Brevo can initialise it in a fully rendered state
+            const sibForm = modalEl.querySelector('.sib-form');
+            sibForm.style.position = 'absolute';
+            sibForm.style.left = '-9999px';
+            sibForm.style.visibility = 'hidden';
+            document.body.appendChild(sibForm);
 
+            // Load Brevo — it can now find the form with no issues
             const s = document.createElement('script');
             s.onload = function () {
-                // Brevo has now initialised — restore and optionally open modal
-                modalEl.style.display = '';
-                modalEl.style.opacity = '';
-                modalEl.style.pointerEvents = '';
+                // Move the form back into the modal
+                sibForm.style.position = '';
+                sibForm.style.left = '';
+                sibForm.style.visibility = '';
+                const modalContent = modalEl.querySelector('.modal-content');
+                const modalFooter = modalEl.querySelector('.modal-footer');
+                modalContent.insertBefore(sibForm, modalFooter);
 
+                // Now show the modal if first visit
                 if (!localStorage.getItem('firstVisitShown')) {
                     const modal = new bootstrap.Modal(modalEl);
                     modal.show();

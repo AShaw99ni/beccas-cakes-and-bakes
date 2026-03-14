@@ -17,7 +17,7 @@
 
     /* ── Navigation links ─────────────────────────────────────────────────── */
     const NAV_LINKS = [
-        { label: 'Home', href: './index.html', page: 'home' },
+        { label: 'Home', href: './new-index.html', page: 'home' },
         { label: 'Our Story', href: './our-story.html', page: 'our-story' },
         { label: 'Allergen Advice', href: './allergen-advice.html', page: 'allergen-advice' },
         { label: 'Upcoming Events', href: './upcoming-events.html', page: 'upcoming-events' },

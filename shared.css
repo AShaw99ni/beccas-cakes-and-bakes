@@ -7,14 +7,14 @@
 
 /* ── CSS Variables ── */
 :root {
-    --pink:       #AB1D79;
-    --pink-dark:  #7c1457;
+    --pink: #AB1D79;
+    --pink-dark: #7c1457;
     --pink-light: #e2c4f9;
-    --cream:      #FFEAFE;
-    --deep:       #2a1a2e;
-    --body-text:  #4a3a52;
-    --muted:      #5a3a6e;
-    --navbar-bg:  rgba(226, 196, 249, 0.85);
+    --cream: #FFEAFE;
+    --deep: #2a1a2e;
+    --body-text: #4a3a52;
+    --muted: #5a3a6e;
+    --navbar-bg: rgba(226, 196, 249, 0.85);
 }
 
 
@@ -30,7 +30,12 @@ body {
     padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Playfair Display', serif;
 }
 
@@ -210,8 +215,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -425,11 +437,25 @@ footer p {
 }
 
 /* Social icon buttons in footer */
-.footer-social-facebook  { background-color: #3b5998; }
-.footer-social-instagram { background-color: #ac2bac; }
-.footer-social-tiktok    { background-color: #000000; }
-.footer-social-linkedin  { background-color: #0082ca; }
-.footer-social-email     { background-color: var(--pink); }
+.footer-social-facebook {
+    background-color: #3b5998;
+}
+
+.footer-social-instagram {
+    background-color: #ac2bac;
+}
+
+.footer-social-tiktok {
+    background-color: #000000;
+}
+
+.footer-social-linkedin {
+    background-color: #0082ca;
+}
+
+.footer-social-email {
+    background-color: var(--pink);
+}
 
 
 /* =============================================================================
@@ -488,4 +514,86 @@ footer p {
 .btn-hero-order:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(171, 29, 121, 0.4);
+}
+
+
+/* ── Brevo signup form root — hidden off-screen on all pages ──────────────
+   The overlay and form are injected by components.js. The form must stay
+   in the DOM for Brevo's main.js to initialise it, but must never be visible
+   until the overlay is opened. These rules apply site-wide.
+─────────────────────────────────────────────────────────────────────────── */
+#sib-form-root {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#signup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#signup-overlay.is-visible {
+    display: flex;
+    opacity: 0;
+}
+
+#signup-overlay.is-open {
+    opacity: 1;
+}
+
+#signup-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem 2rem 2rem;
+    max-width: 500px;
+    width: 92%;
+    position: relative;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+    transform: translateY(16px);
+    transition: transform 0.35s ease;
+}
+
+#signup-overlay.is-open #signup-box {
+    transform: translateY(0);
+}
+
+#signup-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+#signup-close:hover {
+    color: #333;
+}
+
+/* Footer newsletter section */
+.footer-newsletter__sub {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 1rem;
 }

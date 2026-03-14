@@ -9,7 +9,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
@@ -28,7 +30,8 @@
             <div class="hero-divider"></div>
             <h1>Allergen Advice</h1>
             <p class="hero-body">
-                All our bakes are gluten and dairy free. Tap any product to see its full ingredients and allergen information.
+                All our bakes are gluten and dairy free. Tap any product to see its full ingredients and allergen
+                information.
             </p>
             <a href="./contact.html" class="btn btn-brand btn-hero-order mt-3 rounded-pill px-4">Order Now</a>
         </div>
@@ -90,129 +93,104 @@
     <script src="./components.js"></script>
 
     <script>
-        /* ── Product data ─────────────────────────────────────────────────────
-           image: replace placeholder URLs with real product photo paths, e.g.:
-                  image: "./img/products/victoria-sponge.jpg"
-        ──────────────────────────────────────────────────────────────────── */
-        const products = [
-            {
-                name: "Classic Victoria Sponge", category: "cake",
-                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80",
-                ingredients: "Gluten-free self-raising flour blend, caster sugar, dairy-free butter (coconut oil, palm oil), free-range eggs, vanilla extract, dairy-free jam, dairy-free cream.",
-                allergens: ["Eggs"], mayContain: ["Soya", "Tree nuts"]
-            },
-            {
-                name: "Chocolate Fudge Cake", category: "cake",
-                image: "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=600&q=80",
-                ingredients: "Gluten-free plain flour, cocoa powder, caster sugar, dairy-free butter, free-range eggs, dairy-free dark chocolate, vanilla extract, bicarbonate of soda.",
-                allergens: ["Eggs"], mayContain: ["Tree nuts", "Soya"]
-            },
-            {
-                name: "Lemon Drizzle Cake", category: "cake",
-                image: "https://images.unsplash.com/photo-1514910457252-414ca0571010?w=600&q=80",
-                ingredients: "Gluten-free self-raising flour, caster sugar, dairy-free butter, free-range eggs, lemon zest, fresh lemon juice, icing sugar.",
-                allergens: ["Eggs"], mayContain: []
-            },
-            {
-                name: "Carrot Cake", category: "cake",
-                image: "https://images.unsplash.com/photo-1621955511250-41e67f3194ec?w=600&q=80",
-                ingredients: "Gluten-free flour, grated carrots, soft brown sugar, sunflower oil, free-range eggs, cinnamon, mixed spice, walnuts, dairy-free cream cheese frosting.",
-                allergens: ["Eggs", "Tree nuts (walnuts)"], mayContain: ["Soya"]
-            },
-            {
-                name: "Raspberry Blondies", category: "traybake",
-                image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80",
-                ingredients: "Gluten-free plain flour, dairy-free white chocolate chips, caster sugar, dairy-free butter, free-range eggs, vanilla extract, fresh raspberries.",
-                allergens: ["Eggs", "Soya"], mayContain: []
-            },
-            {
-                name: "Chocolate Brownies", category: "traybake",
-                image: "https://images.unsplash.com/photo-1606101273945-e9eba03a4b36?w=600&q=80",
-                ingredients: "Gluten-free plain flour, dairy-free dark chocolate, cocoa powder, caster sugar, dairy-free butter, free-range eggs, vanilla extract.",
-                allergens: ["Eggs"], mayContain: ["Tree nuts", "Soya"]
-            },
-            {
-                name: "Millionaire's Shortbread", category: "traybake",
-                image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80",
-                ingredients: "Gluten-free plain flour, dairy-free butter, icing sugar, dairy-free caramel (golden syrup, coconut cream, dairy-free butter), dairy-free dark chocolate.",
-                allergens: [], mayContain: ["Soya", "Tree nuts"]
-            },
-            {
-                name: "Flapjacks", category: "traybake",
-                image: "https://images.unsplash.com/photo-1490567674331-8a1b0f13a273?w=600&q=80",
-                ingredients: "Gluten-free certified oats, dairy-free butter, golden syrup, soft brown sugar.",
-                allergens: ["Oats (gluten-free certified)"], mayContain: ["Tree nuts"]
-            },
-            {
-                name: "Shortbread Rounds", category: "biscuit",
-                image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80",
-                ingredients: "Gluten-free plain flour, dairy-free butter, icing sugar, vanilla extract.",
-                allergens: [], mayContain: ["Eggs", "Soya"]
-            },
-            {
-                name: "Chocolate Chip Cookies", category: "biscuit",
-                image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80",
-                ingredients: "Gluten-free plain flour, dairy-free butter, soft brown sugar, caster sugar, free-range egg, vanilla extract, dairy-free chocolate chips, bicarbonate of soda.",
-                allergens: ["Eggs", "Soya"], mayContain: ["Tree nuts"]
-            },
-            {
-                name: "Gingerbread Biscuits", category: "biscuit",
-                image: "https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=600&q=80",
-                ingredients: "Gluten-free plain flour, dairy-free butter, soft brown sugar, golden syrup, ground ginger, mixed spice, bicarbonate of soda.",
-                allergens: [], mayContain: ["Eggs", "Tree nuts"]
-            }
-        ];
+        /* ── Google Sheet CSV URL ────────────────────────────────────────────
+           1. Open your Google Sheet
+           2. File → Share → Publish to web → Sheet1 → CSV → Publish
+           3. Copy the URL and paste it below
+        ─────────────────────────────────────────────────────────────────── */
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
 
-        /* ── Render ─────────────────────────────────────────────────────────── */
-        const CAT_LABELS = {
-            cake:     'Cake',
-            traybake: 'Traybake',
-            biscuit:  'Biscuits & Cookies',
-            bread:    'Breads & Scones'
+        /* ── CSV parser (handles quoted fields containing commas) ─────────── */
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            if (lines.length < 2) return [];
+            const headers = parseCSVRow(lines[0]);
+            return lines.slice(1).map(line => {
+                const vals = parseCSVRow(line);
+                const obj = {};
+                headers.forEach((h, i) => obj[h.trim()] = (vals[i] || '').trim());
+                return obj;
+            }).filter(r => r.name);
+        }
+
+        function parseCSVRow(line) {
+            const result = [];
+            let cur = '', inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+                    else inQuotes = !inQuotes;
+                } else if (ch === ',' && !inQuotes) {
+                    result.push(cur); cur = '';
+                } else {
+                    cur += ch;
+                }
+            }
+            result.push(cur);
+            return result;
+        }
+
+        /* ── Convert raw CSV row → product object ─────────────────────────── */
+        function rowToProduct(row) {
+            return {
+                name: row.name,
+                category: row.category,
+                ingredients: row.ingredients,
+                allergens: row.allergens ? row.allergens.split('|').map(s => s.trim()).filter(Boolean) : [],
+                mayContain: row.mayContain ? row.mayContain.split('|').map(s => s.trim()).filter(Boolean) : [],
+                image: row.image ? row.image.trim() : '',
+            };
+        }
+
+        /* ── Placeholder images by category (used when no image is set) ─────── */
+        const PLACEHOLDERS = {
+            cake: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=480&q=80',
+            traybake: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=480&q=80',
+            biscuit: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=480&q=80',
+            bread: 'https://cdn.pixabay.com/photo/2018/06/12/22/29/bread-3471667_1280.jpg',
         };
 
-        function buildCard(p) {
-            const containsPills = p.allergens.map(a  => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
-            const mayPills      = p.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
+        /* ── Render ───────────────────────────────────────────────────────── */
+        const CAT_LABELS = { cake: 'Cake', traybake: 'Traybake', biscuit: 'Biscuits & Cookies', bread: 'Breads & Scones' };
+
+        function buildCard(product) {
+            const containsPills = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
+            const mayPills = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
+            const catLabel = CAT_LABELS[product.category] || product.category;
+            const imgSrc = product.image || PLACEHOLDERS[product.category] || PLACEHOLDERS.cake;
+            const isPlaceholder = !product.image;
 
             return `
-            <div class="product-card" data-category="${p.category}" data-name="${p.name.toLowerCase()}">
-
-                <!-- Photo strip with category badge -->
-                <div class="product-img-strip">
-                    <img src="${p.image}" alt="${p.name}" loading="lazy">
-                    <span class="product-category-badge">${CAT_LABELS[p.category]}</span>
-                </div>
-
-                <!-- Card body -->
-                <div class="product-body">
-
-                    <!-- Name + expand chevron -->
-                    <div class="product-body-header">
-                        <h3 class="product-name">${p.name}</h3>
-                        <i class="fas fa-chevron-down expand-icon"></i>
+                <div class="product-card" data-category="${product.category}" data-name="${product.name.toLowerCase()}">
+                    <div class="product-card-img-wrap${isPlaceholder ? ' is-placeholder' : ''}">
+                        <img src="${imgSrc}" alt="${product.name}" loading="lazy">
+                        ${isPlaceholder ? '<span class="placeholder-badge">Photo coming soon</span>' : ''}
                     </div>
-
-                    <!-- Allergen pills — always visible -->
-                    <div class="allergen-pills">
-                        <span class="pill pill-free">Gluten free</span>
-                        <span class="pill pill-free">Dairy free</span>
-                        ${containsPills}
-                        ${mayPills}
+                    <div class="product-card-body">
+                        <div class="product-card-header">
+                            <div>
+                                <div class="product-category">${catLabel}</div>
+                                <div class="product-name">${product.name}</div>
+                            </div>
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </div>
+                        <div class="allergen-pills">
+                            <span class="pill pill-free">Gluten free</span>
+                            <span class="pill pill-free">Dairy free</span>
+                            ${containsPills}
+                            ${mayPills}
+                        </div>
+                        <div class="product-detail">
+                            <div class="detail-label">Ingredients</div>
+                            <p class="ingredients-list">${product.ingredients}</p>
+                        </div>
                     </div>
-
-                    <!-- Ingredients — revealed on expand -->
-                    <div class="product-detail">
-                        <div class="detail-label">Ingredients</div>
-                        <p class="ingredients-list">${p.ingredients}</p>
-                    </div>
-
-                </div>
-            </div>`;
+                </div>`;
         }
 
         function renderGrid(list) {
-            const grid      = document.getElementById('productGrid');
+            const grid = document.getElementById('productGrid');
             const noResults = document.getElementById('noResults');
             if (!list.length) {
                 grid.innerHTML = '';
@@ -226,12 +204,23 @@
             });
         }
 
-        /* ── Filter logic ──────────────────────────────────────────────────── */
+        function showSpinner() {
+            document.getElementById('productGrid').innerHTML =
+                '<div style="text-align:center;padding:3rem;color:var(--muted)"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading products…</p></div>';
+        }
+
+        function showError() {
+            document.getElementById('productGrid').innerHTML =
+                '<div style="text-align:center;padding:3rem;color:var(--muted)"><i class="fas fa-exclamation-circle fa-2x"></i><p style="margin-top:1rem">Could not load products. Please try again later.</p></div>';
+        }
+
+        /* ── Filter logic ─────────────────────────────────────────────────── */
+        let allProducts = [];
         let activeCategory = 'all';
-        let searchTerm     = '';
+        let searchTerm = '';
 
         function applyFilters() {
-            renderGrid(products.filter(p =>
+            renderGrid(allProducts.filter(p =>
                 (activeCategory === 'all' || p.category === activeCategory) &&
                 p.name.toLowerCase().includes(searchTerm)
             ));
@@ -251,7 +240,16 @@
             applyFilters();
         });
 
-        renderGrid(products);
+        /* ── Fetch and render ─────────────────────────────────────────────── */
+        showSpinner();
+        fetch(SHEET_CSV_URL)
+            .then(res => { if (!res.ok) throw new Error('Network error'); return res.text(); })
+            .then(text => {
+                allProducts = parseCSV(text).map(rowToProduct);
+                applyFilters();
+            })
+            .catch(() => showError());
     </script>
 </body>
+
 </html>

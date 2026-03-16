@@ -62,7 +62,7 @@
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(to top, rgba(42, 26, 46, 0.80) 0%, rgba(42, 26, 46, 0.30) 50%, transparent 100%),
+        linear-gradient(to top,  rgba(42, 26, 46, 0.80) 0%,  rgba(42, 26, 46, 0.30) 50%, transparent 100%),
         linear-gradient(to bottom, rgba(226, 196, 249, 0.25) 0%, transparent 40%);
 }
 
@@ -167,17 +167,8 @@
 }
 
 @keyframes scrollBounce {
-
-    0%,
-    100% {
-        transform: translateX(-50%) translateY(0);
-        opacity: 0.55;
-    }
-
-    50% {
-        transform: translateX(-50%) translateY(6px);
-        opacity: 1;
-    }
+    0%, 100% { transform: translateX(-50%) translateY(0);    opacity: 0.55; }
+    50%       { transform: translateX(-50%) translateY(6px); opacity: 1;    }
 }
 
 @media (max-width: 767px) {
@@ -298,17 +289,9 @@
 }
 
 @media (max-width: 767px) {
-    .trust-strip__grid {
-        gap: 4px;
-    }
-
-    .trust-item {
-        padding: 8px 16px;
-    }
-
-    .trust-divider {
-        display: none;
-    }
+    .trust-strip__grid { gap: 4px; }
+    .trust-item { padding: 8px 16px; }
+    .trust-divider { display: none; }
 }
 
 
@@ -319,6 +302,7 @@
 .section-story {
     background: var(--cream);
     padding: 96px 0;
+    overflow: hidden;
 }
 
 /* Image wrap with floating badge + decorative offset frame */
@@ -341,6 +325,7 @@
     border: 3px solid var(--pink-light);
     border-radius: 24px;
     z-index: 0;
+    overflow: hidden;
 }
 
 /* Pink circular badge floating over the image corner */
@@ -371,29 +356,11 @@
 }
 
 @media (max-width: 767px) {
-    .section-story {
-        padding: 64px 0;
-    }
-
-    .story-img-placeholder {
-        height: 280px;
-    }
-
-    .story-img-accent {
-        display: none;
-    }
-
-    .story-badge {
-        width: 84px;
-        height: 84px;
-        font-size: 0.7rem;
-        right: -10px;
-        bottom: -10px;
-    }
-
-    .story-badge strong {
-        font-size: 1.15rem;
-    }
+    .section-story { padding: 64px 0; }
+    .story-img-placeholder { height: 280px; }
+    .story-img-accent { display: none; }
+    .story-badge { width: 84px; height: 84px; font-size: 0.7rem; right: -10px; bottom: -10px; }
+    .story-badge strong { font-size: 1.15rem; }
 }
 
 
@@ -463,13 +430,8 @@
 }
 
 @media (max-width: 575px) {
-    .cat-card {
-        padding: 1.5rem 0.75rem;
-    }
-
-    .cat-card__icon {
-        font-size: 2rem;
-    }
+    .cat-card { padding: 1.5rem 0.75rem; }
+    .cat-card__icon { font-size: 2rem; }
 }
 
 
@@ -522,21 +484,9 @@
     border: 1.5px solid #f5c2b4;
 }
 
-/* Red — contains */
-.allergen-pill--info {
-    background: #edf4ff;
-    color: #0d6efd;
-    border: 1.5px solid #0d6efd;
-}
-
 @media (max-width: 991px) {
-    .section-allergen {
-        padding: 64px 0;
-    }
-
-    .allergen-preview {
-        justify-content: center;
-    }
+    .section-allergen { padding: 64px 0; }
+    .allergen-preview  { justify-content: center; }
 }
 
 
@@ -592,6 +542,12 @@
     text-align: center;
     position: relative;
     overflow: hidden;
+}
+
+@media (max-width: 767px) {
+    .section-cta {
+        padding: 64px 0;
+    }
 }
 
 /* Decorative blobs to match the Our Story mission banner style */
@@ -679,5 +635,3 @@
     color: white;
 }
 
-
-/* Signup overlay + #sib-form-root styles live in shared.css (apply to all pages) */

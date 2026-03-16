@@ -7,14 +7,14 @@
 
 /* ── CSS Variables ── */
 :root {
-    --pink: #AB1D79;
-    --pink-dark: #7c1457;
+    --pink:       #AB1D79;
+    --pink-dark:  #7c1457;
     --pink-light: #e2c4f9;
-    --cream: #FFEAFE;
-    --deep: #2a1a2e;
-    --body-text: #4a3a52;
-    --muted: #5a3a6e;
-    --navbar-bg: rgba(226, 196, 249, 0.85);
+    --cream:      #FFEAFE;
+    --deep:       #2a1a2e;
+    --body-text:  #4a3a52;
+    --muted:      #5a3a6e;
+    --navbar-bg:  rgba(226, 196, 249, 0.85);
 }
 
 
@@ -22,20 +22,20 @@
    BASE
    ============================================================================= */
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Lato', sans-serif;
     font-weight: 400;
     background-color: var(--cream);
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
 }
 
@@ -202,7 +202,7 @@ h6 {
     font-size: 1.05rem;
     color: var(--muted);
     max-width: 460px;
-    margin: 1rem auto 0;
+    margin: 1rem;
     line-height: 1.7;
 }
 
@@ -215,15 +215,8 @@ h6 {
 }
 
 @keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 
@@ -437,25 +430,11 @@ footer p {
 }
 
 /* Social icon buttons in footer */
-.footer-social-facebook {
-    background-color: #3b5998;
-}
-
-.footer-social-instagram {
-    background-color: #ac2bac;
-}
-
-.footer-social-tiktok {
-    background-color: #000000;
-}
-
-.footer-social-linkedin {
-    background-color: #0082ca;
-}
-
-.footer-social-email {
-    background-color: var(--pink);
-}
+.footer-social-facebook  { background-color: #3b5998; }
+.footer-social-instagram { background-color: #ac2bac; }
+.footer-social-tiktok    { background-color: #000000; }
+.footer-social-linkedin  { background-color: #0082ca; }
+.footer-social-email     { background-color: var(--pink); }
 
 
 /* =============================================================================

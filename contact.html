@@ -164,6 +164,8 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="alert alert-warning">⚠️ Please Note: Orders placed on short notice may not always be
+                            possible and will be accepted at the owner’s discretion.</div>
                         <div class="field-group">
                             <label>Cake flavour(s)</label>
                             <div class="pill-group" id="flavourPills">
@@ -176,8 +178,8 @@
                             <label for="cakeDesc">Design / decoration ideas <span class="req">*</span></label>
                             <textarea id="cakeDesc" class="form-control"
                                 placeholder="Describe colours, themes, wording, tiers, or share a photo idea…"
-                                maxlength="500"></textarea>
-                            <div class="char-counter"><span id="cakeDescCount">0</span> / 500</div>
+                                maxlength="800"></textarea>
+                            <div class="char-counter"><span id="cakeDescCount">0</span> / 800</div>
                             <div class="error-msg" id="err-cakeDesc">Please describe your design ideas.</div>
                         </div>
                     </div>
@@ -233,8 +235,7 @@
                 <!-- Step 3: Review & Send -->
                 <div class="step-panel" id="panel-3">
                     <h2>Review &amp; Send</h2>
-                    <p class="step-desc">Check everything looks right, then hit send. This will open your email
-                        app with
+                    <p class="step-desc">Check everything looks right, then hit send. This will open your email app with
                         everything pre-filled and addressed to Becca.</p>
                     <div id="reviewBox" class="review-box"></div>
                     <div class="form-nav">
@@ -249,8 +250,7 @@
                 <div class="success-panel" id="successPanel">
                     <div class="success-icon"><i class="fas fa-check"></i></div>
                     <h2>You're all set!</h2>
-                    <p>Your email app should have opened with everything ready to send. Becca typically replies
-                        within
+                    <p>Your email app should have opened with everything ready to send. Becca typically replies within
                         48 hours.</p>
                     <a href="./index.html" class="btn btn-brand px-4 py-2 rounded-pill">Back to Home</a>
                 </div>
@@ -346,12 +346,12 @@
             };
             document.getElementById('step2Title').textContent = titles[state.topic];
 
-            // Update message label: required for traybake, optional for everything else
+            // Update message label: optional for custom cake/cupcake, required for everything else
             const msgLabel = document.getElementById('messageLabel');
-            if (state.topic === 'traybake') {
-                msgLabel.innerHTML = 'Your message <span class="req">*</span>';
-            } else {
+            if (state.topic === 'custom') {
                 msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
+            } else {
+                msgLabel.innerHTML = 'Your message <span class="req">*</span>';
             }
 
             goTo(2);
@@ -432,7 +432,7 @@
                 }
             }
 
-            if (state.topic === 'traybake') {
+            if (state.topic !== 'custom') {
                 if (!document.getElementById('message').value.trim()) {
                     showError('message', 'err-message'); ok = false;
                 }

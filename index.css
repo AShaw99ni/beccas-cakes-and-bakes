@@ -484,6 +484,12 @@
     border: 1.5px solid #f5c2b4;
 }
 
+.allergen-pill--info {
+    background: #e7f0ff;
+    color: #0d6efd;
+    border: 1.5px solid #0d6efd;
+}
+
 @media (max-width: 991px) {
     .section-allergen { padding: 64px 0; }
     .allergen-preview  { justify-content: center; }

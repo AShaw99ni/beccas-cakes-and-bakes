@@ -79,7 +79,7 @@
 
             '<section class="footer-newsletter mb-4">' +
             '<h6 class="text-uppercase fw-bold mb-3">Stay in the loop</h6>' +
-            '<p class="footer-newsletter__sub">Get notified about new bakes, markets and special offers.</p>' +
+            '<p class="footer-newsletter__sub">Join our community and get the latest on new bakes, market appearances, and special offers.</p>' +
             '<button class="btn btn-brand rounded-pill px-4" id="footer-signup-btn">' +
             '<i class="fa fa-envelope me-2"></i>Subscribe to our newsletter' +
             '</button>' +

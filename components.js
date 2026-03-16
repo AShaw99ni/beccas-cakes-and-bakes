@@ -8,7 +8,7 @@
    3. Include this script: <script src="./components.js"></script>
    4. Set the active nav link by adding data-page="pageName" to <body>.
       e.g. <body data-page="gallery">
-      Valid values: home | our-story | allergen-advice | upcoming-events | gallery | contact
+      Valid values: home | our-story | allergen-advice | upcoming-events | gallery | contact | shop
 
    TO UPDATE NAV OR FOOTER: edit this file only — changes apply to all pages.
    ============================================================================= */
@@ -17,7 +17,6 @@
 
     /* ── Navigation links ─────────────────────────────────────────────────── */
     const NAV_LINKS = [
-        { label: 'Home', href: './new-index.html', page: 'home' },
         { label: 'Our Story', href: './our-story.html', page: 'our-story' },
         { label: 'Allergen Advice', href: './allergen-advice.html', page: 'allergen-advice' },
         { label: 'Upcoming Events', href: './upcoming-events.html', page: 'upcoming-events' },
@@ -25,8 +24,11 @@
         { label: 'Contact Us', href: './contact.html', page: 'contact' },
     ];
 
+    // Shop is kept separate so it renders as a CTA button, not a plain nav link
+    const SHOP_LINK = { label: 'Shop', href: './shop.html', page: 'shop' };
+
     const LEFT_LINKS = NAV_LINKS.slice(0, 3);
-    const RIGHT_LINKS = NAV_LINKS.slice(3);
+    const RIGHT_LINKS = NAV_LINKS.slice(3);   // Gallery, Contact Us
 
     /* ── Social links ─────────────────────────────────────────────────────── */
     const SOCIAL_LINKS = [
@@ -49,16 +51,42 @@
             '</li>';
     }
 
+    // Shop CTA button — pill style, slightly compact for nav context
+    function shopButtonHTML() {
+        const isActive = activePage() === 'shop';
+        return '<li class="nav-item nav-item--shop ms-2">' +
+            '<a href="' + SHOP_LINK.href + '" ' +
+            'class="btn btn-brand rounded-pill nav-shop-btn' + (isActive ? ' nav-shop-btn--active' : '') + '">' +
+            '<i class="fas fa-shopping-bag me-1"></i>' + SHOP_LINK.label +
+            '</a>' +
+            '</li>';
+    }
+
     /* ── Navbar HTML ──────────────────────────────────────────────────────── */
     function buildNavbar() {
         return '<nav class="navbar navbar-expand-lg">' +
             '<div class="container-xl position-relative navbar-padding">' +
-            '<a class="navbar-brand d-lg-none" href="./index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
-            '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>' +
+
+            // Mobile: logo + hamburger
+            '<a class="navbar-brand d-lg-none" href="./new-index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
+            '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">' +
+            '<span class="navbar-toggler-icon"></span>' +
+            '</button>' +
+
             '<div class="collapse navbar-collapse" id="mainNavbar">' +
+
+            // Left links
             '<ul class="navbar-nav me-auto">' + LEFT_LINKS.map(navLinkHTML).join('') + '</ul>' +
-            '<a class="navbar-brand navbar-center d-none d-lg-block" href="./index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
-            '<ul class="navbar-nav ms-auto">' + RIGHT_LINKS.map(navLinkHTML).join('') + '</ul>' +
+
+            // Centred logo (desktop only)
+            '<a class="navbar-brand navbar-center d-none d-lg-block" href="./new-index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
+
+            // Right links + Shop button
+            '<ul class="navbar-nav ms-auto align-items-center">' +
+            RIGHT_LINKS.map(navLinkHTML).join('') +
+            shopButtonHTML() +
+            '</ul>' +
+
             '</div></div></nav>';
     }
 
@@ -68,7 +96,10 @@
             return '<a class="btn text-white btn-floating m-1 ' + s.cssClass + '" href="' + s.href + '" role="button" aria-label="' + s.label + '"><i class="' + s.icon + '"></i></a>';
         }).join('');
 
-        const footerLinks = NAV_LINKS.map(function (l) {
+        // Footer uses all links including Shop
+        const HOME_LINK = { label: 'Home', href: './new-index.html' };
+        const allFooterLinks = [HOME_LINK, ...NAV_LINKS, SHOP_LINK];
+        const footerLinks = allFooterLinks.map(function (l) {
             return '<p><a href="' + l.href + '" class="text-reset">' + l.label + '</a></p>';
         }).join('');
 
@@ -90,6 +121,7 @@
             footerLinks +
             '</div></div></div></section>' +
             '</div>' +
+
             '<div class="text-center p-3 footer-copyright">' +
             '&copy; 2026 Copyright: <a class="text-body" href="https://beccascakesandbakes.co.uk/">beccascakesandbakes.co.uk</a>' +
             '</div>' +
@@ -155,7 +187,6 @@
         var formRoot = document.getElementById('sib-form-root');
         if (!overlay) return;
 
-        // Teleport Brevo form into the visible slot (only if not already there)
         if (formRoot && formRoot.querySelector('.sib-form') && !slot.querySelector('.sib-form')) {
             slot.appendChild(formRoot.querySelector('.sib-form'));
         }
@@ -203,7 +234,6 @@
         window.addEventListener('load', function () {
             var s = document.createElement('script');
             s.onload = function () {
-                // Auto-close overlay 2s after successful subscription
                 var successPanel = document.getElementById('success-message');
                 if (successPanel) {
                     new MutationObserver(function (mutations, obs) {
@@ -214,7 +244,6 @@
                     }).observe(successPanel, { attributes: true, attributeFilter: ['style'] });
                 }
 
-                // Show automatically on homepage first visit only
                 if (showOnFirstVisit && !localStorage.getItem('firstVisitShown')) {
                     localStorage.setItem('firstVisitShown', 'true');
                     setTimeout(openOverlay, 800);
@@ -230,7 +259,6 @@
         var navSlot = document.getElementById('site-nav');
         var footerSlot = document.getElementById('site-footer');
 
-        // Inject Brevo stylesheet on every page if not already present
         if (!document.querySelector('link[href*="sib-styles"]')) {
             var sibCss = document.createElement('link');
             sibCss.rel = 'stylesheet';
@@ -238,7 +266,6 @@
             document.head.appendChild(sibCss);
         }
 
-        // Inject reCAPTCHA script on every page if not already present
         if (!document.querySelector('script[src*="recaptcha"]')) {
             var rcScript = document.createElement('script');
             rcScript.src = 'https://www.google.com/recaptcha/api.js?hl=en';
@@ -249,10 +276,8 @@
         if (navSlot) navSlot.innerHTML = buildNavbar();
         if (footerSlot) footerSlot.innerHTML = buildFooter();
 
-        // Inject overlay + hidden Brevo form at top of body
         document.body.insertAdjacentHTML('afterbegin', buildSignupOverlay());
 
-        // Wire up close interactions
         var overlay = document.getElementById('signup-overlay');
         var closeBtn = document.getElementById('signup-close');
         if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
@@ -263,12 +288,10 @@
             if (e.key === 'Escape') closeOverlay();
         });
 
-        // Footer subscribe button opens overlay on any page
         document.addEventListener('click', function (e) {
             if (e.target && e.target.id === 'footer-signup-btn') openOverlay();
         });
 
-        // Init Brevo — auto-show popup on homepage only
         initBrevo(activePage() === 'home');
     });
 

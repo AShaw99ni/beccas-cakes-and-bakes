@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shop | Becca's Cakes and Bakes</title>
+    <link rel="icon" type="image/png" href="./img/Logo circle.png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="shop.css">
+</head>
+
+<body class="text-dark" data-page="shop">
+
+    <!-- ── Navbar (injected by components.js) ── -->
+    <div id="site-nav"></div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         PAGE HERO
+    ══════════════════════════════════════════════════════════ -->
+    <div class="page-hero">
+        <div class="page-hero__content">
+            <span class="hero-subtitle">Handmade to Order</span>
+            <div class="hero-divider"></div>
+            <h1>Shop</h1>
+            <p class="hero-body">Every bake is gluten &amp; dairy free, made fresh in Northern Ireland — just for you.
+            </p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ORDER NOTICE
+    ══════════════════════════════════════════════════════════ -->
+    <section class="shop-notice-section">
+        <div class="container">
+            <div class="shop-notice">
+                <i class="fas fa-clock shop-notice__icon"></i>
+                <p class="mb-0">
+                    All orders are <strong>made to order</strong> — please allow at least <strong>5–7 days'
+                        notice</strong>.
+                    You'll receive a confirmation email with collection or delivery details after checkout.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CELEBRATION CAKES
+    ══════════════════════════════════════════════════════════ -->
+    <section class="shop-section">
+        <div class="container">
+            <div class="shop-section__header">
+                <span class="section-label">Made to impress</span>
+                <h2 class="section-heading">Celebration Cakes</h2>
+            </div>
+            <div class="row g-4">
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/birthday-cake.jpg" alt="Birthday Cake" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Birthday+Cake'">
+                            <span class="product-badge">Popular</span>
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Birthday Cake</h3>
+                            <p class="product-card__desc">
+                                6-inch two-layer sponge with buttercream frosting. Choose your flavour and we'll add a
+                                personalised message.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">From £35</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_BIRTHDAY_CAKE"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/celebration-cake.jpg" alt="Celebration Cake" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Celebration+Cake'">
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Celebration Cake</h3>
+                            <p class="product-card__desc">
+                                8-inch showstopper for weddings, anniversaries, or any big occasion. Fully customisable
+                                design and flavour.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">From £55</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_CELEBRATION_CAKE"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/drip-cake.jpg" alt="Drip Cake" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Drip+Cake'">
+                            <span class="product-badge product-badge--new">New</span>
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Drip Cake</h3>
+                            <p class="product-card__desc">
+                                Stunning 6-inch drip cake with ganache finish, topped with sweets, macarons, or fresh
+                                fruit of your choice.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">From £45</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_DRIP_CAKE"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CUPCAKES
+    ══════════════════════════════════════════════════════════ -->
+    <section class="shop-section shop-section--tinted">
+        <div class="container">
+            <div class="shop-section__header">
+                <span class="section-label">For every occasion</span>
+                <h2 class="section-heading">Cupcakes</h2>
+            </div>
+            <div class="row g-4">
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/cupcakes-6.jpg" alt="Box of 6 Cupcakes" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=6+Cupcakes'">
+                            <span class="product-badge">Popular</span>
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Box of 6 Cupcakes</h3>
+                            <p class="product-card__desc">
+                                Six beautifully decorated cupcakes — perfect as a gift or a treat. Mix and match
+                                flavours available.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">£14</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_6_CUPCAKES"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/cupcakes-12.jpg" alt="Box of 12 Cupcakes" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=12+Cupcakes'">
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Box of 12 Cupcakes</h3>
+                            <p class="product-card__desc">
+                                A dozen cupcakes — great for parties, offices, or just because. Choose your theme and
+                                flavours.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">£26</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_12_CUPCAKES"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/cupcakes-wedding.jpg" alt="Wedding Cupcakes" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Wedding+Cupcakes'">
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Wedding Cupcake Tower</h3>
+                            <p class="product-card__desc">
+                                Elegant cupcake tower for weddings and events. Priced per cupcake — minimum 24. Contact
+                                us to discuss design.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">From £3.50 each</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_WEDDING_CUPCAKES"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         TRAYBAKES & COOKIES
+    ══════════════════════════════════════════════════════════ -->
+    <section class="shop-section">
+        <div class="container">
+            <div class="shop-section__header">
+                <span class="section-label">Becca's classics</span>
+                <h2 class="section-heading">Traybakes &amp; Cookies</h2>
+            </div>
+            <div class="row g-4">
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/cinnamon-rolls.jpg" alt="Cinnamon Rolls" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Cinnamon+Rolls'">
+                            <span class="product-badge product-badge--fave">Fan Fave</span>
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Cinnamon Rolls (6)</h3>
+                            <p class="product-card__desc">
+                                Soft, pillowy cinnamon rolls with cream cheese glaze. Baked fresh to order — a Becca's
+                                classic.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">£12</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_CINNAMON_ROLLS"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/cookies.jpg" alt="Cookie Box" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Cookies'">
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Cookie Box (8)</h3>
+                            <p class="product-card__desc">
+                                Eight chunky, chewy cookies — choose from chocolate chip, double chocolate, Biscoff, or
+                                a mix.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">£10</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_COOKIES" class="btn btn-brand rounded-pill px-3"
+                                    target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="product-card h-100">
+                        <div class="product-card__img-wrap">
+                            <img src="./img/brownies.jpg" alt="Brownie Box" loading="lazy"
+                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Brownies'">
+                        </div>
+                        <div class="product-card__body">
+                            <h3 class="product-card__name">Brownie Box (9)</h3>
+                            <p class="product-card__desc">
+                                Fudgy, rich chocolate brownies cut into 9 squares. Optional extras: salted caramel
+                                swirl, Oreo topping.
+                            </p>
+                            <div class="product-card__footer">
+                                <span class="product-price">£11</span>
+                                <!-- 🔑 Replace href with your Stripe Payment Link -->
+                                <a href="https://buy.stripe.com/REPLACE_BROWNIES"
+                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
+                                    Order Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CUSTOM ORDER CTA — same component as homepage section-cta
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-cta">
+        <div class="section-cta__inner container">
+            <span class="section-label">Can't see what you need?</span>
+            <h2 class="section-heading section-cta__heading">
+                Let's bake something<br><em>completely custom</em>
+            </h2>
+            <p class="section-cta__body">
+                Every bake is made to order — if you have something specific in mind, just get in touch
+                and Becca will work with you to make it happen.
+            </p>
+            <div class="section-cta__actions">
+                <a href="./contact.html" class="btn btn-light text-dark fw-bold rounded-pill px-4 py-2">Get in Touch</a>
+                <a href="./upcoming-events.html" class="section-cta__ghost-btn">Find us at a market →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Footer (injected by components.js) ── -->
+    <div id="site-footer"></div>
+
+    <!-- ── Scripts ── -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./components.js"></script>
+
+    <!-- Scroll reveal — same pattern as index.html -->
+    <script>
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.shop-section, .section-cta').forEach(function (el) {
+            io.observe(el);
+        });
+    </script>
+
+</body>
+
+</html>

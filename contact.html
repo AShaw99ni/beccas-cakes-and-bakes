@@ -9,7 +9,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
@@ -28,7 +30,7 @@
             <div class="hero-divider"></div>
             <h1>Get in Touch</h1>
             <p class="hero-body">
-                Whether it's a custom cake, a question about allergens, or just a hello — we'd love to hear from you.
+                Have a question, want a custom cake, or just fancy a hello? We’d love to hear from you.
             </p>
             <a href="./contact.html" class="btn btn-brand btn-hero-order mt-3 rounded-pill px-4">Order Now</a>
         </div>
@@ -67,26 +69,31 @@
                     <div class="topic-grid" id="topicGrid">
                         <div class="topic-card" data-topic="custom" tabindex="0">
                             <span class="topic-icon">🎂</span>
-                            <div class="topic-title">Custom Cake Order</div>
-                            <div class="topic-desc">Birthday, wedding, celebration — let's design your dream cake</div>
+                            <div class="topic-title">Custom Cake / Cupcake Order</div>
+                            <div class="topic-desc">Birthday, wedding, celebration cakes & cupcakes — your perfect bake
+                                made just for you</div>
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
                         <div class="topic-card" data-topic="traybake" tabindex="0">
                             <span class="topic-icon">🍫</span>
                             <div class="topic-title">Traybake / Batch Order</div>
-                            <div class="topic-desc">Brownies, blondies, millionaire's and more for events or gifting</div>
+                            <div class="topic-desc">Brownies, Brookies, and more — ideal for parties, events, or sharing
+                                with friends.
+                            </div>
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
                         <div class="topic-card" data-topic="event" tabindex="0">
                             <span class="topic-icon">🎉</span>
                             <div class="topic-title">Event / Market Enquiry</div>
-                            <div class="topic-desc">Interested in a collaboration, market, or pop-up event</div>
+                            <div class="topic-desc">Whether it’s a collaboration, market, or corporate event, we’d love
+                                to work with you.</div>
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
                         <div class="topic-card" data-topic="other" tabindex="0">
                             <span class="topic-icon">💬</span>
                             <div class="topic-title">General Enquiry</div>
-                            <div class="topic-desc">Allergen questions, feedback, press, or anything else</div>
+                            <div class="topic-desc">Allergen queries, feedback, press requests, or anything else —
+                                drop us a message.</div>
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
                     </div>
@@ -101,7 +108,9 @@
                 <!-- Step 2: Details -->
                 <div class="step-panel" id="panel-2">
                     <h2 id="step2Title">Tell us more</h2>
-                    <p class="step-desc">Fill in as much detail as you can — the more info Becca has, the better she can help.</p>
+                    <p class="step-desc">Fill in as much detail as you can — the more info Becca has, the better
+                        she can
+                        help.</p>
 
                     <!-- Base fields (always shown) -->
                     <div class="date-time-row">
@@ -166,9 +175,12 @@
                             </div>
                         </div>
                         <div class="field-group">
-                            <label for="cakeDesc">Design / decoration ideas</label>
-                            <textarea id="cakeDesc" class="form-control" placeholder="Describe colours, themes, wording, tiers, or share a photo idea…" maxlength="500"></textarea>
+                            <label for="cakeDesc">Design / decoration ideas <span class="req">*</span></label>
+                            <textarea id="cakeDesc" class="form-control"
+                                placeholder="Describe colours, themes, wording, tiers, or share a photo idea…"
+                                maxlength="500"></textarea>
                             <div class="char-counter"><span id="cakeDescCount">0</span> / 500</div>
+                            <div class="error-msg" id="err-cakeDesc">Please describe your design ideas.</div>
                         </div>
                     </div>
 
@@ -206,8 +218,10 @@
 
                     <!-- Message (always shown) -->
                     <div class="field-group field-group--top-gap">
-                        <label for="message">Your message <span class="req">*</span></label>
-                        <textarea id="message" class="form-control" placeholder="Anything else you'd like Becca to know…" maxlength="800"></textarea>
+                        <label for="message" id="messageLabel">Your message <span
+                                class="optional">(optional)</span></label>
+                        <textarea id="message" class="form-control"
+                            placeholder="Anything else you'd like Becca to know…" maxlength="800"></textarea>
                         <div class="char-counter"><span id="msgCount">0</span> / 800</div>
                         <div class="error-msg" id="err-message">Please add a message.</div>
                     </div>
@@ -221,7 +235,9 @@
                 <!-- Step 3: Review & Send -->
                 <div class="step-panel" id="panel-3">
                     <h2>Review &amp; Send</h2>
-                    <p class="step-desc">Check everything looks right, then hit send. This will open your email app with everything pre-filled and addressed to Becca.</p>
+                    <p class="step-desc">Check everything looks right, then hit send. This will open your email
+                        app with
+                        everything pre-filled and addressed to Becca.</p>
                     <div id="reviewBox" class="review-box"></div>
                     <div class="form-nav">
                         <button class="btn-back" id="step3Back">← Edit</button>
@@ -235,7 +251,9 @@
                 <div class="success-panel" id="successPanel">
                     <div class="success-icon"><i class="fas fa-check"></i></div>
                     <h2>You're all set!</h2>
-                    <p>Your email app should have opened with everything ready to send. Becca typically replies within 48 hours.</p>
+                    <p>Your email app should have opened with everything ready to send. Becca typically replies
+                        within
+                        48 hours.</p>
                     <a href="./index.html" class="btn btn-brand px-4 py-2 rounded-pill">Back to Home</a>
                 </div>
 
@@ -247,15 +265,19 @@
     <div class="social-strip">
         <h3>Or find us on social media</h3>
         <p>DMs are always open on Instagram and TikTok for quick questions</p>
-        <a href="https://www.facebook.com/profile.php?id=61586782277669" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.instagram.com/beccascakesandbakes.ni/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61586782277669" aria-label="Facebook"><i
+                class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/beccascakesandbakes.ni/" aria-label="Instagram"><i
+                class="fab fa-instagram"></i></a>
         <a href="https://www.tiktok.com/@beccascakesandbakes.ni" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-        <a href="mailto:beccascakesandbakes.ni@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="/cdn-cgi/l/email-protection#90f2f5f3f3f1e3f3f1fbf5e3f1fef4f2f1fbf5e3befef9d0f7fdf1f9fcbef3fffd"
+            aria-label="Email"><i class="fas fa-envelope"></i></a>
     </div>
 
     <!-- ── Footer (injected by components.js) ── -->
     <div id="site-footer"></div>
 
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./components.js"></script>
 
@@ -263,10 +285,10 @@
         const BECCA_EMAIL = 'beccascakesandbakes.ni@gmail.com';
 
         const TOPIC_LABELS = {
-            custom:   '🎂 Custom Cake Order',
+            custom: '🎂 Custom Cake Order',
             traybake: '🍫 Traybake / Batch Order',
-            event:    '🎉 Event / Market Enquiry',
-            other:    '💬 General Enquiry',
+            event: '🎉 Event / Market Enquiry',
+            other: '💬 General Enquiry',
         };
 
         let state = { topic: null, occasion: null, flavours: [], traybakes: [], servings: 12 };
@@ -281,7 +303,7 @@
                 const si = document.getElementById(`si-${n}`);
                 si.classList.remove('active', 'done');
                 if (n === step) si.classList.add('active');
-                if (n < step)  si.classList.add('done');
+                if (n < step) si.classList.add('done');
 
                 const num = document.querySelector(`#si-${n} .step-num`);
                 num.innerHTML = n < step ? '<i class="fas fa-check" style="font-size:0.7rem;"></i>' : String(n);
@@ -312,8 +334,8 @@
         document.getElementById('step1Next').addEventListener('click', () => {
             if (!state.topic) {
                 const grid = document.getElementById('topicGrid');
-                grid.style.outline       = '2px solid var(--pink)';
-                grid.style.borderRadius  = '12px';
+                grid.style.outline = '2px solid var(--pink)';
+                grid.style.borderRadius = '12px';
                 setTimeout(() => grid.style.outline = '', 1200);
                 return;
             }
@@ -322,9 +344,18 @@
             });
             const titles = {
                 custom: 'Tell us about your cake', traybake: 'Tell us about your order',
-                event:  'Tell us about the event', other:    'What would you like to know?',
+                event: 'Tell us about the event', other: 'What would you like to know?',
             };
             document.getElementById('step2Title').textContent = titles[state.topic];
+
+            // Update message label: required for traybake, optional for everything else
+            const msgLabel = document.getElementById('messageLabel');
+            if (state.topic === 'traybake') {
+                msgLabel.innerHTML = 'Your message <span class="req">*</span>';
+            } else {
+                msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
+            }
+
             goTo(2);
         });
 
@@ -348,8 +379,8 @@
         }
 
         setupPills('occasionPills', false, 'occasion');
-        setupPills('flavourPills',  true,  'flavours');
-        setupPills('traybakePills', true,  'traybakes');
+        setupPills('flavourPills', true, 'flavours');
+        setupPills('traybakePills', true, 'traybakes');
 
         let servings = 12;
         document.getElementById('servDown').addEventListener('click', () => {
@@ -371,7 +402,8 @@
             document.getElementById(errId).classList.add('show');
         }
 
-        ['fname', 'email', 'message'].forEach(id => {
+        // Clear errors on input for all validated fields
+        ['fname', 'email', 'message', 'cakeDesc'].forEach(id => {
             document.getElementById(id).addEventListener('input', function () {
                 this.classList.remove('error');
                 const err = document.getElementById(`err-${id}`);
@@ -380,15 +412,34 @@
         });
 
         function validateStep2() {
-            let ok    = true;
-            const rx  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!document.getElementById('fname').value.trim())        { showError('fname',     'err-fname');   ok = false; }
-            if (!rx.test(document.getElementById('email').value.trim())) { showError('email',  'err-email');   ok = false; }
-            if (!document.getElementById('message').value.trim())      { showError('message', 'err-message'); ok = false; }
-            if (state.topic === 'custom') {
-                if (!state.occasion) { document.getElementById('err-occasion').classList.add('show'); ok = false; }
-                if (!document.getElementById('eventDate').value) { showError('eventDate', 'err-date'); ok = false; }
+            let ok = true;
+            const rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!document.getElementById('fname').value.trim()) {
+                showError('fname', 'err-fname'); ok = false;
             }
+            if (!rx.test(document.getElementById('email').value.trim())) {
+                showError('email', 'err-email'); ok = false;
+            }
+
+            if (state.topic === 'custom') {
+                if (!state.occasion) {
+                    document.getElementById('err-occasion').classList.add('show'); ok = false;
+                }
+                if (!document.getElementById('eventDate').value) {
+                    showError('eventDate', 'err-date'); ok = false;
+                }
+                if (!document.getElementById('cakeDesc').value.trim()) {
+                    showError('cakeDesc', 'err-cakeDesc'); ok = false;
+                }
+            }
+
+            if (state.topic === 'traybake') {
+                if (!document.getElementById('message').value.trim()) {
+                    showError('message', 'err-message'); ok = false;
+                }
+            }
+
             return ok;
         }
 
@@ -436,10 +487,10 @@
         document.getElementById('step3Back').addEventListener('click', () => goTo(2));
 
         document.getElementById('sendBtn').addEventListener('click', () => {
-            const fname   = document.getElementById('fname').value.trim();
-            const lname   = document.getElementById('lname').value.trim();
+            const fname = document.getElementById('fname').value.trim();
+            const lname = document.getElementById('lname').value.trim();
             const subject = encodeURIComponent(`Website Enquiry — ${TOPIC_LABELS[state.topic].replace(/^[^\w]+/, '')} from ${fname}${lname ? ' ' + lname : ''}`);
-            const body    = encodeURIComponent(document.getElementById('reviewBox').textContent);
+            const body = encodeURIComponent(document.getElementById('reviewBox').textContent);
 
             window.location.href = `mailto:${BECCA_EMAIL}?subject=${subject}&body=${body}`;
 
@@ -451,4 +502,5 @@
         });
     </script>
 </body>
+
 </html>

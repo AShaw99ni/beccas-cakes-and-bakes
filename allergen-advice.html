@@ -14,6 +14,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="allergen-advice.css">
 </head>
 
@@ -85,6 +86,23 @@
         </div>
     </div>
 
+    <!-- ── Product detail modal ── -->
+    <div id="product-overlay" role="dialog" aria-modal="true">
+        <div id="product-modal">
+            <button id="product-modal-close" aria-label="Close">&times;</button>
+            <div class="product-modal-img-wrap" id="product-modal-img-wrap">
+                <img id="product-modal-img" src="" alt="">
+            </div>
+            <div class="product-modal-body">
+                <div class="product-category" id="product-modal-category"></div>
+                <div class="product-modal-name" id="product-modal-name"></div>
+                <div class="allergen-pills" id="product-modal-pills"></div>
+                <div class="detail-label" style="margin-top:1.2rem;">Ingredients</div>
+                <p class="ingredients-list" id="product-modal-ingredients"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- ── Footer (injected by components.js) ── -->
     <div id="site-footer"></div>
 
@@ -104,12 +122,12 @@
             const lines = text.trim().split('\n');
             if (lines.length < 2) return [];
             const headers = parseCSVRow(lines[0]);
-            return lines.slice(1).map(line => {
+            return lines.slice(1).map(function (line) {
                 const vals = parseCSVRow(line);
                 const obj = {};
-                headers.forEach((h, i) => obj[h.trim()] = (vals[i] || '').trim());
+                headers.forEach(function (h, i) { obj[h.trim()] = (vals[i] || '').trim(); });
                 return obj;
-            }).filter(r => r.name);
+            }).filter(function (r) { return r.name; });
         }
 
         function parseCSVRow(line) {
@@ -136,32 +154,33 @@
                 name: row.name,
                 category: row.category,
                 ingredients: row.ingredients,
-                allergens: row.allergens ? row.allergens.split('|').map(s => s.trim()).filter(Boolean) : [],
-                mayContain: row.mayContain ? row.mayContain.split('|').map(s => s.trim()).filter(Boolean) : [],
-                image: row.image ? row.image.trim() : '',
+                allergens: row.allergens ? row.allergens.split('|').map(function (s) { return s.trim(); }).filter(Boolean) : [],
+                mayContain: row.mayContain ? row.mayContain.split('|').map(function (s) { return s.trim(); }).filter(Boolean) : [],
+                image: (row.image_url || row.image || '').trim(),
             };
         }
 
-        /* ── Placeholder images by category (used when no image is set) ─────── */
+        /* ── Placeholder images by category ──────────────────────────────── */
         const PLACEHOLDERS = {
             cake: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=480&q=80',
             traybake: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=480&q=80',
             biscuit: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=480&q=80',
-            bread: 'https://cdn.pixabay.com/photo/2018/06/12/22/29/bread-3471667_1280.jpg',
+            bread: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc7b?w=480&q=80',
         };
 
-        /* ── Render ───────────────────────────────────────────────────────── */
         const CAT_LABELS = { cake: 'Cake', traybake: 'Traybake', biscuit: 'Biscuits & Cookies', bread: 'Breads & Scones' };
 
+        /* ── Build card HTML ──────────────────────────────────────────────── */
         function buildCard(product) {
             const containsPills = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
             const mayPills = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
             const catLabel = CAT_LABELS[product.category] || product.category;
             const imgSrc = product.image || PLACEHOLDERS[product.category] || PLACEHOLDERS.cake;
             const isPlaceholder = !product.image;
+            const dataProduct = JSON.stringify(product).replace(/'/g, '&#39;');
 
             return `
-                <div class="product-card" data-category="${product.category}" data-name="${product.name.toLowerCase()}">
+                <div class="product-card" data-category="${product.category}" data-name="${product.name.toLowerCase()}" data-product='${dataProduct}'>
                     <div class="product-card-img-wrap${isPlaceholder ? ' is-placeholder' : ''}">
                         <img src="${imgSrc}" alt="${product.name}" loading="lazy">
                         ${isPlaceholder ? '<span class="placeholder-badge">Photo coming soon</span>' : ''}
@@ -172,7 +191,7 @@
                                 <div class="product-category">${catLabel}</div>
                                 <div class="product-name">${product.name}</div>
                             </div>
-                            <i class="fas fa-chevron-down expand-icon"></i>
+                            <i class="fas fa-chevron-right expand-icon"></i>
                         </div>
                         <div class="allergen-pills">
                             <span class="pill pill-free">Gluten free</span>
@@ -180,14 +199,11 @@
                             ${containsPills}
                             ${mayPills}
                         </div>
-                        <div class="product-detail">
-                            <div class="detail-label">Ingredients</div>
-                            <p class="ingredients-list">${product.ingredients}</p>
-                        </div>
                     </div>
                 </div>`;
         }
 
+        /* ── Render grid ──────────────────────────────────────────────────── */
         function renderGrid(list) {
             const grid = document.getElementById('productGrid');
             const noResults = document.getElementById('noResults');
@@ -199,19 +215,52 @@
             noResults.style.display = 'none';
             grid.innerHTML = list.map(buildCard).join('');
             grid.querySelectorAll('.product-card').forEach(card => {
-                card.addEventListener('click', () => card.classList.toggle('expanded'));
+                card.addEventListener('click', () => openProductModal(JSON.parse(card.dataset.product)));
             });
         }
 
-        function showSpinner() {
-            document.getElementById('productGrid').innerHTML =
-                '<div style="text-align:center;padding:3rem;color:var(--muted)"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading products…</p></div>';
+        /* ── Modal open/close ─────────────────────────────────────────────── */
+        function openProductModal(product) {
+            const containsPills = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
+            const mayPills = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
+            const catLabel = CAT_LABELS[product.category] || product.category;
+            const imgSrc = product.image || PLACEHOLDERS[product.category] || PLACEHOLDERS.cake;
+            const isPlaceholder = !product.image;
+
+            document.getElementById('product-modal-img').src = imgSrc;
+            document.getElementById('product-modal-img').alt = product.name;
+            document.getElementById('product-modal-img-wrap').className = 'product-modal-img-wrap' + (isPlaceholder ? ' is-placeholder' : '');
+            document.getElementById('product-modal-category').textContent = catLabel;
+            document.getElementById('product-modal-name').textContent = product.name;
+            document.getElementById('product-modal-pills').innerHTML =
+                '<span class="pill pill-free">Gluten free</span>' +
+                '<span class="pill pill-free">Dairy free</span>' +
+                containsPills + mayPills;
+            document.getElementById('product-modal-ingredients').textContent = product.ingredients;
+
+            const overlay = document.getElementById('product-overlay');
+            overlay.classList.add('is-visible');
+            requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('is-open')));
+            document.body.style.overflow = 'hidden';
         }
 
-        function showError() {
-            document.getElementById('productGrid').innerHTML =
-                '<div style="text-align:center;padding:3rem;color:var(--muted)"><i class="fas fa-exclamation-circle fa-2x"></i><p style="margin-top:1rem">Could not load products. Please try again later.</p></div>';
+        function closeProductModal() {
+            const overlay = document.getElementById('product-overlay');
+            overlay.classList.remove('is-open');
+            overlay.addEventListener('transitionend', function handler() {
+                overlay.classList.remove('is-visible');
+                overlay.removeEventListener('transitionend', handler);
+                document.body.style.overflow = '';
+            });
         }
+
+        document.getElementById('product-modal-close').addEventListener('click', closeProductModal);
+        document.getElementById('product-overlay').addEventListener('click', e => {
+            if (e.target === document.getElementById('product-overlay')) closeProductModal();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeProductModal();
+        });
 
         /* ── Filter logic ─────────────────────────────────────────────────── */
         let allProducts = [];
@@ -238,6 +287,17 @@
             activeCategory = btn.dataset.cat;
             applyFilters();
         });
+
+        /* ── Spinner / error states ───────────────────────────────────────── */
+        function showSpinner() {
+            document.getElementById('productGrid').innerHTML =
+                '<div style="text-align:center;padding:3rem;color:var(--muted)"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading products…</p></div>';
+        }
+
+        function showError() {
+            document.getElementById('productGrid').innerHTML =
+                '<div style="text-align:center;padding:3rem;color:var(--muted)"><i class="fas fa-exclamation-circle fa-2x"></i><p style="margin-top:1rem">Could not load products. Please try again later.</p></div>';
+        }
 
         /* ── Fetch and render ─────────────────────────────────────────────── */
         showSpinner();

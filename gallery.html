@@ -14,6 +14,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="gallery.css">
 </head>
 
@@ -29,7 +30,7 @@
             <div class="hero-divider"></div>
             <h1>The Gallery</h1>
             <p class="hero-body">
-                Every bake, beautifully captured. Browse for inspiration or discover your perfect custom cake.
+                Every bake, captured. Browse for inspiration or find your perfect custom cake idea.
             </p>
             <a href="./contact.html" class="btn btn-brand btn-hero-order mt-3 rounded-pill px-4">Order Now</a>
         </div>
@@ -74,7 +75,7 @@
     <!-- ── Inspire CTA ── -->
     <div class="inspire-banner">
         <h2>Seen something you love?</h2>
-        <p>Every bake can be made to order. Contact us, and we’ll craft something special just for you.</p>
+        <p>All our bakes can be made to order. Get in touch and let's create something special together.</p>
         <a href="./contact.html" class="btn btn-light text-dark fw-bold">Get in Touch</a>
     </div>
 
@@ -99,47 +100,84 @@
     <script src="./components.js"></script>
 
     <script>
-        /* ── GALLERY DATA ──────────────────────────────────────────────────────
-           To add real photos: set  src: './img/your-photo.jpg'
-           Fields:
-             src   — image path (leave empty for placeholder)
-             alt   — accessibility text
-             title — shown in lightbox and hover overlay
-             cat   — "cakes" | "traybakes" | "biscuits" | "bread" | "custom"
-             tall  — true = taller placeholder (good for portrait photos)
-             ph    — placeholder height in px
-        ─────────────────────────────────────────────────────────────────────── */
-        const photos = [
-            { src: '', alt: 'Victoria Sponge Cake', title: 'Classic Victoria Sponge', cat: 'cakes', tall: true, ph: 420 },
-            { src: '', alt: 'Chocolate Fudge Cake', title: 'Chocolate Fudge Celebration Cake', cat: 'cakes', ph: 300 },
-            { src: '', alt: 'Lemon Drizzle', title: 'Lemon Drizzle Loaf', cat: 'cakes', ph: 280 },
-            { src: '', alt: 'Carrot Cake with cream cheese', title: 'Carrot Cake', cat: 'cakes', tall: true, ph: 400 },
-            { src: '', alt: 'Strawberry layer cake', title: 'Summer Strawberry Layer Cake', cat: 'cakes', ph: 320 },
-            { src: '', alt: 'Coffee and walnut cake', title: 'Coffee & Walnut Cake', cat: 'cakes', ph: 260 },
-            { src: '', alt: 'Chocolate brownies', title: 'Dark Chocolate Brownies', cat: 'traybakes', ph: 260 },
-            { src: '', alt: 'Raspberry blondies', title: 'Raspberry Blondies', cat: 'traybakes', tall: true, ph: 360 },
-            { src: '', alt: "Millionaire's shortbread", title: "Millionaire's Shortbread", cat: 'traybakes', ph: 280 },
-            { src: '', alt: 'Flapjacks with oats', title: 'Golden Flapjacks', cat: 'traybakes', ph: 240 },
-            { src: '', alt: 'Lemon bars', title: 'Zesty Lemon Bars', cat: 'traybakes', ph: 300 },
-            { src: '', alt: 'Shortbread rounds', title: 'Vanilla Shortbread Rounds', cat: 'biscuits', ph: 280 },
-            { src: '', alt: 'Chocolate chip cookies', title: 'Chunky Chocolate Chip Cookies', cat: 'biscuits', tall: true, ph: 380 },
-            { src: '', alt: 'Gingerbread biscuits', title: 'Iced Gingerbread Biscuits', cat: 'biscuits', ph: 300 },
-            { src: '', alt: 'Decorated sugar cookies', title: 'Decorated Sugar Cookies', cat: 'biscuits', ph: 260 },
-            { src: '', alt: 'White sandwich loaf', title: 'Gluten-Free White Loaf', cat: 'bread', tall: true, ph: 360 },
-            { src: '', alt: 'Cheese and herb scones', title: 'Cheese & Herb Scones', cat: 'bread', ph: 280 },
-            { src: '', alt: 'Plain scones with jam', title: 'Plain Scones with Jam & Cream', cat: 'bread', ph: 300 },
-            { src: '', alt: 'Soda bread', title: 'Irish Soda Bread', cat: 'bread', ph: 260 },
-            { src: '', alt: 'Custom birthday cake', title: 'Custom 21st Birthday Cake', cat: 'custom', tall: true, ph: 460 },
-            { src: '', alt: 'Wedding cake tiers', title: 'Three-Tier Wedding Cake', cat: 'custom', tall: true, ph: 500 },
-            { src: '', alt: 'Personalised cupcakes', title: 'Personalised Cupcake Box', cat: 'custom', ph: 300 },
-            { src: '', alt: 'Custom character cake', title: 'Character Cake — Custom Order', cat: 'custom', ph: 340 },
-            { src: '', alt: 'Hamper gift box of bakes', title: 'Gifting Hamper Box', cat: 'custom', ph: 280 },
-        ];
+        /* ── Google Sheet CSV URL ────────────────────────────────────────────
+           1. Open your Google Sheet
+           2. File → Share → Publish to web → Sheet1 → CSV → Publish
+           3. Copy the URL and paste it below
+        ─────────────────────────────────────────────────────────────────── */
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=28611426&single=true&output=csv';
 
-        const CAT_LABELS = {
-            cakes: 'Celebration Cakes', traybakes: 'Traybakes',
-            biscuits: 'Biscuits & Cookies', bread: 'Breads & Scones', custom: 'Custom Orders',
-        };
+        /* ── CSV parser ───────────────────────────────────────────────────── */
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            if (lines.length < 2) return [];
+            const headers = parseCSVRow(lines[0]);
+            return lines.slice(1).map(line => {
+                const vals = parseCSVRow(line);
+                const obj = {};
+                headers.forEach((h, i) => obj[h.trim()] = (vals[i] || '').trim());
+                return obj;
+            }).filter(r => r.name);
+        }
+
+        function parseCSVRow(line) {
+            const result = [];
+            let cur = '', inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+                    else inQuotes = !inQuotes;
+                } else if (ch === ',' && !inQuotes) {
+                    result.push(cur); cur = '';
+                } else { cur += ch; }
+            }
+            result.push(cur);
+            return result;
+        }
+
+        /* ── Convert CSV row → photo object ──────────────────────────────── */
+        function rowToPhoto(row) {
+            const cat = (row.category || '').trim().toLowerCase().replace(/\s+/g, '-');
+            return {
+                src: (row.image || row.image_link || '').trim(),
+                alt: row.name || '',
+                title: row.flavour ? row.name + ' — ' + row.flavour : row.name,
+                cat: cat,
+            };
+        }
+
+        /* CAT_LABELS built dynamically after fetch — maps slug → display label */
+        let CAT_LABELS = {};
+
+        function buildCatLabels() {
+            CAT_LABELS = {};
+            photos.forEach(p => {
+                if (p.cat && !CAT_LABELS[p.cat]) {
+                    // Convert slug back to title case for display e.g. "celebration-cakes" → "Celebration Cakes"
+                    CAT_LABELS[p.cat] = p.cat
+                        .replace(/-/g, ' ')
+                        .replace(/\b\w/g, c => c.toUpperCase());
+                }
+            });
+        }
+
+        function buildFilterBar() {
+            const bar = document.getElementById('filterBar');
+            // Get unique categories in order of first appearance
+            const seen = new Set();
+            const cats = [];
+            photos.forEach(p => { if (p.cat && !seen.has(p.cat)) { seen.add(p.cat); cats.push(p.cat); } });
+
+            bar.innerHTML = `<button class="filter-btn active" data-cat="all">
+                All <span class="count-badge" id="count-all">${photos.length}</span>
+            </button>` + cats.map(cat => `
+                <button class="filter-btn" data-cat="${cat}">
+                    ${CAT_LABELS[cat]} <span class="count-badge" id="count-${cat}">0</span>
+                </button>`).join('');
+        }
+
+        let photos = [];
 
         /* ── Grid ─────────────────────────────────────────────────────────── */
         const grid = document.getElementById('masonryGrid');
@@ -153,7 +191,6 @@
                 if (el) el.textContent = v;
             });
         }
-        updateCounts();
 
         function buildItem(photo, index) {
             const hasImg = photo.src && photo.src !== '';
@@ -295,7 +332,27 @@
             if (Math.abs(dx) > 50) dx < 0 ? setLbImage(lbIndex + 1) : setLbImage(lbIndex - 1);
         });
 
-        renderGrid('all');
+        /* ── Spinner / error ──────────────────────────────────────────────── */
+        function showSpinner() {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted)"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading gallery…</p></div>';
+        }
+
+        function showError() {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted)"><i class="fas fa-exclamation-circle fa-2x"></i><p style="margin-top:1rem">Could not load gallery. Please try again later.</p></div>';
+        }
+
+        /* ── Fetch and render ─────────────────────────────────────────────── */
+        showSpinner();
+        fetch(SHEET_CSV_URL)
+            .then(res => { if (!res.ok) throw new Error('Network error'); return res.text(); })
+            .then(text => {
+                photos = parseCSV(text).map(rowToPhoto);
+                buildCatLabels();
+                buildFilterBar();
+                updateCounts();
+                renderGrid('all');
+            })
+            .catch(() => showError());
     </script>
 </body>
 

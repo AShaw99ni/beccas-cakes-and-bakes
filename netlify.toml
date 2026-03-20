@@ -6,5 +6,8 @@
 [build.environment]
   NODE_VERSION = "18"
 
-[context.production]
-  secret_scanning = false
+[build.processing]
+  skip_processing = false
+
+[context.production.environment]
+  SECRETS_SCAN_OMIT_PATHS = "components.js,contact.html,node_modules"

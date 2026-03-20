@@ -13,8 +13,9 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="shared.css">
-    <link rel="stylesheet" href="shop.css">
+    <link rel="stylesheet" href="./shared.css">
+
+    <link rel="stylesheet" href="./shop.css">
 </head>
 
 <body class="text-dark" data-page="shop">
@@ -22,339 +23,524 @@
     <!-- ── Navbar (injected by components.js) ── -->
     <div id="site-nav"></div>
 
-    <!-- ══════════════════════════════════════════════════════════
-         PAGE HERO
-    ══════════════════════════════════════════════════════════ -->
+    <!-- ── Page Hero ── -->
     <div class="page-hero">
         <div class="page-hero__content">
-            <span class="hero-subtitle">Handmade to Order</span>
+            <span class="hero-subtitle">Gluten &amp; dairy free · Made in Northern Ireland</span>
             <div class="hero-divider"></div>
             <h1>Shop</h1>
-            <p class="hero-body">Every bake is gluten &amp; dairy free, made fresh in Northern Ireland — just for you.
-            </p>
+            <p class="hero-body">Fresh traybakes made to order — collect every Tuesday 12pm–6pm.</p>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════════
-         ORDER NOTICE
-    ══════════════════════════════════════════════════════════ -->
-    <section class="shop-notice-section">
-        <div class="container">
-            <div class="shop-notice">
-                <i class="fas fa-clock shop-notice__icon"></i>
-                <p class="mb-0">
-                    All orders are <strong>made to order</strong> — please allow at least <strong>5–7 days'
-                        notice</strong>.
-                    You'll receive a confirmation email with collection or delivery details after checkout.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════════════
-         CELEBRATION CAKES
-    ══════════════════════════════════════════════════════════ -->
+    <!-- ── Products ── -->
     <section class="shop-section">
         <div class="container">
-            <div class="shop-section__header">
-                <span class="section-label">Made to impress</span>
-                <h2 class="section-heading">Celebration Cakes</h2>
+            <!-- ── Order notice ── -->
+            <div class="notice-banner">
+                <p> <i class="fas fa-clock"></i>
+                    Orders are <strong>made fresh to order</strong>. Please place your order at least <strong>5–7 days
+                        in
+                        advance</strong>. Collection is every <strong>Tuesday 12pm–6pm</strong>.</p>
             </div>
-            <div class="row g-4">
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/birthday-cake.jpg" alt="Birthday Cake" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Birthday+Cake'">
-                            <span class="product-badge">Popular</span>
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Birthday Cake</h3>
-                            <p class="product-card__desc">
-                                6-inch two-layer sponge with buttercream frosting. Choose your flavour and we'll add a
-                                personalised message.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">From £35</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_BIRTHDAY_CAKE"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/celebration-cake.jpg" alt="Celebration Cake" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Celebration+Cake'">
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Celebration Cake</h3>
-                            <p class="product-card__desc">
-                                8-inch showstopper for weddings, anniversaries, or any big occasion. Fully customisable
-                                design and flavour.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">From £55</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_CELEBRATION_CAKE"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/drip-cake.jpg" alt="Drip Cake" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Drip+Cake'">
-                            <span class="product-badge product-badge--new">New</span>
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Drip Cake</h3>
-                            <p class="product-card__desc">
-                                Stunning 6-inch drip cake with ganache finish, topped with sweets, macarons, or fresh
-                                fruit of your choice.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">From £45</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_DRIP_CAKE"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════════════
-         CUPCAKES
-    ══════════════════════════════════════════════════════════ -->
-    <section class="shop-section shop-section--tinted">
-        <div class="container">
-            <div class="shop-section__header">
-                <span class="section-label">For every occasion</span>
-                <h2 class="section-heading">Cupcakes</h2>
-            </div>
-            <div class="row g-4">
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/cupcakes-6.jpg" alt="Box of 6 Cupcakes" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=6+Cupcakes'">
-                            <span class="product-badge">Popular</span>
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Box of 6 Cupcakes</h3>
-                            <p class="product-card__desc">
-                                Six beautifully decorated cupcakes — perfect as a gift or a treat. Mix and match
-                                flavours available.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">£14</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_6_CUPCAKES"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/cupcakes-12.jpg" alt="Box of 12 Cupcakes" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=12+Cupcakes'">
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Box of 12 Cupcakes</h3>
-                            <p class="product-card__desc">
-                                A dozen cupcakes — great for parties, offices, or just because. Choose your theme and
-                                flavours.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">£26</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_12_CUPCAKES"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/cupcakes-wedding.jpg" alt="Wedding Cupcakes" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Wedding+Cupcakes'">
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Wedding Cupcake Tower</h3>
-                            <p class="product-card__desc">
-                                Elegant cupcake tower for weddings and events. Priced per cupcake — minimum 24. Contact
-                                us to discuss design.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">From £3.50 each</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_WEDDING_CUPCAKES"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════════════
-         TRAYBAKES & COOKIES
-    ══════════════════════════════════════════════════════════ -->
-    <section class="shop-section">
-        <div class="container">
-            <div class="shop-section__header">
+            <div class="text-center mb-5">
                 <span class="section-label">Becca's classics</span>
-                <h2 class="section-heading">Traybakes &amp; Cookies</h2>
+                <h2 class="section-heading">Traybakes</h2>
             </div>
-            <div class="row g-4">
 
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/cinnamon-rolls.jpg" alt="Cinnamon Rolls" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Cinnamon+Rolls'">
-                            <span class="product-badge product-badge--fave">Fan Fave</span>
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Cinnamon Rolls (6)</h3>
-                            <p class="product-card__desc">
-                                Soft, pillowy cinnamon rolls with cream cheese glaze. Baked fresh to order — a Becca's
-                                classic.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">£12</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_CINNAMON_ROLLS"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Spinner -->
+            <div id="shopSpinner" class="product-grid" style="display:block;">
+                <div style="text-align:center;padding:3rem;color:var(--muted)">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top:1rem">Loading products…</p>
                 </div>
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/cookies.jpg" alt="Cookie Box" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Cookies'">
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Cookie Box (8)</h3>
-                            <p class="product-card__desc">
-                                Eight chunky, chewy cookies — choose from chocolate chip, double chocolate, Biscoff, or
-                                a mix.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">£10</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_COOKIES" class="btn btn-brand rounded-pill px-3"
-                                    target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="product-card h-100">
-                        <div class="product-card__img-wrap">
-                            <img src="./img/brownies.jpg" alt="Brownie Box" loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFEAFE/AB1D79?text=Brownies'">
-                        </div>
-                        <div class="product-card__body">
-                            <h3 class="product-card__name">Brownie Box (9)</h3>
-                            <p class="product-card__desc">
-                                Fudgy, rich chocolate brownies cut into 9 squares. Optional extras: salted caramel
-                                swirl, Oreo topping.
-                            </p>
-                            <div class="product-card__footer">
-                                <span class="product-price">£11</span>
-                                <!-- 🔑 Replace href with your Stripe Payment Link -->
-                                <a href="https://buy.stripe.com/REPLACE_BROWNIES"
-                                    class="btn btn-brand rounded-pill px-3" target="_blank" rel="noopener">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+            <!-- Error -->
+            <div id="shopError" style="display:none;text-align:center;padding:3rem;color:var(--muted)">
+                <i class="fas fa-exclamation-circle fa-2x"></i>
+                <p style="margin-top:1rem">Could not load products. Please try again later.</p>
+            </div>
+
+            <!-- Product grid -->
+            <div class="product-grid" id="productGrid" style="display:none;"></div>
         </div>
     </section>
 
-    <!-- ══════════════════════════════════════════════════════════
-         CUSTOM ORDER CTA — same component as homepage section-cta
-    ══════════════════════════════════════════════════════════ -->
-    <section class="section-cta">
-        <div class="section-cta__inner container">
-            <span class="section-label">Can't see what you need?</span>
-            <h2 class="section-heading section-cta__heading">
-                Let's bake something<br><em>completely custom</em>
-            </h2>
-            <p class="section-cta__body">
-                Every bake is made to order — if you have something specific in mind, just get in touch
-                and Becca will work with you to make it happen.
-            </p>
-            <div class="section-cta__actions">
-                <a href="./contact.html" class="btn btn-light text-dark fw-bold rounded-pill px-4 py-2">Get in Touch</a>
-                <a href="./upcoming-events.html" class="section-cta__ghost-btn">Find us at a market →</a>
+    <!-- ── CTA ── -->
+    <div class="shop-cta-wrap">
+        <section class="section-cta">
+            <div class="section-cta__inner container">
+                <span class="section-label">Need something different?</span>
+                <h2 class="section-heading section-cta__heading">
+                    Let's bake something<br><em>just for you</em>
+                </h2>
+                <p class="section-cta__body">
+                    Looking for a custom cake or a bulk order? Get in touch and Becca will make it happen.
+                </p>
+                <div class="section-cta__actions">
+                    <a href="./contact.html" class="btn btn-light text-dark fw-bold rounded-pill px-4 py-2">Get in
+                        Touch</a>
+                    <a href="./upcoming-events.html" class="section-cta__ghost-btn">Find us at a market →</a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+    </div>
 
     <!-- ── Footer (injected by components.js) ── -->
     <div id="site-footer"></div>
 
-    <!-- ── Scripts ── -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./components.js"></script>
+    <!-- ══════════════════════════════════════════════════════════
+         CART DRAWER
+    ══════════════════════════════════════════════════════════ -->
+    <div id="cart-overlay"></div>
+    <div id="cart-drawer" aria-label="Your cart">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button id="cart-close" aria-label="Close cart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-body" id="cart-body">
+            <div class="cart-empty" id="cart-empty">
+                <i class="fas fa-shopping-basket"></i>
+                <p>Your cart is empty</p>
+            </div>
+            <div id="cart-items"></div>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cart-total-amount">£0.00</span>
+            </div>
+            <button class="btn btn-brand w-100 rounded-pill" id="checkout-btn">
+                <i class="fas fa-lock me-2"></i>Proceed to Checkout
+            </button>
+        </div>
+    </div>
 
-    <!-- Scroll reveal — same pattern as index.html -->
-    <script>
-        var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-                if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+    <!-- Floating cart button -->
+    <button class="cart-fab" id="cart-fab" aria-label="Open cart">
+        <i class="fas fa-shopping-basket"></i>
+        <span class="cart-fab__count" id="cart-fab-count">0</span>
+    </button>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CHECKOUT MODAL
+    ══════════════════════════════════════════════════════════ -->
+    <div id="checkout-overlay" role="dialog" aria-modal="true">
+        <div id="checkout-modal">
+            <button id="checkout-close" aria-label="Close">&times;</button>
+            <h2 class="checkout-title">Checkout</h2>
+
+            <div id="checkout-form-wrap">
+                <div class="checkout-section-label">Your details</div>
+                <div class="checkout-field">
+                    <label for="co-name">Full name <span class="req">*</span></label>
+                    <input type="text" id="co-name" class="form-control" placeholder="e.g. Sarah Murphy">
+                    <div class="checkout-error" id="err-co-name">Please enter your name.</div>
+                </div>
+                <div class="checkout-field">
+                    <label for="co-email">Email address <span class="req">*</span></label>
+                    <input type="email" id="co-email" class="form-control" placeholder="e.g. sarah@email.com">
+                    <div class="checkout-error" id="err-co-email">Please enter a valid email.</div>
+                </div>
+
+                <div class="checkout-section-label mt-4">Collection date</div>
+                <p class="checkout-hint">Collection is every <strong>Tuesday 12pm–6pm</strong>. Pick your Tuesday below
+                    — please allow at least 5–7 days.</p>
+                <div class="checkout-field">
+                    <label for="co-date">Collection date <span class="req">*</span></label>
+                    <select id="co-date" class="form-select">
+                        <option value="">Select a Tuesday…</option>
+                    </select>
+                    <div class="checkout-error" id="err-co-date">Please select a collection date.</div>
+                </div>
+
+                <div class="checkout-section-label mt-4">Order summary</div>
+                <div id="checkout-summary"></div>
+                <div class="checkout-total">
+                    <span>Total</span>
+                    <span id="checkout-total-amount"></span>
+                </div>
+
+                <button class="btn btn-brand w-100 rounded-pill mt-4" id="pay-btn">
+                    <i class="fas fa-lock me-2"></i>Pay securely with Stripe
+                </button>
+                <p class="checkout-stripe-note"><i class="fas fa-lock"></i> Payments are processed securely by Stripe.
+                    We never store your card details.</p>
+            </div>
+
+            <div id="checkout-loading" style="display:none;">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p>Redirecting to payment…</p>
+            </div>
+
+            <div id="checkout-error-msg" style="display:none;">
+                <i class="fas fa-exclamation-circle fa-2x" style="color:var(--pink)"></i>
+                <p id="checkout-error-text">Something went wrong. Please try again.</p>
+                <button class="btn btn-brand rounded-pill px-4 mt-2" id="checkout-retry-btn">Try again</button>
+            </div>
+        </div>
+
+        <!-- ── Scripts ── -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="./components.js"></script>
+
+        <script>
+            /* ── CONFIG ───────────────────────────────────────────────────────────
+               Paste your Google Sheet CSV URL below.
+               The sheet must have these columns:
+               name | price | serves | available | image_url | ingredients | allergens | mayContain
+            ──────────────────────────────────────────────────────────────────── */
+            const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
+
+            /* ── CSV parser ──────────────────────────────────────────────────── */
+            function parseCSV(text) {
+                const lines = text.trim().split('\n');
+                if (lines.length < 2) return [];
+                const headers = parseCSVRow(lines[0]);
+                return lines.slice(1).map(function (line) {
+                    const vals = parseCSVRow(line);
+                    const obj = {};
+                    headers.forEach(function (h, i) { obj[h.trim()] = (vals[i] || '').trim(); });
+                    return obj;
+                }).filter(function (r) { return r.name; });
+            }
+
+            function parseCSVRow(line) {
+                const result = [];
+                let cur = '', inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const ch = line[i];
+                    if (ch === '"') {
+                        if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+                        else inQuotes = !inQuotes;
+                    } else if (ch === ',' && !inQuotes) {
+                        result.push(cur); cur = '';
+                    } else { cur += ch; }
+                }
+                result.push(cur);
+                return result;
+            }
+
+            /* ── State ───────────────────────────────────────────────────────── */
+            var cart = {}; // { productName: { product, qty } }
+
+            /* ── Build product card ──────────────────────────────────────────── */
+            function buildCard(product) {
+                const price = parseFloat(product.price) || 0;
+                const serves = product.servings ? product.servings : '';
+                const imgSrc = product.image || product.imageLink || '';
+                const hasImage = imgSrc !== '';
+
+                var card = document.createElement('div');
+                card.className = 'shop-product-card';
+                card.innerHTML =
+                    '<div class="shop-product-card__img-wrap' + (hasImage ? '' : ' is-placeholder') + '">' +
+                    (hasImage
+                        ? '<img src="' + imgSrc + '" alt="' + product.name + '" loading="lazy">'
+                        : '<div class="shop-img-placeholder"><i class="fas fa-camera"></i><span>Photo coming soon</span></div>') +
+                    '</div>' +
+                    '<div class="shop-product-card__body">' +
+                    '<div class="shop-product-card__name">' + product.name + '</div>' +
+                    (serves ? '<div class="shop-product-card__serves"><i class="fas fa-users"></i> ' + serves + '</div>' : '') +
+                    '<div class="shop-product-card__price">£' + price.toFixed(2) + '</div>' +
+                    '<div class="shop-product-card__qty" id="qty-wrap-' + slugify(product.name) + '">' +
+                    '<button class="qty-btn qty-btn--minus" data-name="' + product.name + '" aria-label="Remove one">−</button>' +
+                    '<span class="qty-val" id="qty-' + slugify(product.name) + '">0</span>' +
+                    '<button class="qty-btn qty-btn--plus" data-name="' + product.name + '" aria-label="Add one">+</button>' +
+                    '</div>' +
+                    '</div>';
+
+                card.querySelector('.qty-btn--plus').addEventListener('click', function () { addToCart(product); });
+                card.querySelector('.qty-btn--minus').addEventListener('click', function () { removeFromCart(product); });
+
+                return card;
+            }
+
+            function slugify(str) {
+                return str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            }
+
+            /* ── Cart logic ──────────────────────────────────────────────────── */
+            function addToCart(product) {
+                var key = product.name;
+                if (cart[key]) { cart[key].qty++; } else { cart[key] = { product: product, qty: 1 }; }
+                updateQtyDisplay(product.name);
+                updateCartUI();
+            }
+
+            function removeFromCart(product) {
+                var key = product.name;
+                if (!cart[key]) return;
+                cart[key].qty--;
+                if (cart[key].qty <= 0) delete cart[key];
+                updateQtyDisplay(product.name);
+                updateCartUI();
+            }
+
+            function updateQtyDisplay(name) {
+                var el = document.getElementById('qty-' + slugify(name));
+                if (el) el.textContent = cart[name] ? cart[name].qty : 0;
+            }
+
+            function cartTotal() {
+                return Object.values(cart).reduce(function (sum, item) {
+                    return sum + (parseFloat(item.product.price) * item.qty);
+                }, 0);
+            }
+
+            function cartCount() {
+                return Object.values(cart).reduce(function (sum, item) { return sum + item.qty; }, 0);
+            }
+
+            function updateCartUI() {
+                var count = cartCount();
+                var total = cartTotal();
+
+                // FAB count
+                document.getElementById('cart-fab-count').textContent = count;
+                document.getElementById('cart-fab').classList.toggle('has-items', count > 0);
+
+                // Cart drawer
+                var items = document.getElementById('cart-items');
+                var empty = document.getElementById('cart-empty');
+                var footer = document.getElementById('cart-footer');
+                var totalEl = document.getElementById('cart-total-amount');
+
+                if (count === 0) {
+                    empty.style.display = 'flex';
+                    items.innerHTML = '';
+                    footer.style.display = 'none';
+                } else {
+                    empty.style.display = 'none';
+                    footer.style.display = 'block';
+                    totalEl.textContent = '£' + total.toFixed(2);
+
+                    items.innerHTML = Object.values(cart).map(function (item) {
+                        return '<div class="cart-item">' +
+                            '<div class="cart-item__info">' +
+                            '<div class="cart-item__name">' + item.product.name + '</div>' +
+                            '<div class="cart-item__price">£' + (parseFloat(item.product.price) * item.qty).toFixed(2) + '</div>' +
+                            '</div>' +
+                            '<div class="cart-item__qty">' +
+                            '<button class="qty-btn qty-btn--minus cart-qty-btn" data-name="' + item.product.name + '">−</button>' +
+                            '<span>' + item.qty + '</span>' +
+                            '<button class="qty-btn qty-btn--plus cart-qty-btn" data-name="' + item.product.name + '">+</button>' +
+                            '</div>' +
+                            '</div>';
+                    }).join('');
+
+                    // Wire up cart item qty buttons
+                    items.querySelectorAll('.cart-qty-btn').forEach(function (btn) {
+                        btn.addEventListener('click', function () {
+                            var name = btn.dataset.name;
+                            var product = cart[name] ? cart[name].product : null;
+                            if (!product) return;
+                            if (btn.classList.contains('qty-btn--plus')) addToCart(product);
+                            else removeFromCart(product);
+                        });
+                    });
+                }
+            }
+
+            /* ── Cart drawer ─────────────────────────────────────────────────── */
+            function openCart() {
+                document.getElementById('cart-drawer').classList.add('is-open');
+                document.getElementById('cart-overlay').classList.add('is-visible');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeCart() {
+                document.getElementById('cart-drawer').classList.remove('is-open');
+                document.getElementById('cart-overlay').classList.remove('is-visible');
+                document.body.style.overflow = '';
+            }
+
+            document.getElementById('cart-fab').addEventListener('click', openCart);
+            document.getElementById('cart-close').addEventListener('click', closeCart);
+            document.getElementById('cart-overlay').addEventListener('click', closeCart);
+
+            /* ── Tuesday date picker ─────────────────────────────────────────── */
+            function populateTuesdayDates() {
+                var select = document.getElementById('co-date');
+                var today = new Date();
+                var cutoff = new Date(today);
+                cutoff.setDate(cutoff.getDate() + 7); // 7 day minimum notice
+
+                // Find next Tuesday on or after cutoff
+                var day = cutoff.getDay(); // 0=Sun, 2=Tue
+                var daysUntilTuesday = (2 - day + 7) % 7 || 7;
+                var next = new Date(cutoff);
+                next.setDate(cutoff.getDate() + (daysUntilTuesday === 0 ? 7 : daysUntilTuesday));
+
+                // Generate 8 Tuesdays
+                for (var i = 0; i < 8; i++) {
+                    var d = new Date(next);
+                    d.setDate(next.getDate() + (i * 7));
+                    var label = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                    var value = d.toISOString().split('T')[0];
+                    var opt = document.createElement('option');
+                    opt.value = value;
+                    opt.textContent = label + ' · 12pm–6pm';
+                    select.appendChild(opt);
+                }
+            }
+
+            /* ── Checkout modal ──────────────────────────────────────────────── */
+            function openCheckout() {
+                closeCart();
+
+                // Populate summary
+                var summary = document.getElementById('checkout-summary');
+                summary.innerHTML = Object.values(cart).map(function (item) {
+                    return '<div class="checkout-summary-row">' +
+                        '<span>' + item.product.name + ' × ' + item.qty + '</span>' +
+                        '<span>£' + (parseFloat(item.product.price) * item.qty).toFixed(2) + '</span>' +
+                        '</div>';
+                }).join('');
+                document.getElementById('checkout-total-amount').textContent = '£' + cartTotal().toFixed(2);
+
+                // Reset form state
+                document.getElementById('checkout-form-wrap').style.display = 'block';
+                document.getElementById('checkout-loading').style.display = 'none';
+                document.getElementById('checkout-error-msg').style.display = 'none';
+
+                var overlay = document.getElementById('checkout-overlay');
+                overlay.classList.add('is-visible');
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () { overlay.classList.add('is-open'); });
+                });
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeCheckout() {
+                var overlay = document.getElementById('checkout-overlay');
+                overlay.classList.remove('is-open');
+                overlay.addEventListener('transitionend', function handler() {
+                    overlay.classList.remove('is-visible');
+                    overlay.removeEventListener('transitionend', handler);
+                    document.body.style.overflow = '';
+                });
+            }
+
+            document.getElementById('checkout-btn').addEventListener('click', openCheckout);
+            document.getElementById('checkout-close').addEventListener('click', closeCheckout);
+            document.getElementById('checkout-overlay').addEventListener('click', function (e) {
+                if (e.target === document.getElementById('checkout-overlay')) closeCheckout();
             });
-        }, { threshold: 0.08 });
-        document.querySelectorAll('.shop-section, .section-cta').forEach(function (el) {
-            io.observe(el);
-        });
-    </script>
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeCheckout();
+            });
 
+            document.getElementById('checkout-retry-btn').addEventListener('click', function () {
+                document.getElementById('checkout-form-wrap').style.display = 'block';
+                document.getElementById('checkout-error-msg').style.display = 'none';
+            });
+
+            /* ── Validation ──────────────────────────────────────────────────── */
+            function showFieldError(fieldId, errId) {
+                document.getElementById(fieldId).classList.add('is-invalid');
+                document.getElementById(errId).style.display = 'block';
+            }
+
+            function clearFieldError(fieldId, errId) {
+                document.getElementById(fieldId).classList.remove('is-invalid');
+                document.getElementById(errId).style.display = 'none';
+            }
+
+            ['co-name', 'co-email', 'co-date'].forEach(function (id) {
+                document.getElementById(id).addEventListener('input', function () {
+                    clearFieldError(id, 'err-' + id);
+                });
+            });
+
+            function validateCheckout() {
+                var ok = true;
+                var rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!document.getElementById('co-name').value.trim()) { showFieldError('co-name', 'err-co-name'); ok = false; }
+                if (!rx.test(document.getElementById('co-email').value.trim())) { showFieldError('co-email', 'err-co-email'); ok = false; }
+                if (!document.getElementById('co-date').value) { showFieldError('co-date', 'err-co-date'); ok = false; }
+                return ok;
+            }
+
+            /* ── Stripe checkout via Netlify function ────────────────────────── */
+            document.getElementById('pay-btn').addEventListener('click', function () {
+                if (!validateCheckout()) return;
+
+                document.getElementById('checkout-form-wrap').style.display = 'none';
+                document.getElementById('checkout-loading').style.display = 'flex';
+
+                var payload = {
+                    name: document.getElementById('co-name').value.trim(),
+                    email: document.getElementById('co-email').value.trim(),
+                    collectionDate: document.getElementById('co-date').value,
+                    items: Object.values(cart).map(function (item) {
+                        return {
+                            name: item.product.name,
+                            price: Math.round(parseFloat(item.product.price) * 100), // pence
+                            quantity: item.qty,
+                        };
+                    }),
+                };
+
+                fetch('/.netlify/functions/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (data.url) {
+                            window.location.href = data.url;
+                        } else {
+                            throw new Error(data.error || 'No URL returned');
+                        }
+                    })
+                    .catch(function (err) {
+                        console.error(err);
+                        document.getElementById('checkout-loading').style.display = 'none';
+                        document.getElementById('checkout-error-msg').style.display = 'flex';
+                        document.getElementById('checkout-error-text').textContent = 'Something went wrong. Please try again or contact us directly.';
+                    });
+            });
+
+            /* ── Fetch products and render ───────────────────────────────────── */
+            fetch(SHEET_CSV_URL)
+                .then(function (res) { if (!res.ok) throw new Error(); return res.text(); })
+                .then(function (text) {
+                    var allRows = parseCSV(text);
+                    console.log('Total rows:', allRows.length);
+                    console.log('Headers in first row:', allRows[0]);
+
+                    var rows = allRows.filter(function (r) {
+                        var a = (r.available || '').trim().toLowerCase();
+                        console.log(r.name, '| available:', JSON.stringify(r.available), '| normalised:', a);
+                        return a === 'yes' || a === 'true';
+                    });
+
+                    console.log('Rows after filter:', rows.length);
+                    document.getElementById('shopSpinner').style.display = 'none';
+
+                    if (!rows.length) {
+                        document.getElementById('shopError').style.display = 'flex';
+                        return;
+                    }
+
+                    var grid = document.getElementById('productGrid');
+                    grid.style.display = 'grid';
+                    rows.forEach(function (row) { grid.appendChild(buildCard(row)); });
+                })
+                .catch(function (err) {
+                    console.error('Fetch failed:', err);
+                    document.getElementById('shopSpinner').style.display = 'none';
+                    document.getElementById('shopError').style.display = 'flex';
+                });
+
+            /* ── Init ────────────────────────────────────────────────────────── */
+            populateTuesdayDates();
+            updateCartUI();
+        </script>
 </body>
 
 </html>

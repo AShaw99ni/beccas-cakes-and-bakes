@@ -10,14 +10,14 @@
    ============================================================================= */
 
 :root {
-    --pink:       #AB1D79;
-    --pink-dark:  #7c1457;
+    --pink: #AB1D79;
+    --pink-dark: #7c1457;
     --pink-light: #e2c4f9;
-    --cream:      #FFEAFE;
-    --deep:       #2a1a2e;
-    --body-text:  #4a3a52;
-    --muted:      #5a3a6e;
-    --navbar-bg:  rgba(226, 196, 249, 0.85);
+    --cream: #FFEAFE;
+    --deep: #2a1a2e;
+    --body-text: #4a3a52;
+    --muted: #5a3a6e;
+    --navbar-bg: rgba(226, 196, 249, 0.85);
 }
 
 
@@ -38,7 +38,12 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Playfair Display', serif;
 }
 
@@ -321,8 +326,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0);    }
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -582,11 +594,25 @@ footer p {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.footer-social-facebook  { background-color: #3b5998; }
-.footer-social-instagram { background-color: #ac2bac; }
-.footer-social-tiktok    { background-color: #000000; }
-.footer-social-linkedin  { background-color: #0082ca; }
-.footer-social-email     { background-color: var(--pink); }
+.footer-social-facebook {
+    background-color: #3b5998;
+}
+
+.footer-social-instagram {
+    background-color: #ac2bac;
+}
+
+.footer-social-tiktok {
+    background-color: #000000;
+}
+
+.footer-social-linkedin {
+    background-color: #0082ca;
+}
+
+.footer-social-email {
+    background-color: var(--pink);
+}
 
 .footer-newsletter__sub {
     font-size: 0.9rem;
@@ -721,4 +747,24 @@ footer p {
     font-family: 'Playfair Display', serif !important;
     font-size: 1.4rem;
     color: var(--deep);
+}
+
+/* ── Cross-contamination notice ── */
+.notice-banner {
+    background: #fff8e7;
+    border: 1px solid #f0dfa0;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 0.88rem;
+    color: #6b5000;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    max-width: 700px;
+    margin: 0 auto 44px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.notice-banner strong {
+    font-weight: 700;
 }

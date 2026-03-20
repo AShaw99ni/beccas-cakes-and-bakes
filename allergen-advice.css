@@ -290,28 +290,6 @@
     display: none;
 }
 
-
-/* ── Cross-contamination notice ── */
-.notice-banner {
-    background: #fff8e7;
-    border: 1px solid #f0dfa0;
-    border-radius: 12px;
-    padding: 14px 20px;
-    font-size: 0.88rem;
-    color: #6b5000;
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    max-width: 700px;
-    margin: 0 auto 44px;
-    text-align: center;
-    line-height: 1.6;
-}
-
-.notice-banner strong {
-    font-weight: 700;
-}
-
-
 /* ── Product detail modal ── */
 #product-overlay {
     display: none;

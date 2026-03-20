@@ -5,7 +5,7 @@
    ============================================================================= */
 
 
-   
+
 
 /* ── Order notice ── */
 .shop-notice-wrap {
@@ -201,21 +201,21 @@
 }
 
 
-/* ── Floating cart button ── */
+/* ── Floating cart button — fixed top-right ── */
 .cart-fab {
     position: fixed;
-    bottom: 28px;
+    top: 20px;
     right: 28px;
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     background: var(--pink);
     color: white;
     border: none;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     box-shadow: 0 6px 24px rgba(171, 29, 121, 0.4);
     cursor: pointer;
-    z-index: 800;
+    z-index: 1100;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -258,7 +258,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
-    z-index: 900;
+    z-index: 1050;
 }
 
 #cart-overlay.is-visible {
@@ -275,7 +275,7 @@
     width: 380px;
     max-width: 100vw;
     background: white;
-    z-index: 950;
+    z-index: 1100;
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
@@ -667,4 +667,72 @@
     background: rgba(255, 255, 255, 0.12);
     border-color: white;
     color: white;
+}
+
+/* ── Navbar cart button (replaces FAB) ── */
+.nav-cart-btn {
+    position: relative;
+    background: var(--pink);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1rem;
+    padding: 0.35rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    transition: background-color 0.25s ease;
+    white-space: nowrap;
+}
+
+.nav-cart-btn:hover {
+    background-color: var(--pink-dark);
+}
+
+.nav-cart-btn__count {
+    background: white;
+    color: var(--pink);
+    border-radius: 50px;
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.nav-cart-btn.has-items .nav-cart-btn__count {
+    opacity: 1;
+}
+
+/* Tighten at mid breakpoint to match the shop button */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .nav-cart-btn {
+        font-size: 0.75rem;
+        padding: 0.28rem 0.7rem;
+    }
+}
+
+/* Full width on mobile like the shop button */
+@media (max-width: 991.98px) {
+    .nav-cart-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+    }
+
+    .nav-item.ms-2:has(.nav-cart-btn) {
+        margin-top: 0.5rem;
+        margin-left: 0 !important;
+        width: 100%;
+    }
 }

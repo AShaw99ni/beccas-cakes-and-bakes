@@ -349,12 +349,14 @@
             function openCart() {
                 document.getElementById('cart-drawer').classList.add('is-open');
                 document.getElementById('cart-overlay').classList.add('is-visible');
+                document.getElementById('cart-fab').style.display = 'none';
                 document.body.style.overflow = 'hidden';
             }
 
             function closeCart() {
                 document.getElementById('cart-drawer').classList.remove('is-open');
                 document.getElementById('cart-overlay').classList.remove('is-visible');
+                document.getElementById('cart-fab').style.display = 'flex';
                 document.body.style.overflow = '';
             }
 

@@ -53,14 +53,8 @@
                 <input type="text" id="searchInput" placeholder="Search for a product…" autocomplete="off">
             </div>
 
-            <!-- Category filter tabs -->
-            <div class="category-tabs" id="categoryTabs">
-                <button class="cat-btn active" data-cat="all">All</button>
-                <button class="cat-btn" data-cat="cake">Cakes</button>
-                <button class="cat-btn" data-cat="traybake">Traybakes</button>
-                <button class="cat-btn" data-cat="biscuit">Biscuits &amp; Cookies</button>
-                <button class="cat-btn" data-cat="bread">Breads &amp; Scones</button>
-            </div>
+            <!-- Category filter tabs (populated from CSV category column) -->
+            <div class="category-tabs" id="categoryTabs"></div>
 
             <!-- Pill legend -->
             <div class="legend">
@@ -98,6 +92,9 @@
                 <div class="allergen-pills" id="product-modal-pills"></div>
                 <div class="detail-label" style="margin-top:1.2rem;">Ingredients</div>
                 <p class="ingredients-list" id="product-modal-ingredients"></p>
+                <div class="product-modal-shop-wrap" id="product-modal-shop-wrap" hidden>
+                    <a href="./shop.html" class="btn btn-brand rounded-pill px-4" id="product-modal-shop-link">View in shop</a>
+                </div>
             </div>
         </div>
     </div>
@@ -151,7 +148,8 @@
         function rowToProduct(row) {
             return {
                 name: row.name,
-                category: row.category,
+                category: (row.category || '').trim(),
+                available: (row.available || '').trim(),
                 ingredients: row.ingredients,
                 allergens: row.allergens ? row.allergens.split('|').map(function (s) { return s.trim(); }).filter(Boolean) : [],
                 mayContain: row.mayContain ? row.mayContain.split('|').map(function (s) { return s.trim(); }).filter(Boolean) : [],
@@ -167,14 +165,47 @@
             bread: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc7b?w=480&q=80',
         };
 
-        const CAT_LABELS = { cake: 'Cake', traybake: 'Traybake', biscuit: 'Biscuits & Cookies', bread: 'Breads & Scones' };
+        function placeholderForCategory(cat) {
+            var key = (cat || '').trim().toLowerCase().replace(/\s+/g, '-');
+            if (PLACEHOLDERS[key]) return PLACEHOLDERS[key];
+            var singular = key.replace(/s$/, '');
+            if (PLACEHOLDERS[singular]) return PLACEHOLDERS[singular];
+            return PLACEHOLDERS.cake;
+        }
+
+        function buildCategoryTabs(products) {
+            var bar = document.getElementById('categoryTabs');
+            var seen = Object.create(null);
+            var cats = [];
+            products.forEach(function (p) {
+                var c = (p.category || '').trim();
+                if (c && !seen[c]) {
+                    seen[c] = true;
+                    cats.push(c);
+                }
+            });
+            cats.sort(function (a, b) { return a.localeCompare(b, undefined, { sensitivity: 'base' }); });
+            bar.innerHTML = '';
+            var allBtn = document.createElement('button');
+            allBtn.className = 'cat-btn active';
+            allBtn.dataset.cat = 'all';
+            allBtn.textContent = 'All';
+            bar.appendChild(allBtn);
+            cats.forEach(function (c) {
+                var btn = document.createElement('button');
+                btn.className = 'cat-btn';
+                btn.dataset.cat = c;
+                btn.textContent = c;
+                bar.appendChild(btn);
+            });
+        }
 
         /* ── Build card HTML ──────────────────────────────────────────────── */
         function buildCard(product) {
             const containsPills = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
             const mayPills = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
-            const catLabel = CAT_LABELS[product.category] || product.category;
-            const imgSrc = product.image || PLACEHOLDERS[product.category] || PLACEHOLDERS.cake;
+            const catLabel = product.category || '—';
+            const imgSrc = product.image || placeholderForCategory(product.category);
             const isPlaceholder = !product.image;
             const dataProduct = JSON.stringify(product).replace(/'/g, '&#39;');
 
@@ -222,8 +253,8 @@
         function openProductModal(product) {
             const containsPills = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
             const mayPills = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
-            const catLabel = CAT_LABELS[product.category] || product.category;
-            const imgSrc = product.image || PLACEHOLDERS[product.category] || PLACEHOLDERS.cake;
+            const catLabel = product.category || '—';
+            const imgSrc = product.image || placeholderForCategory(product.category);
             const isPlaceholder = !product.image;
 
             document.getElementById('product-modal-img').src = imgSrc;
@@ -236,6 +267,17 @@
                 '<span class="pill pill-free">Dairy free</span>' +
                 containsPills + mayPills;
             document.getElementById('product-modal-ingredients').textContent = product.ingredients;
+
+            var shopWrap = document.getElementById('product-modal-shop-wrap');
+            var shopLink = document.getElementById('product-modal-shop-link');
+            var avail = (product.available || '').trim().toLowerCase();
+            var isAvailable = avail === 'yes' || avail === 'true';
+            if (shopWrap) {
+                shopWrap.hidden = !isAvailable;
+                if (isAvailable && shopLink) {
+                    shopLink.href = './shop.html?product=' + encodeURIComponent(product.name);
+                }
+            }
 
             const overlay = document.getElementById('product-overlay');
             overlay.classList.add('is-visible');
@@ -304,6 +346,7 @@
             .then(res => { if (!res.ok) throw new Error('Network error'); return res.text(); })
             .then(text => {
                 allProducts = parseCSV(text).map(rowToProduct);
+                buildCategoryTabs(allProducts);
                 applyFilters();
             })
             .catch(() => showError());

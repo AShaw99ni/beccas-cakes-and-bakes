@@ -67,6 +67,7 @@
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-transform: capitalize;
 }
 
 .cat-btn:hover,
@@ -257,6 +258,17 @@
     line-height: 1.6;
     font-family: 'Lato', sans-serif;
     margin: 0;
+}
+
+.product-modal-shop-wrap {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.product-modal-shop-wrap .btn {
+    font-weight: 700;
 }
 
 

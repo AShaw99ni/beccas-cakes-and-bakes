@@ -43,6 +43,7 @@
                         in
                         advance</strong>. Collection is every <strong>Tuesday 12pm–6pm</strong>.</p>
             </div>
+            <div id="shop-deep-link-notice" class="shop-deep-link-notice" style="display:none;" role="status"></div>
             <div class="text-center mb-5">
                 <span class="section-label">Becca's classics</span>
                 <h2 class="section-heading">Traybakes</h2>
@@ -329,6 +330,7 @@
 
                 var card = document.createElement('div');
                 card.className = 'shop-product-card';
+                card.dataset.productName = product.name;
                 card.setAttribute('role', 'button');
                 card.setAttribute('tabindex', '0');
                 card.setAttribute('aria-label', 'View details for ' + product.name);
@@ -439,6 +441,60 @@
             document.getElementById('shop-product-overlay').addEventListener('click', function (e) {
                 if (e.target === document.getElementById('shop-product-overlay')) closeShopProductModal();
             });
+
+            function stripProductQueryParam() {
+                var url = new URL(window.location.href);
+                if (!url.searchParams.has('product')) return;
+                url.searchParams.delete('product');
+                var qs = url.searchParams.toString();
+                history.replaceState({}, '', url.pathname + (qs ? '?' + qs : '') + url.hash);
+            }
+
+            function maybeOpenProductFromQuery(availableRows) {
+                var params = new URLSearchParams(window.location.search);
+                var nameParam = params.get('product');
+                if (!nameParam) return;
+                var noticeEl = document.getElementById('shop-deep-link-notice');
+                if (noticeEl) {
+                    noticeEl.style.display = 'none';
+                    noticeEl.textContent = '';
+                }
+                var target = nameParam.trim().toLowerCase();
+                var matched = null;
+                if (availableRows && availableRows.length) {
+                    for (var i = 0; i < availableRows.length; i++) {
+                        if (availableRows[i].name.trim().toLowerCase() === target) {
+                            matched = availableRows[i];
+                            break;
+                        }
+                    }
+                }
+                if (!matched) {
+                    if (noticeEl) {
+                        noticeEl.textContent = 'We couldn’t find that product available to order right now. Browse below or get in touch for a custom order.';
+                        noticeEl.style.display = 'block';
+                    }
+                    stripProductQueryParam();
+                    return;
+                }
+                stripProductQueryParam();
+                requestAnimationFrame(function () {
+                    var cards = document.querySelectorAll('.shop-product-card');
+                    var card = null;
+                    for (var j = 0; j < cards.length; j++) {
+                        if (cards[j].dataset.productName === matched.name) {
+                            card = cards[j];
+                            break;
+                        }
+                    }
+                    if (card) {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    setTimeout(function () {
+                        openShopProductModal(matched);
+                    }, card ? 450 : 0);
+                });
+            }
 
             function slugify(str) {
                 return str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -719,17 +775,20 @@
 
                     if (!rows.length) {
                         document.getElementById('shopError').style.display = 'flex';
+                        maybeOpenProductFromQuery(null);
                         return;
                     }
 
                     var grid = document.getElementById('productGrid');
                     grid.style.display = 'grid';
                     rows.forEach(function (row) { grid.appendChild(buildCard(row)); });
+                    maybeOpenProductFromQuery(rows);
                 })
                 .catch(function (err) {
                     console.error('Fetch failed:', err);
                     document.getElementById('shopSpinner').style.display = 'none';
                     document.getElementById('shopError').style.display = 'flex';
+                    maybeOpenProductFromQuery(null);
                 });
 
             /* ── Init ────────────────────────────────────────────────────────── */

@@ -64,13 +64,13 @@
                     <p class="section-body mt-3">
                         After joining TikTok, I quickly realised it wasn’t only gluten-free people who struggle to find
                         safe, delicious food. So many people told me they were dairy-free and faced the same problem.
-                        This inspired me to make Becca’s Cakes & Bakes Northern Ireland’s first bakery that is entirely
-                        gluten and dairy-free.
+                        This inspired me to make Becca’s cakes and bakes Northern Ireland's very first solely gluten and
+                        dairy-free bakery.
                     </p>
                     <p class="section-body mt-3">
-                        Today, based in Northern Ireland, we create cakes, cupcakes, traybakes, cookies, and protein
-                        bites—all made with care, attention, and the knowledge that food should be something everyone
-                        can enjoy safely.
+                        Today, based in Northern Ireland, we create cakes, cupcakes, traybakes, cookies, and as many
+                        customer requests as possible. All made with care, attention, and the knowledge that food
+                        should be something everyone can enjoy safely.
                     </p>
                 </div>
             </div>
@@ -97,8 +97,8 @@
                     <div class="value-card">
                         <div class="value-icon">🏡</div>
                         <h5>Made Locally, With Care</h5>
-                        <p>Everything is made in small batches, right here in Northern Ireland. We take our time because
-                            we care about what goes into your hands — and your body.</p>
+                        <p>Every item is crafted in small batches right here in Northern Ireland. We take the time to do
+                            things properly, because care and quality come first.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -172,21 +172,10 @@
                 <span class="section-label">A taste of what we make</span>
                 <h2 class="section-heading">Fresh from the kitchen</h2>
             </div>
-            <div class="gallery-grid">
-                <div class="g-item">
-                    <div class="img-placeholder"><i class="fas fa-camera"></i><span>Photo 1</span></div>
-                </div>
-                <div class="g-item">
-                    <div class="img-placeholder"><i class="fas fa-camera"></i><span>Photo 2</span></div>
-                </div>
-                <div class="g-item">
-                    <div class="img-placeholder"><i class="fas fa-camera"></i><span>Photo 3</span></div>
-                </div>
-                <div class="g-item">
-                    <div class="img-placeholder"><i class="fas fa-camera"></i><span>Photo 4</span></div>
-                </div>
-                <div class="g-item">
-                    <div class="img-placeholder"><i class="fas fa-camera"></i><span>Photo 5</span></div>
+            <div class="gallery-preview gallery-preview--loading" id="galleryPreviewGrid" aria-busy="true">
+                <div class="gallery-preview__loading">
+                    <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                    <span>Loading gallery…</span>
                 </div>
             </div>
             <div class="text-center mt-4">
@@ -200,6 +189,89 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./components.js"></script>
+
+    <script>
+        /* Same source as gallery.html — published Sheet CSV */
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=28611426&single=true&output=csv';
+        const PREVIEW_COUNT = 6;
+
+        function parseCSVRow(line) {
+            const result = [];
+            let cur = '', inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+                    else inQuotes = !inQuotes;
+                } else if (ch === ',' && !inQuotes) {
+                    result.push(cur); cur = '';
+                } else { cur += ch; }
+            }
+            result.push(cur);
+            return result;
+        }
+
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            if (lines.length < 2) return [];
+            const headers = parseCSVRow(lines[0]);
+            return lines.slice(1).map(line => {
+                const vals = parseCSVRow(line);
+                const obj = {};
+                headers.forEach((h, i) => obj[h.trim()] = (vals[i] || '').trim());
+                return obj;
+            }).filter(r => r.name);
+        }
+
+        function rowToPhoto(row) {
+            const src = (row.image || row.image_link || row.Image || '').trim();
+            const alt = row.name || 'Gallery photo';
+            return { src, alt };
+        }
+
+        function buildPreviewItem(p, i) {
+            const item = document.createElement('div');
+            item.className = 'g-item';
+            if (!p.src) {
+                item.innerHTML = `<div class="img-placeholder"><i class="fas fa-camera"></i><span>Photo ${i + 1}</span></div>`;
+            } else {
+                const img = document.createElement('img');
+                img.src = p.src;
+                img.alt = p.alt;
+                img.loading = 'lazy';
+                img.referrerPolicy = 'no-referrer';
+                item.appendChild(img);
+            }
+            return item;
+        }
+
+        function renderGalleryPreview(photos) {
+            const root = document.getElementById('galleryPreviewGrid');
+            root.classList.remove('gallery-preview--loading');
+            root.innerHTML = '';
+
+            const withImg = photos.filter(p => p.src);
+            const slice = withImg.slice(0, PREVIEW_COUNT);
+            while (slice.length < PREVIEW_COUNT) {
+                slice.push({ src: '', alt: '' });
+            }
+
+            slice.forEach((p, i) => {
+                root.appendChild(buildPreviewItem(p, i));
+            });
+            root.setAttribute('aria-busy', 'false');
+        }
+
+        fetch(SHEET_CSV_URL)
+            .then(res => { if (!res.ok) throw new Error('Network error'); return res.text(); })
+            .then(text => {
+                const photos = parseCSV(text).map(rowToPhoto);
+                renderGalleryPreview(photos);
+            })
+            .catch(() => {
+                renderGalleryPreview([]);
+            });
+    </script>
 
 </body>
 

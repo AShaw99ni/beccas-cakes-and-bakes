@@ -73,18 +73,17 @@
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
                         <div class="topic-card" data-topic="traybake" tabindex="0">
-                            <span class="topic-icon">🍫</span>
-                            <div class="topic-title">Traybake Batch Order</div>
-                            <div class="topic-desc">Brownies, Brookies, and more — ideal for parties, events, or sharing
-                                with friends.
-                            </div>
+                            <span class="topic-icon">🏢</span>
+                            <div class="topic-title">Corporate Events</div>
+                            <div class="topic-desc">Customised sweet creations, designed to elevate your corporate
+                                events while keeping your treats safe and enjoyable for everyone.</div>
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
                         <div class="topic-card" data-topic="event" tabindex="0">
                             <span class="topic-icon">🎉</span>
-                            <div class="topic-title">Event / Market Enquiry</div>
-                            <div class="topic-desc">Whether it’s a collaboration, market, or corporate event, we’d love
-                                to work with you.</div>
+                            <div class="topic-title">Collaboration / Market Enquiry</div>
+                            <div class="topic-desc">Whether it's a collaboration or upcoming market, we'd love to work
+                                with you.</div>
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
                         <div class="topic-card" data-topic="other" tabindex="0">
@@ -118,8 +117,9 @@
                             <div class="error-msg" id="err-fname">Please enter your first name.</div>
                         </div>
                         <div class="field-group">
-                            <label for="lname">Last name</label>
+                            <label for="lname">Last name <span class="req">*</span></label>
                             <input type="text" id="lname" class="form-control" placeholder="e.g. Murphy">
+                            <div class="error-msg" id="err-lname">Please enter your last name.</div>
                         </div>
                     </div>
                     <div class="field-group">
@@ -128,8 +128,9 @@
                         <div class="error-msg" id="err-email">Please enter a valid email address.</div>
                     </div>
                     <div class="field-group">
-                        <label for="phone">Phone number <span class="optional">(optional)</span></label>
+                        <label for="phone">Phone number <span class="req">*</span></label>
                         <input type="tel" id="phone" class="form-control" placeholder="e.g. 07700 900123">
+                        <div class="error-msg" id="err-phone">Please enter your phone number.</div>
                     </div>
 
                     <!-- Custom cake extra fields (shown only for custom topic) -->
@@ -168,7 +169,7 @@
                             <label>Cake flavour(s)</label>
                             <div class="pill-group" id="flavourPills">
                                 <div class="pill-option" data-val="Victoria Sponge">Victoria Sponge</div>
-                                <div class="pill-option" data-val="Chocolate Fudge">Chocolate Fudge</div>
+                                <div class="pill-option" data-val="Chocolate Fudge">Chocolate Cake</div>
                                 <div class="pill-option" data-val="Not sure yet">Not sure yet</div>
                             </div>
                         </div>
@@ -282,8 +283,8 @@
 
         const TOPIC_LABELS = {
             custom: '🎂 Custom Cake Order',
-            traybake: '🍫 Traybake Batch Order',
-            event: '🎉 Event / Market Enquiry',
+            traybake: '🏢 Corporate Event',
+            event: '🎉 Collaboration / Market Enquiry',
             other: '💬 General Enquiry',
         };
 
@@ -339,8 +340,8 @@
                 document.getElementById(`extraFields-${t}`).style.display = state.topic === t ? 'block' : 'none';
             });
             const titles = {
-                custom: 'Tell us about your cake', traybake: 'Tell us about your order',
-                event: 'Tell us about the event', other: 'What would you like to know?',
+                custom: 'Tell us about your cake', traybake: 'Tell us about your event',
+                event: 'Tell us about the collaboration', other: 'What would you like to know?',
             };
             document.getElementById('step2Title').textContent = titles[state.topic];
 
@@ -399,7 +400,7 @@
         }
 
         // Clear errors on input for all validated fields
-        ['fname', 'email', 'message', 'cakeDesc'].forEach(id => {
+        ['fname', 'lname', 'phone', 'email', 'message', 'cakeDesc'].forEach(id => {
             document.getElementById(id).addEventListener('input', function () {
                 this.classList.remove('error');
                 const err = document.getElementById(`err-${id}`);
@@ -416,6 +417,13 @@
             }
             if (!rx.test(document.getElementById('email').value.trim())) {
                 showError('email', 'err-email'); ok = false;
+            }
+
+            if (!document.getElementById('lname').value.trim()) {
+                showError('lname', 'err-lname'); ok = false;
+            }
+            if (!document.getElementById('phone').value.trim()) {
+                showError('phone', 'err-phone'); ok = false;
             }
 
             if (state.topic === 'custom') {

@@ -77,6 +77,16 @@
     transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+}
+
+.shop-product-card:focus {
+    outline: none;
+}
+
+.shop-product-card:focus-visible {
+    outline: 2px solid var(--pink);
+    outline-offset: 2px;
 }
 
 .shop-product-card:hover {
@@ -132,6 +142,19 @@
     flex-direction: column;
 }
 
+.shop-product-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 2px;
+}
+
+.shop-product-card__header-text {
+    min-width: 0;
+    flex: 1;
+}
+
 .shop-product-card__name {
     font-family: 'Playfair Display', serif;
     font-size: 1.1rem;
@@ -152,6 +175,86 @@
     margin-right: 4px;
 }
 
+.shop-product-card__expand-icon {
+    color: var(--pink);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 4px;
+    transition: transform 0.2s ease;
+}
+
+/* ── Allergen pills (match allergen-advice.html) ── */
+.shop-product-card .allergen-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+
+.shop-product-card .pill {
+    font-size: 0.75rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50px;
+    letter-spacing: 0.04em;
+}
+
+.shop-product-card .pill-free {
+    background: #edf7f0;
+    color: #1a7a3a;
+    border: 1px solid #b5e2c4;
+}
+
+.shop-product-card .pill-contains {
+    background: #fff3f0;
+    color: #b33a1a;
+    border: 1px solid #f5c2b4;
+}
+
+.shop-product-card .pill-may {
+    background: #fffbec;
+    color: #8a6400;
+    border: 1px solid #f0dfa0;
+}
+
+/* Same pills inside shop product modal */
+#shop-product-modal-content .allergen-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+#shop-product-modal-content .pill {
+    font-size: 0.75rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50px;
+    letter-spacing: 0.04em;
+}
+
+#shop-product-modal-content .pill-free {
+    background: #edf7f0;
+    color: #1a7a3a;
+    border: 1px solid #b5e2c4;
+}
+
+#shop-product-modal-content .pill-contains {
+    background: #fff3f0;
+    color: #b33a1a;
+    border: 1px solid #f5c2b4;
+}
+
+#shop-product-modal-content .pill-may {
+    background: #fffbec;
+    color: #8a6400;
+    border: 1px solid #f0dfa0;
+}
+
 .shop-product-card__price {
     font-family: 'Lato', sans-serif;
     font-size: 1.3rem;
@@ -161,11 +264,12 @@
     margin-top: auto;
 }
 
-/* ── Qty stepper ── */
+/* ── Qty stepper (stop card click; keep default cursor) ── */
 .shop-product-card__qty {
     display: flex;
     align-items: center;
     gap: 12px;
+    cursor: default;
 }
 
 .qty-btn {
@@ -572,6 +676,191 @@
     text-align: center;
     font-family: 'Lato', sans-serif;
     color: var(--muted);
+}
+
+
+/* ── Shop product detail modal (description only — matches allergen-advice modal) ── */
+#shop-product-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+#shop-product-overlay.is-visible {
+    display: flex;
+}
+
+#shop-product-overlay.is-open {
+    opacity: 1;
+}
+
+#shop-product-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+    transform: translateY(16px);
+    transition: transform 0.35s ease;
+}
+
+#shop-product-overlay.is-open #shop-product-modal {
+    transform: translateY(0);
+}
+
+#shop-product-modal.shop-product-modal--no-image .shop-product-modal-body {
+    padding-top: 2.75rem;
+    border-radius: 16px 16px 0 0;
+}
+
+#shop-product-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+    padding: 0 4px;
+    z-index: 1;
+}
+
+#shop-product-modal-close:hover {
+    color: #333;
+}
+
+.shop-product-modal-img-wrap {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+    background: var(--pink-light);
+}
+
+.shop-product-modal-img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.shop-product-modal-body {
+    padding: 1.5rem 1.75rem 2rem;
+}
+
+.shop-product-modal-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--deep);
+    margin: 4px 0 10px;
+    line-height: 1.2;
+}
+
+.shop-product-modal-meta {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--pink);
+    margin-bottom: 2px;
+}
+
+/* Same row as product cards: icon + servings text from sheet (e.g. “9 slices”) */
+#shop-product-modal-content .shop-product-modal-serves-line {
+    margin-top: 2px;
+    margin-bottom: 10px;
+}
+
+.shop-product-modal-basket {
+    margin-top: 1.25rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid #f0e4f8;
+}
+
+.shop-product-modal-basket .shop-product-modal-qty {
+    justify-content: center;
+}
+
+.shop-product-modal-body .detail-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 6px;
+    margin-top: 1.15rem;
+}
+
+#shop-product-modal-content > .shop-product-modal-meta + .detail-label,
+#shop-product-modal-content > .shop-product-card__serves + .detail-label {
+    margin-top: 0.75rem;
+}
+
+.shop-product-modal-plain {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--body-text);
+    line-height: 1.65;
+    font-family: 'Lato', sans-serif;
+    margin: 0 0 0.25rem;
+    white-space: pre-wrap;
+}
+
+.shop-product-modal-ingredients-details {
+    margin-top: 1.15rem;
+}
+
+.shop-product-modal-ingredients-summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink);
+    font-family: 'Lato', sans-serif;
+    list-style: none;
+    user-select: none;
+}
+
+.shop-product-modal-ingredients-summary::-webkit-details-marker {
+    display: none;
+}
+
+.shop-product-modal-ingredients-chevron {
+    font-size: 0.7rem;
+    color: var(--pink);
+    transition: transform 0.22s ease;
+    flex-shrink: 0;
+}
+
+.shop-product-modal-ingredients-details[open] .shop-product-modal-ingredients-chevron {
+    transform: rotate(180deg);
+}
+
+.shop-product-modal-ingredients-details .shop-product-modal-ingredients {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--body-text);
+    line-height: 1.6;
+    font-family: 'Lato', sans-serif;
+    margin: 10px 0 0;
+    white-space: pre-wrap;
 }
 
 /* =============================================================================

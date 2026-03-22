@@ -182,6 +182,30 @@
                 <button class="btn btn-brand rounded-pill px-4 mt-2" id="checkout-retry-btn">Try again</button>
             </div>
         </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SHOP PRODUCT DETAIL (full product info)
+    ══════════════════════════════════════════════════════════ -->
+    <div id="shop-product-overlay" role="dialog" aria-modal="true" aria-labelledby="shop-product-modal-title">
+        <div id="shop-product-modal">
+            <button type="button" id="shop-product-modal-close" aria-label="Close">&times;</button>
+            <div class="shop-product-modal-img-wrap" id="shop-product-modal-img-wrap">
+                <img id="shop-product-modal-img" alt="">
+            </div>
+            <div class="shop-product-modal-body">
+                <h2 class="shop-product-modal-name" id="shop-product-modal-title"></h2>
+                <div id="shop-product-modal-content"></div>
+                <div class="shop-product-modal-basket">
+                    <div class="shop-product-card__qty shop-product-modal-qty">
+                        <button type="button" class="qty-btn qty-btn--minus" id="shop-product-modal-qty-minus" aria-label="Remove one">−</button>
+                        <span class="qty-val" id="shop-product-modal-qty-val">0</span>
+                        <button type="button" class="qty-btn qty-btn--plus" id="shop-product-modal-qty-plus" aria-label="Add one">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <!-- ── Scripts ── -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
@@ -190,8 +214,9 @@
         <script>
             /* ── CONFIG ───────────────────────────────────────────────────────────
                Paste your Google Sheet CSV URL below.
-               The sheet must have these columns:
-               name | price | serves | available | image_url | ingredients | allergens | mayContain
+               Expected columns include:
+               name | price | servings | category | available | image | imageLink |
+               description | ingredients | allergens | mayContain (pipe-separated, e.g. Eggs|Soya)
             ──────────────────────────────────────────────────────────────────── */
             const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
 
@@ -226,6 +251,72 @@
 
             /* ── State ───────────────────────────────────────────────────────── */
             var cart = {}; // { productName: { product, qty } }
+            var shopModalProduct = null; // product currently shown in detail modal (for qty sync)
+
+            function escapeHtml(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            function parsePipeArray(s) {
+                if (!s || !String(s).trim()) return [];
+                return String(s).split('|').map(function (x) { return x.trim(); }).filter(Boolean);
+            }
+
+            function buildAllergenPillsHtml(product) {
+                var allergens = parsePipeArray(product.allergens || '');
+                var mayContain = parsePipeArray(product.mayContain || '');
+                var parts = [];
+                parts.push('<span class="pill pill-free">Gluten free</span>');
+                parts.push('<span class="pill pill-free">Dairy free</span>');
+                allergens.forEach(function (a) {
+                    if (a.toLowerCase() === 'none') return;
+                    parts.push('<span class="pill pill-contains">Contains ' + escapeHtml(a) + '</span>');
+                });
+                mayContain.forEach(function (a) {
+                    parts.push('<span class="pill pill-may">May contain ' + escapeHtml(a) + '</span>');
+                });
+                return '<div class="allergen-pills">' + parts.join('') + '</div>';
+            }
+
+            function buildShopModalContentHtml(product) {
+                var price = parseFloat(product.price) || 0;
+                var servings = (product.servings || '').trim();
+                var category = (product.category || '').trim();
+                var desc = (product.description || '').trim();
+                var ingredients = (product.ingredients || '').trim();
+                var chunks = [];
+
+                chunks.push('<div class="shop-product-modal-meta"><span class="shop-product-modal-price">£' + price.toFixed(2) + '</span></div>');
+                if (servings) {
+                    chunks.push('<div class="shop-product-card__serves shop-product-modal-serves-line"><i class="fas fa-users"></i> ' + escapeHtml(servings) + '</div>');
+                }
+
+                if (category) {
+                    chunks.push('<div class="detail-label">Category</div><p class="shop-product-modal-plain">' + escapeHtml(category) + '</p>');
+                }
+
+                if (desc) {
+                    chunks.push('<div class="detail-label">Description</div><p class="shop-product-modal-plain">' + escapeHtml(desc) + '</p>');
+                }
+
+                chunks.push('<div class="detail-label">Allergens</div>');
+                chunks.push(buildAllergenPillsHtml(product));
+
+                if (ingredients) {
+                    chunks.push(
+                        '<details class="shop-product-modal-ingredients-details">' +
+                        '<summary class="shop-product-modal-ingredients-summary">Ingredients <i class="fas fa-chevron-down shop-product-modal-ingredients-chevron" aria-hidden="true"></i></summary>' +
+                        '<p class="shop-product-modal-ingredients">' + escapeHtml(ingredients) + '</p>' +
+                        '</details>'
+                    );
+                }
+
+                return chunks.join('');
+            }
 
             /* ── Build product card ──────────────────────────────────────────── */
             function buildCard(product) {
@@ -233,31 +324,121 @@
                 const serves = product.servings ? product.servings : '';
                 const imgSrc = product.image || product.imageLink || '';
                 const hasImage = imgSrc !== '';
+                const nameEsc = escapeHtml(product.name);
+                const attrName = escapeHtml(product.name);
 
                 var card = document.createElement('div');
                 card.className = 'shop-product-card';
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', 'View details for ' + product.name);
                 card.innerHTML =
                     '<div class="shop-product-card__img-wrap' + (hasImage ? '' : ' is-placeholder') + '">' +
                     (hasImage
-                        ? '<img src="' + imgSrc + '" alt="' + product.name + '" loading="lazy">'
+                        ? '<img src="' + imgSrc + '" alt="' + nameEsc + '" loading="lazy">'
                         : '<div class="shop-img-placeholder"><i class="fas fa-camera"></i><span>Photo coming soon</span></div>') +
                     '</div>' +
                     '<div class="shop-product-card__body">' +
-                    '<div class="shop-product-card__name">' + product.name + '</div>' +
-                    (serves ? '<div class="shop-product-card__serves"><i class="fas fa-users"></i> ' + serves + '</div>' : '') +
+                    '<div class="shop-product-card__header">' +
+                    '<div class="shop-product-card__header-text">' +
+                    '<div class="shop-product-card__name">' + nameEsc + '</div>' +
+                    (serves ? '<div class="shop-product-card__serves"><i class="fas fa-users"></i> ' + escapeHtml(serves) + '</div>' : '') +
+                    '</div>' +
+                    '<i class="fas fa-chevron-right shop-product-card__expand-icon" aria-hidden="true"></i>' +
+                    '</div>' +
+                    buildAllergenPillsHtml(product) +
                     '<div class="shop-product-card__price">£' + price.toFixed(2) + '</div>' +
                     '<div class="shop-product-card__qty" id="qty-wrap-' + slugify(product.name) + '">' +
-                    '<button class="qty-btn qty-btn--minus" data-name="' + product.name + '" aria-label="Remove one">−</button>' +
+                    '<button type="button" class="qty-btn qty-btn--minus" data-name="' + attrName + '" aria-label="Remove one">−</button>' +
                     '<span class="qty-val" id="qty-' + slugify(product.name) + '">0</span>' +
-                    '<button class="qty-btn qty-btn--plus" data-name="' + product.name + '" aria-label="Add one">+</button>' +
+                    '<button type="button" class="qty-btn qty-btn--plus" data-name="' + attrName + '" aria-label="Add one">+</button>' +
                     '</div>' +
                     '</div>';
 
-                card.querySelector('.qty-btn--plus').addEventListener('click', function () { addToCart(product); });
-                card.querySelector('.qty-btn--minus').addEventListener('click', function () { removeFromCart(product); });
+                card.querySelector('.shop-product-card__qty').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+                card.querySelector('.qty-btn--plus').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    addToCart(product);
+                });
+                card.querySelector('.qty-btn--minus').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    removeFromCart(product);
+                });
+
+                card.addEventListener('click', function () {
+                    openShopProductModal(product);
+                });
+                card.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openShopProductModal(product);
+                    }
+                });
 
                 return card;
             }
+
+            function openShopProductModal(product) {
+                var imgSrc = product.image || product.imageLink || '';
+                var imgEl = document.getElementById('shop-product-modal-img');
+                var wrap = document.getElementById('shop-product-modal-img-wrap');
+                var modal = document.getElementById('shop-product-modal');
+                var titleEl = document.getElementById('shop-product-modal-title');
+                var contentEl = document.getElementById('shop-product-modal-content');
+
+                titleEl.textContent = product.name;
+                contentEl.innerHTML = buildShopModalContentHtml(product);
+                shopModalProduct = product;
+                var modalQtyEl = document.getElementById('shop-product-modal-qty-val');
+                if (modalQtyEl) {
+                    modalQtyEl.textContent = cart[product.name] ? cart[product.name].qty : 0;
+                }
+                if (imgSrc) {
+                    imgEl.src = imgSrc;
+                    imgEl.alt = product.name;
+                    wrap.style.display = '';
+                    modal.classList.remove('shop-product-modal--no-image');
+                } else {
+                    imgEl.removeAttribute('src');
+                    imgEl.alt = '';
+                    wrap.style.display = 'none';
+                    modal.classList.add('shop-product-modal--no-image');
+                }
+
+                var overlay = document.getElementById('shop-product-overlay');
+                overlay.classList.add('is-visible');
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () { overlay.classList.add('is-open'); });
+                });
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeShopProductModal() {
+                shopModalProduct = null;
+                var overlay = document.getElementById('shop-product-overlay');
+                overlay.classList.remove('is-open');
+                overlay.addEventListener('transitionend', function handler() {
+                    overlay.classList.remove('is-visible');
+                    overlay.removeEventListener('transitionend', handler);
+                    document.body.style.overflow = '';
+                });
+            }
+
+            document.getElementById('shop-product-modal-qty-plus').addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (shopModalProduct) addToCart(shopModalProduct);
+            });
+            document.getElementById('shop-product-modal-qty-minus').addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (shopModalProduct) removeFromCart(shopModalProduct);
+            });
+
+            document.getElementById('shop-product-modal-close').addEventListener('click', closeShopProductModal);
+            document.getElementById('shop-product-overlay').addEventListener('click', function (e) {
+                if (e.target === document.getElementById('shop-product-overlay')) closeShopProductModal();
+            });
 
             function slugify(str) {
                 return str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -283,6 +464,10 @@
             function updateQtyDisplay(name) {
                 var el = document.getElementById('qty-' + slugify(name));
                 if (el) el.textContent = cart[name] ? cart[name].qty : 0;
+                var modalQty = document.getElementById('shop-product-modal-qty-val');
+                if (modalQty && shopModalProduct && shopModalProduct.name === name) {
+                    modalQty.textContent = cart[name] ? cart[name].qty : 0;
+                }
             }
 
             function cartTotal() {
@@ -433,7 +618,14 @@
                 if (e.target === document.getElementById('checkout-overlay')) closeCheckout();
             });
             document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') closeCheckout();
+                if (e.key !== 'Escape') return;
+                var shopOv = document.getElementById('shop-product-overlay');
+                if (shopOv && shopOv.classList.contains('is-open')) {
+                    closeShopProductModal();
+                    return;
+                }
+                var co = document.getElementById('checkout-overlay');
+                if (co && co.classList.contains('is-open')) closeCheckout();
             });
 
             document.getElementById('checkout-retry-btn').addEventListener('click', function () {

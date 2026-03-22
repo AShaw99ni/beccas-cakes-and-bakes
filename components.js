@@ -1,6 +1,7 @@
 /* =============================================================================
    components.js — Becca's Cakes and Bakes
-   Injects the shared navbar, footer, and newsletter signup overlay into every page.
+   Injects the shared navbar, footer, newsletter signup overlay, cart drawer,
+   and checkout modal into every page.
 
    HOW TO USE IN EACH HTML PAGE:
    1. Add <div id="site-nav"></div> where the navbar should appear.
@@ -24,11 +25,10 @@
         { label: 'Contact Us', href: './contact.html', page: 'contact' },
     ];
 
-    // Shop is kept separate so it renders as a CTA button, not a plain nav link
     const SHOP_LINK = { label: 'Shop', href: './shop.html', page: 'shop' };
 
     const LEFT_LINKS = NAV_LINKS.slice(0, 3);
-    const RIGHT_LINKS = NAV_LINKS.slice(3);   // Gallery, Contact Us
+    const RIGHT_LINKS = NAV_LINKS.slice(3);
 
     /* ── Social links ─────────────────────────────────────────────────────── */
     const SOCIAL_LINKS = [
@@ -51,7 +51,6 @@
             '</li>';
     }
 
-    // Shop CTA button — pill style, slightly compact for nav context
     function shopButtonHTML() {
         const isActive = activePage() === 'shop';
         return '<li class="nav-item nav-item--shop ms-2">' +
@@ -66,27 +65,17 @@
     function buildNavbar() {
         return '<nav class="navbar navbar-expand-lg">' +
             '<div class="container-xl position-relative navbar-padding">' +
-
-            // Mobile: logo + hamburger
             '<a class="navbar-brand d-lg-none" href="./new-index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
             '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">' +
             '<span class="navbar-toggler-icon"></span>' +
             '</button>' +
-
             '<div class="collapse navbar-collapse" id="mainNavbar">' +
-
-            // Left links
             '<ul class="navbar-nav me-auto">' + LEFT_LINKS.map(navLinkHTML).join('') + '</ul>' +
-
-            // Centred logo (desktop only)
             '<a class="navbar-brand navbar-center d-none d-lg-block" href="./new-index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
-
-            // Right links + Shop button
             '<ul class="navbar-nav ms-auto align-items-center">' +
             RIGHT_LINKS.map(navLinkHTML).join('') +
             shopButtonHTML() +
             '</ul>' +
-
             '</div></div></nav>';
     }
 
@@ -96,7 +85,6 @@
             return '<a class="btn text-white btn-floating m-1 ' + s.cssClass + '" href="' + s.href + '" role="button" aria-label="' + s.label + '"><i class="' + s.icon + '"></i></a>';
         }).join('');
 
-        // Footer uses all links including Shop
         const HOME_LINK = { label: 'Home', href: './new-index.html' };
         const allFooterLinks = [HOME_LINK, ...NAV_LINKS, SHOP_LINK];
         const footerLinks = allFooterLinks.map(function (l) {
@@ -105,9 +93,7 @@
 
         return '<footer class="bg-body-tertiary text-center">' +
             '<div class="container p-4 pb-0">' +
-
             '<section class="mb-4">' + socialButtons + '</section>' +
-
             '<section class="footer-newsletter mb-4">' +
             '<h6 class="text-uppercase fw-bold mb-3">Stay in the loop</h6>' +
             '<p class="footer-newsletter__sub">Join our community and get the latest on new bakes, market appearances, and special offers.</p>' +
@@ -115,17 +101,87 @@
             '<i class="fa fa-envelope me-2"></i>Subscribe to our newsletter' +
             '</button>' +
             '</section>' +
-
             '<section><div class="container text-center"><div class="row mt-3"><div>' +
             '<h6 class="text-uppercase fw-bold mb-4">Pages</h6>' +
             footerLinks +
             '</div></div></div></section>' +
             '</div>' +
-
             '<div class="text-center p-3 footer-copyright">' +
             '&copy; 2026 Copyright: <a class="text-body" href="https://beccascakesandbakes.co.uk/">beccascakesandbakes.co.uk</a>' +
             '</div>' +
             '</footer>';
+    }
+
+    /* ── Cart + Checkout HTML ─────────────────────────────────────────────── */
+    function buildCartAndCheckout() {
+        return '' +
+            '<div id="cart-overlay"></div>' +
+            '<div id="cart-drawer" aria-label="Your cart">' +
+            '<div class="cart-header">' +
+            '<h2>Your Cart</h2>' +
+            '<button id="cart-close" aria-label="Close cart"><i class="fas fa-times"></i></button>' +
+            '</div>' +
+            '<div class="cart-body" id="cart-body">' +
+            '<div class="cart-empty" id="cart-empty">' +
+            '<i class="fas fa-shopping-basket"></i>' +
+            '<p>Your cart is empty</p>' +
+            '<a href="./shop.html" class="btn btn-brand rounded-pill px-4 mt-2" style="font-size:0.9rem;">Go to Shop</a>' +
+            '</div>' +
+            '<div id="cart-items"></div>' +
+            '</div>' +
+            '<div class="cart-footer" id="cart-footer" style="display:none;">' +
+            '<div class="cart-total"><span>Total</span><span id="cart-total-amount">£0.00</span></div>' +
+            '<button class="btn btn-brand w-100 rounded-pill" id="cart-checkout-btn">' +
+            '<i class="fas fa-lock me-2"></i>Proceed to Checkout' +
+            '</button>' +
+            '<button class="cart-clear-btn" id="cart-clear-btn">Clear cart</button>' +
+            '</div>' +
+            '</div>' +
+            '<button class="cart-fab" id="cart-fab" aria-label="Open cart">' +
+            '<i class="fas fa-shopping-basket"></i>' +
+            '<span class="cart-fab__count" id="cart-fab-count">0</span>' +
+            '</button>' +
+            '<div id="checkout-overlay" role="dialog" aria-modal="true">' +
+            '<div id="checkout-modal">' +
+            '<button id="checkout-close" aria-label="Close">&times;</button>' +
+            '<h2 class="checkout-title">Checkout</h2>' +
+            '<div id="checkout-form-wrap">' +
+            '<div class="checkout-section-label">Your details</div>' +
+            '<div class="checkout-field">' +
+            '<label for="co-name">Full name <span class="req">*</span></label>' +
+            '<input type="text" id="co-name" class="form-control" placeholder="e.g. Sarah Murphy">' +
+            '<div class="checkout-error" id="err-co-name">Please enter your name.</div>' +
+            '</div>' +
+            '<div class="checkout-field">' +
+            '<label for="co-email">Email address <span class="req">*</span></label>' +
+            '<input type="email" id="co-email" class="form-control" placeholder="e.g. sarah@email.com">' +
+            '<div class="checkout-error" id="err-co-email">Please enter a valid email.</div>' +
+            '</div>' +
+            '<div class="checkout-section-label mt-4">Collection date</div>' +
+            '<p class="checkout-hint">Collection is every <strong>Tuesday 12pm\u20136pm</strong>. Pick your Tuesday below \u2014 please allow at least 5\u20137 days.</p>' +
+            '<div class="checkout-field">' +
+            '<label for="co-date">Collection date <span class="req">*</span></label>' +
+            '<select id="co-date" class="form-select"><option value="">Select a Tuesday\u2026</option></select>' +
+            '<div class="checkout-error" id="err-co-date">Please select a collection date.</div>' +
+            '</div>' +
+            '<div class="checkout-section-label mt-4">Order summary</div>' +
+            '<div id="checkout-summary"></div>' +
+            '<div class="checkout-total"><span>Total</span><span id="checkout-total-amount"></span></div>' +
+            '<button class="btn btn-brand w-100 rounded-pill mt-4" id="pay-btn">' +
+            '<i class="fas fa-lock me-2"></i>Pay securely with Stripe' +
+            '</button>' +
+            '<p class="checkout-stripe-note"><i class="fas fa-lock"></i> Payments are processed securely by Stripe. We never store your card details.</p>' +
+            '</div>' +
+            '<div id="checkout-loading" style="display:none;">' +
+            '<i class="fas fa-spinner fa-spin fa-2x"></i><p>Redirecting to payment\u2026</p>' +
+            '</div>' +
+            '<div id="checkout-error-msg" style="display:none;">' +
+            '<i class="fas fa-exclamation-circle fa-2x" style="color:var(--pink)"></i>' +
+            '<p id="checkout-error-text">Something went wrong. Please try again.</p>' +
+            '<button class="btn btn-brand rounded-pill px-4 mt-2" id="checkout-retry-btn">Try again</button>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
     }
 
     /* ── Brevo signup overlay HTML ────────────────────────────────────────── */
@@ -180,22 +236,228 @@
             '</div></div>';
     }
 
-    /* ── Overlay open / close ─────────────────────────────────────────────── */
+    /* ── Cart state & logic ───────────────────────────────────────────────── */
+    window.BeccaCart = (function () {
+        var cart = {};
+        try {
+            var saved = localStorage.getItem('becca_cart');
+            if (saved) cart = JSON.parse(saved);
+        } catch (e) { cart = {}; }
+
+        function persist() {
+            try { localStorage.setItem('becca_cart', JSON.stringify(cart)); } catch (e) { }
+        }
+
+        function cartTotal() {
+            return Object.values(cart).reduce(function (sum, item) {
+                return sum + (parseFloat(item.product.price) * item.qty);
+            }, 0);
+        }
+
+        function cartCount() {
+            return Object.values(cart).reduce(function (sum, item) { return sum + item.qty; }, 0);
+        }
+
+        function updateCartUI() {
+            var count = cartCount();
+            var total = cartTotal();
+            var fab = document.getElementById('cart-fab');
+            var fabCount = document.getElementById('cart-fab-count');
+            if (fab) fab.classList.toggle('has-items', count > 0);
+            if (fabCount) fabCount.textContent = count;
+
+            var items = document.getElementById('cart-items');
+            var empty = document.getElementById('cart-empty');
+            var footer = document.getElementById('cart-footer');
+            var totalEl = document.getElementById('cart-total-amount');
+            if (!items) return;
+
+            if (count === 0) {
+                if (empty) empty.style.display = 'flex';
+                items.innerHTML = '';
+                if (footer) footer.style.display = 'none';
+            } else {
+                if (empty) empty.style.display = 'none';
+                if (footer) footer.style.display = 'block';
+                if (totalEl) totalEl.textContent = '\u00a3' + total.toFixed(2);
+
+                items.innerHTML = Object.values(cart).map(function (item) {
+                    var escapedName = item.product.name
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;');
+                    return '<div class="cart-item">' +
+                        '<div class="cart-item__info">' +
+                        '<div class="cart-item__name">' + escapedName + '</div>' +
+                        '<div class="cart-item__price">£' + (parseFloat(item.product.price) * item.qty).toFixed(2) + '</div>' +
+                        '</div>' +
+                        '<div class="cart-item__qty">' +
+                        '<button class="qty-btn qty-btn--minus cart-qty-btn" data-name="' + escapedName + '">−</button>' +
+                        '<span>' + item.qty + '</span>' +
+                        '<button class="qty-btn qty-btn--plus cart-qty-btn" data-name="' + escapedName + '">+</button>' +
+                        '</div>' +
+                        '</div>';
+                }).join('');
+
+                items.querySelectorAll('.cart-qty-btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        var name = btn.dataset.name
+                            .replace(/&amp;/g, '&')
+                            .replace(/&lt;/g, '<')
+                            .replace(/&gt;/g, '>')
+                            .replace(/&quot;/g, '"');
+                        var product = cart[name] ? cart[name].product : null;
+                        if (!product) return;
+                        if (btn.classList.contains('qty-btn--plus')) addToCart(product);
+                        else removeFromCart(product);
+                    });
+                });
+            }
+        }
+
+        function addToCart(product) {
+            var key = product.name;
+            if (cart[key]) { cart[key].qty++; } else { cart[key] = { product: product, qty: 1 }; }
+            persist();
+            updateCartUI();
+            if (window.shopUpdateQtyDisplay) window.shopUpdateQtyDisplay(product.name);
+        }
+
+        function removeFromCart(product) {
+            var key = product.name;
+            if (!cart[key]) return;
+            cart[key].qty--;
+            if (cart[key].qty <= 0) delete cart[key];
+            persist();
+            updateCartUI();
+            if (window.shopUpdateQtyDisplay) window.shopUpdateQtyDisplay(product.name);
+        }
+
+        function clearCart() { cart = {}; persist(); updateCartUI(); }
+        function getCart() { return cart; }
+        function getCartTotal() { return cartTotal(); }
+        function getCartCount() { return cartCount(); }
+
+        return { addToCart, removeFromCart, clearCart, getCart, getCartTotal, getCartCount, updateCartUI };
+    })();
+
+    window.addToCart = window.BeccaCart.addToCart;
+    window.removeFromCart = window.BeccaCart.removeFromCart;
+
+    /* ── Cart open / close ────────────────────────────────────────────────── */
+    function openCart() {
+        document.getElementById('cart-drawer').classList.add('is-open');
+        document.getElementById('cart-overlay').classList.add('is-visible');
+        document.getElementById('cart-fab').style.display = 'none';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+        document.getElementById('cart-drawer').classList.remove('is-open');
+        document.getElementById('cart-overlay').classList.remove('is-visible');
+        document.getElementById('cart-fab').style.display = 'flex';
+        document.body.style.overflow = '';
+    }
+
+    window.openCart = openCart;
+    window.closeCart = closeCart;
+
+    /* ── Tuesday date picker ──────────────────────────────────────────────── */
+    function populateTuesdayDates() {
+        var select = document.getElementById('co-date');
+        if (!select) return;
+        var today = new Date();
+        var cutoff = new Date(today);
+        cutoff.setDate(cutoff.getDate() + 7);
+        var day = cutoff.getDay();
+        var daysUntilTuesday = (2 - day + 7) % 7 || 7;
+        var next = new Date(cutoff);
+        next.setDate(cutoff.getDate() + (daysUntilTuesday === 0 ? 7 : daysUntilTuesday));
+        for (var i = 0; i < 8; i++) {
+            var d = new Date(next);
+            d.setDate(next.getDate() + (i * 7));
+            var label = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            var value = d.toISOString().split('T')[0];
+            var opt = document.createElement('option');
+            opt.value = value;
+            opt.textContent = label + ' \u00b7 12pm\u20136pm';
+            select.appendChild(opt);
+        }
+    }
+
+    /* ── Checkout modal ───────────────────────────────────────────────────── */
+    function openCheckout() {
+        closeCart();
+        var cart = window.BeccaCart.getCart();
+        var summary = document.getElementById('checkout-summary');
+        summary.innerHTML = Object.values(cart).map(function (item) {
+            return '<div class="checkout-summary-row">' +
+                '<span>' + item.product.name + ' \u00d7 ' + item.qty + '</span>' +
+                '<span>\u00a3' + (parseFloat(item.product.price) * item.qty).toFixed(2) + '</span>' +
+                '</div>';
+        }).join('');
+        document.getElementById('checkout-total-amount').textContent = '\u00a3' + window.BeccaCart.getCartTotal().toFixed(2);
+        document.getElementById('checkout-form-wrap').style.display = 'block';
+        document.getElementById('checkout-loading').style.display = 'none';
+        document.getElementById('checkout-error-msg').style.display = 'none';
+        var overlay = document.getElementById('checkout-overlay');
+        overlay.classList.add('is-visible');
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () { overlay.classList.add('is-open'); });
+        });
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCheckout() {
+        var overlay = document.getElementById('checkout-overlay');
+        overlay.classList.remove('is-open');
+        overlay.addEventListener('transitionend', function handler() {
+            overlay.classList.remove('is-visible');
+            overlay.removeEventListener('transitionend', handler);
+            document.body.style.overflow = '';
+        });
+    }
+
+    window.openCheckout = openCheckout;
+    window.closeCheckout = closeCheckout;
+
+    /* ── Checkout validation ──────────────────────────────────────────────── */
+    function showFieldError(fieldId, errId) {
+        var f = document.getElementById(fieldId);
+        var e = document.getElementById(errId);
+        if (f) f.classList.add('is-invalid');
+        if (e) e.style.display = 'block';
+    }
+
+    function clearFieldError(fieldId, errId) {
+        var f = document.getElementById(fieldId);
+        var e = document.getElementById(errId);
+        if (f) f.classList.remove('is-invalid');
+        if (e) e.style.display = 'none';
+    }
+
+    function validateCheckout() {
+        var ok = true;
+        var rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!document.getElementById('co-name').value.trim()) { showFieldError('co-name', 'err-co-name'); ok = false; }
+        if (!rx.test(document.getElementById('co-email').value.trim())) { showFieldError('co-email', 'err-co-email'); ok = false; }
+        if (!document.getElementById('co-date').value) { showFieldError('co-date', 'err-co-date'); ok = false; }
+        return ok;
+    }
+
+    /* ── Signup overlay open / close ──────────────────────────────────────── */
     function openOverlay() {
         var overlay = document.getElementById('signup-overlay');
         var slot = document.getElementById('signup-form-slot');
         var formRoot = document.getElementById('sib-form-root');
         if (!overlay) return;
-
         if (formRoot && formRoot.querySelector('.sib-form') && !slot.querySelector('.sib-form')) {
             slot.appendChild(formRoot.querySelector('.sib-form'));
         }
-
         overlay.classList.add('is-visible');
         requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-                overlay.classList.add('is-open');
-            });
+            requestAnimationFrame(function () { overlay.classList.add('is-open'); });
         });
         document.body.style.overflow = 'hidden';
     }
@@ -225,12 +487,10 @@
             }
         };
         window.AUTOHIDE = Boolean(0);
-
         window.handleCaptchaResponse = function () {
             var el = document.getElementById('sib-captcha');
             if (el) el.dispatchEvent(new Event('captchaChange'));
         };
-
         window.addEventListener('load', function () {
             var s = document.createElement('script');
             s.onload = function () {
@@ -243,7 +503,6 @@
                         }
                     }).observe(successPanel, { attributes: true, attributeFilter: ['style'] });
                 }
-
                 if (showOnFirstVisit && !localStorage.getItem('firstVisitShown')) {
                     localStorage.setItem('firstVisitShown', 'true');
                     setTimeout(openOverlay, 800);
@@ -265,7 +524,6 @@
             sibCss.href = 'https://sibforms.com/forms/end-form/build/sib-styles.css';
             document.head.appendChild(sibCss);
         }
-
         if (!document.querySelector('script[src*="recaptcha"]')) {
             var rcScript = document.createElement('script');
             rcScript.src = 'https://www.google.com/recaptcha/api.js?hl=en';
@@ -276,22 +534,93 @@
         if (navSlot) navSlot.innerHTML = buildNavbar();
         if (footerSlot) footerSlot.innerHTML = buildFooter();
 
+        document.body.insertAdjacentHTML('beforeend', buildCartAndCheckout());
         document.body.insertAdjacentHTML('afterbegin', buildSignupOverlay());
 
-        var overlay = document.getElementById('signup-overlay');
-        var closeBtn = document.getElementById('signup-close');
-        if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
-        if (overlay) overlay.addEventListener('click', function (e) {
-            if (e.target === overlay) closeOverlay();
-        });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeOverlay();
+        // Cart events
+        document.getElementById('cart-fab').addEventListener('click', openCart);
+        document.getElementById('cart-close').addEventListener('click', closeCart);
+        document.getElementById('cart-overlay').addEventListener('click', closeCart);
+        document.getElementById('cart-checkout-btn').addEventListener('click', openCheckout);
+        document.getElementById('cart-clear-btn').addEventListener('click', function () {
+            window.BeccaCart.clearCart();
         });
 
+        // Checkout events
+        document.getElementById('checkout-close').addEventListener('click', closeCheckout);
+        document.getElementById('checkout-overlay').addEventListener('click', function (e) {
+            if (e.target === document.getElementById('checkout-overlay')) closeCheckout();
+        });
+        document.getElementById('checkout-retry-btn').addEventListener('click', function () {
+            document.getElementById('checkout-form-wrap').style.display = 'block';
+            document.getElementById('checkout-error-msg').style.display = 'none';
+        });
+
+        ['co-name', 'co-email', 'co-date'].forEach(function (id) {
+            document.getElementById(id).addEventListener('input', function () {
+                clearFieldError(id, 'err-' + id);
+            });
+        });
+
+        // Pay button — Stripe
+        document.getElementById('pay-btn').addEventListener('click', function () {
+            if (!validateCheckout()) return;
+            document.getElementById('checkout-form-wrap').style.display = 'none';
+            document.getElementById('checkout-loading').style.display = 'flex';
+
+            var cart = window.BeccaCart.getCart();
+            var payload = {
+                name: document.getElementById('co-name').value.trim(),
+                email: document.getElementById('co-email').value.trim(),
+                collectionDate: document.getElementById('co-date').value,
+                items: Object.values(cart).map(function (item) {
+                    return {
+                        name: item.product.name,
+                        price: Math.round(parseFloat(item.product.price) * 100),
+                        quantity: item.qty,
+                    };
+                }),
+            };
+
+            fetch('/.netlify/functions/create-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data.url) { window.location.href = data.url; }
+                    else { throw new Error(data.error || 'No URL returned'); }
+                })
+                .catch(function (err) {
+                    console.error(err);
+                    document.getElementById('checkout-loading').style.display = 'none';
+                    document.getElementById('checkout-error-msg').style.display = 'flex';
+                    document.getElementById('checkout-error-text').textContent = 'Something went wrong. Please try again or contact us directly.';
+                });
+        });
+
+        // Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            var co = document.getElementById('checkout-overlay');
+            if (co && co.classList.contains('is-open')) { closeCheckout(); return; }
+            closeOverlay();
+        });
+
+        // Signup overlay events
+        var signupOverlay = document.getElementById('signup-overlay');
+        var closeBtn = document.getElementById('signup-close');
+        if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
+        if (signupOverlay) signupOverlay.addEventListener('click', function (e) {
+            if (e.target === signupOverlay) closeOverlay();
+        });
         document.addEventListener('click', function (e) {
             if (e.target && e.target.id === 'footer-signup-btn') openOverlay();
         });
 
+        populateTuesdayDates();
+        window.BeccaCart.updateCartUI();
         initBrevo(activePage() === 'home');
     });
 

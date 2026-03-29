@@ -24,40 +24,157 @@ exports.handler = async function (event) {
         },
     });
 
-    // Build email body
-    const lines = [
-        `ENQUIRY TYPE: ${topicLabel}`,
-        '',
-        `Name:  ${fname} ${lname}`,
-        `Email: ${email}`,
-        `Phone: ${phone}`,
-    ];
+    // ── Shared colours ──────────────────────────────────────────────────────
+    const pink = '#AB1D79';
+    const pinkDark = '#7c1457';
+    const cream = '#FFEAFE';
+    const deep = '#2a1a2e';
+    const muted = '#5a3a6e';
+    const pinkLight = '#e2c4f9';
 
+    // ── Shared HTML helpers ─────────────────────────────────────────────────
+    function row(label, value) {
+        if (!value || value === '—') return '';
+        return `
+            <tr>
+                <td style="padding:8px 0;vertical-align:top;width:140px;
+                    font-family:Arial,sans-serif;font-size:13px;font-weight:700;
+                    color:${muted};text-transform:uppercase;letter-spacing:0.06em;">
+                    ${label}
+                </td>
+                <td style="padding:8px 0;vertical-align:top;
+                    font-family:Arial,sans-serif;font-size:15px;color:${deep};">
+                    ${value}
+                </td>
+            </tr>`;
+    }
+
+    function section(title, rows) {
+        return `
+            <div style="margin:24px 0 0;">
+                <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;
+                    letter-spacing:0.14em;text-transform:uppercase;color:${pink};
+                    margin-bottom:12px;">
+                    ${title}
+                </div>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="border-top:1px solid ${pinkLight};">
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>`;
+    }
+
+    function emailWrapper(preheader, bodyContent) {
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Becca's Cakes and Bakes</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f7edf7;">
+<!-- preheader -->
+<div style="display:none;max-height:0;overflow:hidden;color:#f7edf7;">
+    ${preheader}
+</div>
+<!-- wrapper -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="background-color:#f7edf7;padding:32px 16px;">
+<tr><td align="center">
+<table width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="max-width:560px;">
+
+    <!-- Header -->
+    <tr>
+        <td align="center"
+            style="background:linear-gradient(135deg,${pink} 0%,${pinkDark} 100%);
+                border-radius:16px 16px 0 0;padding:36px 32px 28px;">
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;
+                font-weight:700;color:#ffffff;letter-spacing:0.02em;margin-bottom:4px;">
+                Becca's Cakes and Bakes
+            </div>
+            <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:400;
+                color:rgba(255,255,255,0.75);letter-spacing:0.14em;text-transform:uppercase;">
+                Gluten &amp; dairy free &middot; Made in Northern Ireland
+            </div>
+        </td>
+    </tr>
+
+    <!-- Body -->
+    <tr>
+        <td style="background:#ffffff;padding:36px 36px 28px;border-radius:0 0 16px 16px;
+            box-shadow:0 4px 24px rgba(171,29,121,0.08);">
+            ${bodyContent}
+        </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+        <td align="center" style="padding:20px 0 8px;">
+            <p style="font-family:Arial,sans-serif;font-size:12px;color:${muted};margin:0 0 6px;">
+                &copy; 2026 Becca's Cakes and Bakes &middot; Northern Ireland
+            </p>
+            <p style="font-family:Arial,sans-serif;font-size:12px;color:${muted};margin:0;">
+                <a href="https://beccascakesandbakes.co.uk"
+                    style="color:${pink};text-decoration:none;">beccascakesandbakes.co.uk</a>
+            </p>
+        </td>
+    </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+    }
+
+    // ── Build detail rows ───────────────────────────────────────────────────
+    const contactRows = row('Name', `${fname} ${lname}`) +
+        row('Email', `<a href="mailto:${email}" style="color:${pink};text-decoration:none;">${email}</a>`) +
+        row('Phone', phone);
+
+    let detailRows = '';
     if (topic === 'custom') {
-        lines.push('',
-            `Occasion: ${occasion || '—'}`,
-            `Date:     ${eventDate || '—'}`,
-            `Servings: ${servings}`,
-            `Flavours: ${flavours || '—'}`,
-            '',
-            `Design ideas:`,
-            cakeDesc || '—'
+        detailRows = section('Order details',
+            row('Occasion', occasion) +
+            row('Date needed', eventDate) +
+            row('Servings', servings) +
+            row('Flavours', flavours) +
+            (cakeDesc ? `<tr><td colspan="2" style="padding:12px 0;">
+                <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;
+                    letter-spacing:0.1em;text-transform:uppercase;color:${muted};margin-bottom:6px;">
+                    Design ideas
+                </div>
+                <div style="font-family:Arial,sans-serif;font-size:15px;color:${deep};
+                    line-height:1.65;white-space:pre-wrap;">${cakeDesc}</div>
+            </td></tr>` : '')
         );
     }
 
     if (topic === 'traybake') {
-        lines.push('',
-            `Items:    ${traybakes || '—'}`,
-            `Quantity: ${traybakeQty || '—'}`,
-            `Date:     ${traybakeDate || '—'}`
+        detailRows = section('Event details',
+            row('Items', traybakes) +
+            row('Quantity', traybakeQty) +
+            row('Date needed', traybakeDate)
         );
     }
 
-    if (message) {
-        lines.push('', `Message:`, message);
-    }
+    const messageBlock = message ? section('Message',
+        `<tr><td colspan="2" style="padding:12px 0;font-family:Arial,sans-serif;
+            font-size:15px;color:${deep};line-height:1.65;white-space:pre-wrap;">
+            ${message}
+        </td></tr>`
+    ) : '';
 
-    // Build attachments from base64 images
+    const imageNote = images && images.length > 0
+        ? `<div style="margin-top:20px;padding:14px 16px;background:${cream};
+            border-radius:10px;font-family:Arial,sans-serif;font-size:13px;color:${muted};">
+            📸 <strong style="color:${deep};">${images.length} inspiration image${images.length > 1 ? 's' : ''}</strong>
+            attached to this email.
+          </div>`
+        : '';
+
+    // ── Build attachments ───────────────────────────────────────────────────
     const attachments = (images || []).map(function (img, i) {
         const matches = img.data.match(/^data:image\/(jpeg|png);base64,(.+)$/);
         if (!matches) return null;
@@ -68,32 +185,101 @@ exports.handler = async function (event) {
         };
     }).filter(Boolean);
 
+    // ── Plain text fallback ─────────────────────────────────────────────────
+    const textLines = [
+        `ENQUIRY TYPE: ${topicLabel}`, '',
+        `Name:  ${fname} ${lname}`,
+        `Email: ${email}`,
+        `Phone: ${phone}`,
+    ];
+    if (topic === 'custom') {
+        textLines.push('',
+            `Occasion: ${occasion || '—'}`,
+            `Date:     ${eventDate || '—'}`,
+            `Servings: ${servings}`,
+            `Flavours: ${flavours || '—'}`,
+            '', `Design ideas:`, cakeDesc || '—'
+        );
+    }
+    if (topic === 'traybake') {
+        textLines.push('',
+            `Items:    ${traybakes || '—'}`,
+            `Quantity: ${traybakeQty || '—'}`,
+            `Date:     ${traybakeDate || '—'}`
+        );
+    }
+    if (message) textLines.push('', `Message:`, message);
+
+    // ── Becca's email ───────────────────────────────────────────────────────
+    const beccaBody = `
+        <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;
+            color:${deep};margin:0 0 6px;">New enquiry received</h1>
+        <p style="font-family:Arial,sans-serif;font-size:15px;color:${muted};
+            margin:0 0 24px;line-height:1.6;">
+            A new <strong style="color:${deep};">${topicLabel}</strong> enquiry
+            has come in from the website.
+        </p>
+        ${section('Contact details', contactRows)}
+        ${detailRows}
+        ${messageBlock}
+        ${imageNote}
+        <div style="margin-top:28px;padding-top:20px;border-top:1px solid ${pinkLight};">
+            <a href="mailto:${email}?subject=Re: Your enquiry with Becca's Cakes and Bakes"
+                style="display:inline-block;background:${pink};color:#ffffff;
+                font-family:Arial,sans-serif;font-size:14px;font-weight:700;
+                text-decoration:none;padding:12px 28px;border-radius:50px;">
+                Reply to ${fname}
+            </a>
+        </div>`;
+
+    // ── Customer confirmation email ──────────────────────────────────────────
+    const customerBody = `
+        <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;
+            color:${deep};margin:0 0 6px;">Thanks for getting in touch, ${fname}!</h1>
+        <p style="font-family:Arial,sans-serif;font-size:15px;color:${muted};
+            margin:0 0 24px;line-height:1.6;">
+            Becca has received your enquiry and will get back to you within
+            <strong style="color:${deep};">48 hours</strong>.
+            Here's a summary of what you sent.
+        </p>
+        ${section('Your details', contactRows)}
+        ${detailRows}
+        ${messageBlock}
+        ${images && images.length > 0 ? `
+        <div style="margin-top:20px;padding:14px 16px;background:${cream};
+            border-radius:10px;font-family:Arial,sans-serif;font-size:13px;color:${muted};">
+            📸 You attached <strong style="color:${deep};">${images.length} inspiration image${images.length > 1 ? 's' : ''}</strong> — Becca will take a look!
+        </div>` : ''}
+        <div style="margin-top:28px;padding:20px 24px;background:${cream};
+            border-radius:12px;text-align:center;">
+            <p style="font-family:Georgia,'Times New Roman',serif;font-size:16px;
+                color:${deep};margin:0 0 14px;font-style:italic;">
+                "Baking without barriers"
+            </p>
+            <a href="https://beccascakesandbakes.co.uk/shop.html"
+                style="display:inline-block;background:${pink};color:#ffffff;
+                font-family:Arial,sans-serif;font-size:14px;font-weight:700;
+                text-decoration:none;padding:12px 28px;border-radius:50px;">
+                Browse the Shop
+            </a>
+        </div>`;
+
     try {
-        // Email to Becca
         await transporter.sendMail({
             from: `"Becca's Cakes and Bakes" <${process.env.NOTIFY_EMAIL_USER}>`,
-            to: "aaronshawni0@gmail.com",
+            to: 'aaronshawni0@gmail.com',
             subject: `New Enquiry — ${topicLabel} from ${fname} ${lname}`,
-            text: lines.join('\n'),
+            text: textLines.join('\n'),
+            html: emailWrapper(`New ${topicLabel} enquiry from ${fname} ${lname}`, beccaBody),
             attachments,
         });
 
-        // Confirmation email to customer
         await transporter.sendMail({
             from: `"Becca's Cakes and Bakes" <${process.env.NOTIFY_EMAIL_USER}>`,
             to: email,
-            subject: `We've received your enquiry!`,
-            text: [
-                `Hi ${fname},`,
-                '',
-                `Thanks for getting in touch! Becca has received your enquiry and will get back to you within 48 hours.`,
-                '',
-                `Here's a summary of what you sent:`,
-                '',
-                ...lines,
-                '',
-                'Becca x',
-            ].join('\n'),
+            subject: `We've received your enquiry! 🎂`,
+            text: [`Hi ${fname},`, '', `Thanks for getting in touch! Becca has received your enquiry and will get back to you within 48 hours.`, '', ...textLines, '', 'Becca x'].join('\n'),
+            html: emailWrapper(`We've got your enquiry, ${fname}!`, customerBody),
         });
 
         return { statusCode: 200, body: JSON.stringify({ ok: true }) };

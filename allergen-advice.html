@@ -93,7 +93,8 @@
                 <div class="detail-label" style="margin-top:1.2rem;">Ingredients</div>
                 <p class="ingredients-list" id="product-modal-ingredients"></p>
                 <div class="product-modal-shop-wrap" id="product-modal-shop-wrap" hidden>
-                    <a href="./shop.html" class="btn btn-brand rounded-pill px-4" id="product-modal-shop-link">View in shop</a>
+                    <a href="./shop.html" class="btn btn-brand rounded-pill px-4" id="product-modal-shop-link">View in
+                        shop</a>
                 </div>
             </div>
         </div>
@@ -250,7 +251,7 @@
                 '<span class="pill pill-free">Gluten free</span>' +
                 '<span class="pill pill-free">Dairy free</span>' +
                 containsPills + mayPills;
-            document.getElementById('product-modal-ingredients').textContent = product.ingredients;
+            document.getElementById('product-modal-ingredients').innerHTML = highlightAllergens(product.ingredients, product.allergens);
 
             var shopWrap = document.getElementById('product-modal-shop-wrap');
             var shopLink = document.getElementById('product-modal-shop-link');
@@ -277,6 +278,59 @@
                 overlay.removeEventListener('transitionend', handler);
                 document.body.style.overflow = '';
             });
+        }
+
+        var ALLERGEN_SYNONYMS = {
+            'nuts': ['almond', 'almonds', 'walnut', 'walnuts', 'hazelnut', 'hazelnuts',
+                'cashew', 'cashews', 'pecan', 'pecans', 'pistachio', 'pistachios',
+                'macadamia', 'brazil nut', 'brazil nuts', 'pine nut', 'pine nuts'],
+            'tree nuts': ['almond', 'almonds', 'walnut', 'walnuts', 'hazelnut', 'hazelnuts',
+                'cashew', 'cashews', 'pecan', 'pecans', 'pistachio', 'pistachios'],
+            'gluten': ['wheat', 'barley', 'rye', 'oat', 'oats', 'spelt'],
+            'wheat': ['wheat', 'wheat flour', 'wholemeal'],
+            'milk': ['milk', 'butter', 'cream', 'cheese', 'yogurt', 'lactose', 'whey', 'casein'],
+            'dairy': ['milk', 'butter', 'cream', 'cheese', 'yogurt', 'lactose', 'whey', 'casein'],
+        };
+
+        function highlightAllergens(ingredients, allergens) {
+            if (!ingredients) return '';
+
+            var safe = ingredients
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            var terms = (allergens || []).filter(Boolean);
+
+            // Expand each allergen into its synonyms if available, keeping the original too
+            var allTerms = [];
+            terms.forEach(function (term) {
+                var lower = term.toLowerCase();
+                allTerms.push(term);
+                if (ALLERGEN_SYNONYMS[lower]) {
+                    allTerms = allTerms.concat(ALLERGEN_SYNONYMS[lower]);
+                }
+                // Also add singular/plural variant
+                if (lower.endsWith('s')) {
+                    allTerms.push(term.slice(0, -1));
+                } else {
+                    allTerms.push(term + 's');
+                }
+            });
+
+            // Deduplicate and sort longest first
+            allTerms = allTerms.filter(function (v, i, a) {
+                return a.findIndex(function (x) { return x.toLowerCase() === v.toLowerCase(); }) === i;
+            });
+            allTerms.sort(function (a, b) { return b.length - a.length; });
+
+            allTerms.forEach(function (term) {
+                var escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                var regex = new RegExp('\\b(' + escaped + ')\\b', 'gi');
+                safe = safe.replace(regex, '<strong><em>$1</em></strong>');
+            });
+
+            return safe;
         }
 
         document.getElementById('product-modal-close').addEventListener('click', closeProductModal);

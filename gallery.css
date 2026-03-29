@@ -303,13 +303,15 @@
     z-index: 9999;
     background: rgba(20, 6, 28, 0.96);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
-    padding: 20px;
+    padding: 60px 20px 20px;
+    gap: 12px;
+    overflow: hidden;
 }
 
 .lightbox.open {
@@ -322,13 +324,13 @@
     position: relative;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 /* Main image wrapper */
 .lb-img-wrap {
     position: relative;
-    max-width: min(700px, 90vw);
-    max-height: 65vh;
+    max-width: min(700px, 80vw);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -337,7 +339,7 @@
 .lb-img-wrap img,
 .lb-img-wrap .lb-placeholder {
     max-width: 100%;
-    max-height: 65vh;
+    max-height: 50vh;
     border-radius: 16px;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
     display: block;
@@ -364,23 +366,22 @@
     font-size: 3rem;
 }
 
-/* Fade animation on image change */
 .lb-img-wrap.animating img,
 .lb-img-wrap.animating .lb-placeholder {
     opacity: 0;
     transform: scale(0.96);
 }
 
-/* Title / category below image */
+/* Info sits below image in normal flow */
 .lb-info {
     text-align: center;
-    margin-top: 16px;
+    flex-shrink: 0;
 }
 
 .lb-title {
     font-family: 'Playfair Display', serif;
     color: white;
-    font-size: 1.15rem;
+    font-size: 1rem;
     margin-bottom: 4px;
 }
 
@@ -420,28 +421,32 @@
 }
 
 .lb-prev {
-    left: -68px;
+    left: -60px;
 }
 
 .lb-next {
-    right: -68px;
+    right: -60px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 600px) {
     .lb-prev {
-        left: 8px;
+        left: 4px;
     }
 
     .lb-next {
-        right: 8px;
+        right: 4px;
+    }
+
+    .lb-img-wrap {
+        max-width: 85vw;
     }
 }
 
 /* Close button */
 .lb-close {
     position: fixed;
-    top: 20px;
-    right: 24px;
+    top: 16px;
+    right: 20px;
     width: 44px;
     height: 44px;
     background: rgba(255, 255, 255, 0.1);
@@ -465,30 +470,23 @@
 
 /* Counter */
 .lb-counter {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
     font-family: 'Lato', sans-serif;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     color: rgba(255, 255, 255, 0.45);
-    z-index: 10;
+    flex-shrink: 0;
 }
 
 /* Thumbnail strip */
 .lb-thumbs {
-    position: fixed;
-    bottom: 48px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     gap: 8px;
     max-width: 90vw;
     overflow-x: auto;
-    padding: 6px 10px;
+    padding: 4px 10px;
     scrollbar-width: none;
+    flex-shrink: 0;
 }
 
 .lb-thumbs::-webkit-scrollbar {
@@ -496,8 +494,8 @@
 }
 
 .lb-thumb {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
     border-radius: 8px;
     overflow: hidden;
     cursor: pointer;

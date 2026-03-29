@@ -39,6 +39,60 @@
         { icon: 'fa fa-envelope', href: 'mailto:beccascakesandbakes.ni@gmail.com', cssClass: 'footer-social-email', label: 'Email' },
     ];
 
+    /* ── Reviews ──────────────────────────────────────────────────────────── */
+    const REVIEWS = [
+        {
+            name: 'Tracy',
+            text: 'Amazing cake, online communication was spot on and everything was explained and made clear from order to payment to collection.',
+            food: 5,
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
+        {
+            name: 'Cliodhna Curley',
+            text: "Ordered some Cupcakes from Beccas Cakes and Bakes for Mother's Day and can honestly say I loved everything about them! Being someone with ceoliac and who also struggles with diary finding a nice treat is very far few inbetween so when i came across this bakery i was so happy! They tasted amazing! The texture was perfect! I would highly highly recommend you will not be disappointed! And Becca herself is so lovely and so educated in everything around allergens etc which really puts you at ease!",
+            food: 5,
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
+        {
+            name: 'Jordyn Berryman',
+            text: 'I recently tried this dairy-free, gluten-free bakery and was really impressed. I ordered their chocolate Bueno cupcakes for a party, and they were a great choice. The cupcakes were soft and moist with a rich chocolate flavour, and the topping was creamy and really tasty. They looked great and went down really well with everyone at the party. You honestly wouldn’t guess they were dairy-free and gluten-free. I’d definitely order from them again!',
+            food: 5,
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
+        {
+            name: 'Leah McCorry',
+            text: "I recently tried a range of treats from my friend’s home bakery and honestly everything has been incredible. I’ve had the caramel squares, themed Barbie cupcakes, cake, crispy treats and brownies — and every single one has been delicious. The caramel squares were perfectly rich and gooey, the brownies were indulgent and chocolatey, and the cupcakes looked amazing while tasting just as good. What’s even more impressive is that everything is gluten- and dairy-free, yet you genuinely wouldn’t be able to tell. The texture and flavour are just as good (if not better) than traditional bakes. The themed Barbie cupcakes were such a hit and beautifully done. It’s clear a lot of care and attention goes into both the look and taste of the bakes.",
+            food: 5,
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
+        {
+            name: 'Abby Butterworth',
+            text: 'Delicious bakes! Amazing inclusivity. GF and DF bakes but everyone can definitely enjoy! Yum!',
+            food: 5,
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
+        {
+            name: 'Ronan Clarke',
+            text: 'The strawberry and white chocolate rice crispy treats were amazing',
+            food: 5,
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
+    ];
+
+    const GOOGLE_REVIEWS_URL = 'https://share.google/aDjErtuY06bjAsfI1';
+
     /* ── Helpers ──────────────────────────────────────────────────────────── */
     function activePage() {
         return document.body.dataset.page || '';
@@ -234,6 +288,50 @@
             '<button id="signup-close" aria-label="Close">&times;</button>' +
             '<div id="signup-form-slot"></div>' +
             '</div></div>';
+    }
+
+    function buildReviews() {
+        var stars = '<i class="fas fa-star"></i>'.repeat(5);
+
+        var cards = REVIEWS.map(function (r) {
+            var initial = r.name.charAt(0).toUpperCase();
+            return '<div class="review-card">' +
+                '<div class="review-card__header">' +
+                '<div class="review-card__avatar">' + initial + '</div>' +
+                '<div>' +
+                '<div class="review-card__name">' + r.name + '</div>' +
+                '<div class="review-card__stars">' + stars + '</div>' +
+                '</div>' +
+                '</div>' +
+                '<p class="review-card__text">\u201c' + r.text + '\u201d</p>' +
+                '</div>';
+        }).join('');
+
+        return '<section class="section-reviews">' +
+            '<div class="container">' +
+            '<div class="text-center mb-5">' +
+            '<span class="section-label">What people are saying</span>' +
+            '<h2 class="section-heading">Reviews from our customers</h2>' +
+            '<div class="reviews-stars-header">' + stars +
+            '<span class="reviews-rating-text">5.0 on Google</span>' +
+            '</div>' +
+            '</div>' +
+            '<div class="reviews-grid">' + cards + '</div>' +
+            '<div class="text-center mt-5">' +
+            '<a href="' + GOOGLE_REVIEWS_URL + '" target="_blank" rel="noopener" class="btn btn-brand-outline rounded-pill px-4">' +
+            '<i class="fab fa-google me-2"></i>View all reviews on Google' +
+            '</a>' +
+            '</div>' +
+            '</div>' +
+            '</section>';
+    }
+
+    // Reviews — home page only
+    if (activePage() === 'home') {
+        var ctaBanner = document.querySelector('.section-cta');
+        if (ctaBanner) {
+            ctaBanner.insertAdjacentHTML('beforebegin', buildReviews());
+        }
     }
 
     /* ── Cart state & logic ───────────────────────────────────────────────── */

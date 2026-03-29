@@ -342,7 +342,7 @@
                 if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
             });
         }, { threshold: 0.08 });
-        document.querySelectorAll('.section-story, .section-categories, .section-allergen, .section-tiktok, .section-cta').forEach(function (el) {
+        document.querySelectorAll('.section-story, .section-categories, .section-allergen, .section-tiktok, .section-reviews, .section-cta').forEach(function (el) {
             io.observe(el);
         });
     </script>

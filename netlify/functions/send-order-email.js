@@ -230,7 +230,7 @@ exports.handler = async function (event) {
     const firstName = customerName.split(' ')[0];
     const customerBody = `
         <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;
-            color:${deep};margin:0 0 6px;">Your order is confirmed! 🎂</h1>
+            color:${deep};margin:0 0 6px;">Your order is confirmed!</h1>
         <p style="font-family:Arial,sans-serif;font-size:15px;color:${muted};
             margin:0 0 24px;line-height:1.6;">
             Hi ${firstName}, thank you for your order! Payment has been received and
@@ -290,7 +290,7 @@ exports.handler = async function (event) {
         await transporter.sendMail({
             from: `"Becca's Cakes and Bakes" <${process.env.NOTIFY_EMAIL_USER}>`,
             to: customerEmail,
-            subject: `Your order is confirmed! 🎂`,
+            subject: `Your order is confirmed!`,
             text: [
                 'Hi ' + firstName + ',', '',
                 'Thank you for your order! Here\'s a summary:', '',

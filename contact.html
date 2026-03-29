@@ -181,6 +181,19 @@
                             <div class="char-counter"><span id="cakeDescCount">0</span> / 800</div>
                             <div class="error-msg" id="err-cakeDesc">Please describe your design ideas.</div>
                         </div>
+                        <div class="field-group">
+                            <label for="images">Inspiration images <span class="req">(at least one)</span></label>
+                            <div class="image-upload-area" id="imageUploadArea">
+                                <input type="file" id="imageInput" accept="image/jpeg,image/png" multiple
+                                    style="display:none;">
+                                <button type="button" class="image-upload-btn" id="imageUploadBtn">
+                                    <i class="fas fa-camera"></i> Add photos
+                                </button>
+                                <p class="image-upload-hint">JPG or PNG · Max 2MB each · Up to 3 images</p>
+                            </div>
+                            <div class="image-previews" id="imagePreviews"></div>
+                            <div class="error-msg" id="err-images">Please attach at least one image.</div>
+                        </div>
                     </div>
 
                     <!-- Traybake extra fields (shown only for traybake topic) -->
@@ -288,31 +301,27 @@
             other: '💬 General Enquiry',
         };
 
-        let state = { topic: null, occasion: null, flavours: [], traybakes: [], servings: 12 };
+        let state = { topic: null, occasion: null, flavours: [], traybakes: [], servings: 12, images: [] };
         let currentStep = 1;
 
-        /* ── Step navigation ──────────────────────────────────────────────── */
+        /* ── Step navigation ── */
         function goTo(step) {
             document.getElementById(`panel-${currentStep}`).classList.remove('active');
             document.getElementById(`panel-${step}`).classList.add('active');
-
             [1, 2, 3].forEach(n => {
                 const si = document.getElementById(`si-${n}`);
                 si.classList.remove('active', 'done');
                 if (n === step) si.classList.add('active');
                 if (n < step) si.classList.add('done');
-
                 const num = document.querySelector(`#si-${n} .step-num`);
                 num.innerHTML = n < step ? '<i class="fas fa-check" style="font-size:0.7rem;"></i>' : String(n);
             });
-
             [1, 2].forEach(n => document.getElementById(`sl-${n}`).classList.toggle('done', n < step));
-
             currentStep = step;
             window.scrollTo({ top: document.querySelector('.form-card').offsetTop - 80, behavior: 'smooth' });
         }
 
-        /* ── Step 1 ───────────────────────────────────────────────────────── */
+        /* ── Step 1 ── */
         document.getElementById('topicGrid').addEventListener('click', e => {
             const card = e.target.closest('.topic-card');
             if (!card) return;
@@ -344,19 +353,16 @@
                 event: 'Tell us about the collaboration', other: 'What would you like to know?',
             };
             document.getElementById('step2Title').textContent = titles[state.topic];
-
-            // Update message label: optional for custom cake/cupcake, required for everything else
             const msgLabel = document.getElementById('messageLabel');
             if (state.topic === 'custom') {
                 msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
             } else {
                 msgLabel.innerHTML = 'Your message <span class="req">*</span>';
             }
-
             goTo(2);
         });
 
-        /* ── Step 2 ───────────────────────────────────────────────────────── */
+        /* ── Step 2 ── */
         function setupPills(containerId, multiSelect, stateKey) {
             document.getElementById(containerId).addEventListener('click', e => {
                 const pill = e.target.closest('.pill-option');
@@ -394,13 +400,75 @@
             document.getElementById('cakeDescCount').textContent = this.value.length;
         });
 
+        /* ── Image upload ── */
+        const imageInput = document.getElementById('imageInput');
+        const imageUploadBtn = document.getElementById('imageUploadBtn');
+        const imagePreviews = document.getElementById('imagePreviews');
+
+        imageUploadBtn.addEventListener('click', () => imageInput.click());
+
+        imageInput.addEventListener('change', function () {
+            const files = Array.from(this.files);
+            const errEl = document.getElementById('err-images');
+            document.getElementById('imageUploadArea').classList.remove('error');
+            document.getElementById('err-images').classList.remove('show');
+            errEl.style.display = 'none';
+            errEl.textContent = '';
+
+            const remaining = 3 - state.images.length;
+            if (files.length > remaining) {
+                errEl.textContent = `You can only add ${remaining} more image${remaining === 1 ? '' : 's'}.`;
+                errEl.style.display = 'block';
+            }
+
+            const toAdd = files.slice(0, remaining);
+            toAdd.forEach(function (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    errEl.textContent = `${file.name} is over 2MB and was skipped.`;
+                    errEl.style.display = 'block';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    state.images.push({ name: file.name, data: e.target.result });
+                    renderPreviews();
+                    if (state.images.length >= 3) imageUploadBtn.disabled = true;
+                };
+                reader.readAsDataURL(file);
+            });
+            this.value = '';
+        });
+
+        function renderPreviews() {
+            imagePreviews.innerHTML = state.images.map(function (img, i) {
+                return '<div class="image-preview">' +
+                    '<img src="' + img.data + '" alt="' + img.name + '">' +
+                    '<button type="button" class="image-preview__remove" data-index="' + i + '" aria-label="Remove image">' +
+                    '<i class="fas fa-times"></i>' +
+                    '</button>' +
+                    '</div>';
+            }).join('');
+
+            imagePreviews.querySelectorAll('.image-preview__remove').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    state.images.splice(parseInt(btn.dataset.index), 1);
+                    imageUploadBtn.disabled = false;
+
+                    // ✅ clear error styling when user interacts
+                    document.getElementById('imageUploadArea').classList.remove('error');
+                    document.getElementById('err-images').classList.remove('show');
+
+                    renderPreviews();
+                });
+            });
+        }
+
         function showError(fieldId, errId) {
             document.getElementById(fieldId).classList.add('error');
             document.getElementById(errId).classList.add('show');
         }
 
-        // Clear errors on input for all validated fields
-        ['fname', 'lname', 'phone', 'email', 'message', 'cakeDesc'].forEach(id => {
+        ['fname', 'lname', 'phone', 'email', 'message', 'cakeDesc', 'imageInput'].forEach(id => {
             document.getElementById(id).addEventListener('input', function () {
                 this.classList.remove('error');
                 const err = document.getElementById(`err-${id}`);
@@ -411,39 +479,23 @@
         function validateStep2() {
             let ok = true;
             const rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!document.getElementById('fname').value.trim()) {
-                showError('fname', 'err-fname'); ok = false;
-            }
-            if (!rx.test(document.getElementById('email').value.trim())) {
-                showError('email', 'err-email'); ok = false;
-            }
-
-            if (!document.getElementById('lname').value.trim()) {
-                showError('lname', 'err-lname'); ok = false;
-            }
-            if (!document.getElementById('phone').value.trim()) {
-                showError('phone', 'err-phone'); ok = false;
-            }
-
+            if (!document.getElementById('fname').value.trim()) { showError('fname', 'err-fname'); ok = false; }
+            if (!document.getElementById('lname').value.trim()) { showError('lname', 'err-lname'); ok = false; }
+            if (!rx.test(document.getElementById('email').value.trim())) { showError('email', 'err-email'); ok = false; }
+            if (!document.getElementById('phone').value.trim()) { showError('phone', 'err-phone'); ok = false; }
             if (state.topic === 'custom') {
-                if (!state.occasion) {
-                    document.getElementById('err-occasion').classList.add('show'); ok = false;
-                }
-                if (!document.getElementById('eventDate').value) {
-                    showError('eventDate', 'err-date'); ok = false;
-                }
-                if (!document.getElementById('cakeDesc').value.trim()) {
-                    showError('cakeDesc', 'err-cakeDesc'); ok = false;
+                if (!state.occasion) { document.getElementById('err-occasion').classList.add('show'); ok = false; }
+                if (!document.getElementById('eventDate').value) { showError('eventDate', 'err-date'); ok = false; }
+                if (!document.getElementById('cakeDesc').value.trim()) { showError('cakeDesc', 'err-cakeDesc'); ok = false; }
+                if (state.images.length === 0) {
+                    document.getElementById('imageUploadArea').classList.add('error');
+                    document.getElementById('err-images').classList.add('show');
+                    ok = false;
                 }
             }
-
             if (state.topic !== 'custom') {
-                if (!document.getElementById('message').value.trim()) {
-                    showError('message', 'err-message'); ok = false;
-                }
+                if (!document.getElementById('message').value.trim()) { showError('message', 'err-message'); ok = false; }
             }
-
             return ok;
         }
 
@@ -454,16 +506,15 @@
             goTo(3);
         });
 
-        /* ── Step 3 ───────────────────────────────────────────────────────── */
+        /* ── Step 3 ── */
         function buildReview() {
             const g = id => document.getElementById(id).value.trim();
             const lines = [
                 `📋 ENQUIRY TYPE: ${TOPIC_LABELS[state.topic]}`, '',
-                `👤 Name:  ${g('fname')}${g('lname') ? ' ' + g('lname') : ''}`,
+                `👤 Name:  ${g('fname')} ${g('lname')}`,
                 `✉️  Email: ${g('email')}`,
-                ...(g('phone') ? [`📞 Phone: ${g('phone')}`] : []),
+                `📞 Phone: ${g('phone')}`,
             ];
-
             if (state.topic === 'custom') {
                 lines.push('',
                     `🎉 Occasion: ${state.occasion || '—'}`,
@@ -471,10 +522,12 @@
                     `🍰 Servings: ${servings}`,
                     `🎂 Flavours: ${state.flavours.length ? state.flavours.join(', ') : '—'}`
                 );
-                const desc = document.getElementById('cakeDesc').value.trim();
+                const desc = g('cakeDesc');
                 if (desc) lines.push('', `🎨 Design ideas:\n${desc}`);
+                if (state.images.length) {
+                    lines.push('', `📸 Inspiration images: ${state.images.length} attached`);
+                }
             }
-
             if (state.topic === 'traybake') {
                 const td = document.getElementById('traybakeDate').value;
                 lines.push('',
@@ -483,26 +536,61 @@
                     ...(td ? [`📅 Date:     ${td}`] : [])
                 );
             }
-
             lines.push('', `💬 Message:\n${g('message')}`);
             document.getElementById('reviewBox').textContent = lines.join('\n');
         }
 
         document.getElementById('step3Back').addEventListener('click', () => goTo(2));
 
-        document.getElementById('sendBtn').addEventListener('click', () => {
-            const fname = document.getElementById('fname').value.trim();
-            const lname = document.getElementById('lname').value.trim();
-            const subject = encodeURIComponent(`Website Enquiry — ${TOPIC_LABELS[state.topic].replace(/^[^\w]+/, '')} from ${fname}${lname ? ' ' + lname : ''}`);
-            const body = encodeURIComponent(document.getElementById('reviewBox').textContent);
+        /* ── Submit via Netlify function ── */
+        document.getElementById('sendBtn').addEventListener('click', async function () {
+            const btn = document.getElementById('sendBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
 
-            window.location.href = `mailto:${BECCA_EMAIL}?subject=${subject}&body=${body}`;
+            const g = id => document.getElementById(id).value.trim();
 
-            setTimeout(() => {
+            const payload = {
+                fname: g('fname'),
+                lname: g('lname'),
+                email: g('email'),
+                phone: g('phone'),
+                topic: state.topic,
+                topicLabel: TOPIC_LABELS[state.topic].replace(/^[^\w]+/, ''),
+                occasion: state.occasion,
+                eventDate: document.getElementById('eventDate').value,
+                servings: servings,
+                flavours: state.flavours.join(', '),
+                cakeDesc: g('cakeDesc'),
+                traybakes: state.traybakes.join(', '),
+                traybakeDate: document.getElementById('traybakeDate').value,
+                traybakeQty: document.getElementById('traybakeQty').value,
+                message: g('message'),
+                images: state.images,
+            };
+
+            try {
+                const res = await fetch('/.netlify/functions/send-contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                const data = await res.json();
+                if (!data.ok) throw new Error(data.error || 'Unknown error');
+
                 document.getElementById(`panel-${currentStep}`).classList.remove('active');
                 document.getElementById('stepIndicator').style.display = 'none';
                 document.getElementById('successPanel').classList.add('active');
-            }, 800);
+            } catch (err) {
+                console.error(err);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Becca';
+                const errDiv = document.createElement('p');
+                errDiv.style.cssText = 'color:#c0392b;font-size:0.85rem;margin-top:12px;text-align:center;';
+                errDiv.textContent = 'Something went wrong. Please try again or email us directly.';
+                btn.parentNode.appendChild(errDiv);
+                setTimeout(() => errDiv.remove(), 5000);
+            }
         });
     </script>
 </body>

@@ -591,6 +591,13 @@
     transform: scale(1.1);
 }
 
+.social-follow-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 
 /* =============================================================================
    ORDER CTA BANNER

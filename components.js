@@ -57,6 +57,21 @@
             atmosphere: 5,
             stars: 5
         },
+         {
+            name: 'Nichola Miller',
+            text: 'The BEST caramel square I have ever tasted! Can’t wait to try all the other bakes!!!',
+            food: 5,
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
+        {
+            name: 'Taylor Pollock',
+            text: "Unreal school cake, great people and service!",
+            service: 5,
+            atmosphere: 5,
+            stars: 5
+        },
         {
             name: 'Jordyn Berryman',
             text: 'I recently tried this dairy-free, gluten-free bakery and was really impressed. I ordered their chocolate Bueno cupcakes for a party, and they were a great choice. The cupcakes were soft and moist with a rich chocolate flavour, and the topping was creamy and really tasty. They looked great and went down really well with everyone at the party. You honestly wouldn’t guess they were dairy-free and gluten-free. I’d definitely order from them again!',

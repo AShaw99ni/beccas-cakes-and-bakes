@@ -74,8 +74,10 @@
 
             <!-- Loading spinner (shown while CSV fetches) -->
             <div id="eventsSpinner" class="events-spinner">
-                <div class="events-spinner__ring"></div>
-                <p class="events-spinner__text">Loading events…</p>
+                <div style="text-align:center;padding:3rem;color:var(--muted)">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top:1rem">Loading events…</p>
+                </div>
             </div>
 
             <!-- Error state (shown if sheet can't be reached) -->

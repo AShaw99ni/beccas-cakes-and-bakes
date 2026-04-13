@@ -232,6 +232,9 @@ function highlightAllergens(ingredients, allergens) {
             '<div class="text-center p-3 footer-copyright">' +
             '&copy; 2026 Copyright: <a class="text-body" href="https://beccascakesandbakes.co.uk/">beccascakesandbakes.co.uk</a>' +
             '</div>' +
+            '<div class="text-center p-3 footer-copyright">' +
+            'Created by: <a class="text-body" href="https://webshaw.co.uk/">webshaw.co.uk</a>' +
+            '</div>' +
             '</footer>';
     }
 

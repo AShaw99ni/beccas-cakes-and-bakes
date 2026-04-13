@@ -185,6 +185,11 @@
         let allEvents = [];
         let activeFilter = 'all';
 
+        function getMonthStart() {
+            const now = new Date();
+            return new Date(now.getFullYear(), now.getMonth(), 1);
+        }
+
         function render(typeFilter) {
             activeFilter = typeFilter;
             const list = document.getElementById('eventList');
@@ -201,22 +206,51 @@
             }
             noEvents.style.display = 'none';
 
-            const groups = {};
-            filtered.forEach(ev => {
-                const d = parseDate(ev.date);
-                const key = `${d.getFullYear()}-${d.getMonth()}`;
-                if (!groups[key]) groups[key] = { label: `${MONTHS[d.getMonth()]} ${d.getFullYear()}`, evs: [] };
-                groups[key].evs.push(ev);
-            });
+            const monthStart = getMonthStart();
+            const current = filtered.filter(ev => parseDate(ev.date) >= monthStart);
+            const past = filtered.filter(ev => parseDate(ev.date) < monthStart);
 
-            list.innerHTML = Object.values(groups).map(g => `
-                <div class="month-group">
-                    <div class="month-heading">
-                        ${g.label}
-                        <span class="month-count">${g.evs.length} event${g.evs.length !== 1 ? 's' : ''}</span>
-                    </div>
-                    ${g.evs.map(buildCard).join('')}
-                </div>`).join('');
+            function buildGroups(events) {
+                const groups = {};
+                events.forEach(ev => {
+                    const d = parseDate(ev.date);
+                    const key = `${d.getFullYear()}-${d.getMonth()}`;
+                    if (!groups[key]) groups[key] = { label: `${MONTHS[d.getMonth()]} ${d.getFullYear()}`, evs: [] };
+                    groups[key].evs.push(ev);
+                });
+                return Object.values(groups).map(g => `
+            <div class="month-group">
+                <div class="month-heading">
+                    ${g.label}
+                    <span class="month-count">${g.evs.length} event${g.evs.length !== 1 ? 's' : ''}</span>
+                </div>
+                ${g.evs.map(buildCard).join('')}
+            </div>`).join('');
+            }
+
+            let html = '';
+
+            if (current.length) {
+                html += buildGroups(current);
+            } else {
+                html += `<p class="no-events" style="display:block;">No upcoming events this month — check back soon!</p>`;
+            }
+
+            if (past.length) {
+                html += `
+            <details class="past-events-details">
+                <summary class="past-events-summary">
+                    <i class="fas fa-history"></i> Past Events
+                    <span class="month-count">${past.length} event${past.length !== 1 ? 's' : ''}</span>
+                    <i class="fas fa-chevron-down past-events-chevron"></i>
+                </summary>
+                <div class="past-events-body">
+                    ${buildGroups(past.reverse())}
+                </div>
+            </details>`;
+            }
+
+            list.innerHTML = html;
         }
 
         /* ── Show / hide spinner ──────────────────────────────────────────── */

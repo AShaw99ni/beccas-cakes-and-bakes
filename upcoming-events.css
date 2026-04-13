@@ -41,9 +41,17 @@
     flex-shrink: 0;
 }
 
-.legend-stripe--stall  { background: #7c3aed; }
-.legend-stripe--order  { background: var(--pink); }
-.legend-stripe--tiktok { background: #1a1a1a; }
+.legend-stripe--stall {
+    background: #7c3aed;
+}
+
+.legend-stripe--order {
+    background: var(--pink);
+}
+
+.legend-stripe--tiktok {
+    background: #1a1a1a;
+}
 
 
 /* ── Filter tabs ── */
@@ -79,23 +87,50 @@
     flex-shrink: 0;
 }
 
-.dot--all    { background: var(--pink); }
-.dot--stall  { background: #7c3aed; }
-.dot--order  { background: var(--pink); }
-.dot--tiktok { background: #1a1a1a; }
+.dot--all {
+    background: var(--pink);
+}
+
+.dot--stall {
+    background: #7c3aed;
+}
+
+.dot--order {
+    background: var(--pink);
+}
+
+.dot--tiktok {
+    background: #1a1a1a;
+}
 
 /* Active / hover states — colour matched per type */
 .filter-btn[data-type="all"]:hover,
-.filter-btn[data-type="all"].active    { background: var(--pink);  border-color: var(--pink);  color: white; }
+.filter-btn[data-type="all"].active {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+}
 
 .filter-btn[data-type="stall"]:hover,
-.filter-btn[data-type="stall"].active  { background: #7c3aed; border-color: #7c3aed; color: white; }
+.filter-btn[data-type="stall"].active {
+    background: #7c3aed;
+    border-color: #7c3aed;
+    color: white;
+}
 
 .filter-btn[data-type="order"]:hover,
-.filter-btn[data-type="order"].active  { background: var(--pink);  border-color: var(--pink);  color: white; }
+.filter-btn[data-type="order"].active {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+}
 
 .filter-btn[data-type="tiktok"]:hover,
-.filter-btn[data-type="tiktok"].active { background: #1a1a1a; border-color: #1a1a1a; color: white; }
+.filter-btn[data-type="tiktok"].active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: white;
+}
 
 
 /* ── Month group ── */
@@ -144,9 +179,17 @@
     box-shadow: 0 10px 24px rgba(171, 29, 121, 0.1);
 }
 
-.event-card.type-stall  { border-left-color: #7c3aed; }
-.event-card.type-order  { border-left-color: var(--pink); }
-.event-card.type-tiktok { border-left-color: #1a1a1a; }
+.event-card.type-stall {
+    border-left-color: #7c3aed;
+}
+
+.event-card.type-order {
+    border-left-color: var(--pink);
+}
+
+.event-card.type-tiktok {
+    border-left-color: #1a1a1a;
+}
 
 
 /* ── Date block (left side of card) ── */
@@ -206,12 +249,29 @@
 }
 
 /* Badge text + dot colour per type */
-.type-stall  .event-type-badge { color: #7c3aed; }
-.type-stall  .badge-dot        { background: #7c3aed; }
-.type-order  .event-type-badge { color: var(--pink); }
-.type-order  .badge-dot        { background: var(--pink); }
-.type-tiktok .event-type-badge { color: #1a1a1a; }
-.type-tiktok .badge-dot        { background: #1a1a1a; }
+.type-stall .event-type-badge {
+    color: #7c3aed;
+}
+
+.type-stall .badge-dot {
+    background: #7c3aed;
+}
+
+.type-order .event-type-badge {
+    color: var(--pink);
+}
+
+.type-order .badge-dot {
+    background: var(--pink);
+}
+
+.type-tiktok .event-type-badge {
+    color: #1a1a1a;
+}
+
+.type-tiktok .badge-dot {
+    background: #1a1a1a;
+}
 
 .event-title {
     font-family: 'Playfair Display', serif;
@@ -298,7 +358,9 @@
         padding: 6px 12px;
     }
 
-    .event-date-block__day { font-size: 1.2rem; }
+    .event-date-block__day {
+        font-size: 1.2rem;
+    }
 }
 
 
@@ -322,7 +384,9 @@
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .events-spinner__text {
@@ -355,4 +419,52 @@
     font-size: 1rem;
     font-weight: 300;
     margin: 0;
+}
+
+/* ── Past events collapsible ── */
+.past-events-details {
+    margin-top: 48px;
+    border-top: 2px solid var(--pink-light);
+    padding-top: 24px;
+}
+
+.past-events-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    list-style: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--deep);
+    padding: 14px 20px;
+}
+
+.past-events-summary i.fa-history {
+    color: var(--pink);
+    font-size: 1.1rem;
+}
+
+.past-events-chevron {
+    margin-left: auto;
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+    color: var(--pink);
+    background: var(--cream);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.past-events-details[open] .past-events-chevron {
+    transform: rotate(180deg);
+}
+
+.past-events-body .month-heading {
+    font-size: 1.15rem;
+    color: var(--muted);
 }

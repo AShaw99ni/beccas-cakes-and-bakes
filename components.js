@@ -91,7 +91,7 @@
         },
     ];
 
-    const GOOGLE_REVIEWS_URL = 'https://share.google/aDjErtuY06bjAsfI1';
+    const GOOGLE_REVIEWS_URL = 'https://www.google.com/search?sca_esv=f0f46d557053f7c4&hl=en-GB&biw=1710&bih=869&sxsrf=ANbL-n5KTD8M81eVa07DmgdPKr4hIo2noQ:1776109519384&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOXP594UY-BtZVyFDr-osKsLqQjhBFHtcFuRy-D62f_2SLIZ0L9UL8-Pw0_hLwQyATTG4gcJmC1ykmjB-90IVn8YcpqZbraNtpnBmiqSd8DbCK6N5Mw%3D%3D&q=Becca%27s+Cakes+and+Bakes+Reviews&sa=X&ved=2ahUKEwiuuPDHy-uTAxXWVkEAHVfaNfMQ0bkNegQIHxAH';
 
     /* ── Helpers ──────────────────────────────────────────────────────────── */
     function activePage() {
@@ -318,9 +318,14 @@
             '</div>' +
             '<div class="reviews-grid">' + cards + '</div>' +
             '<div class="text-center mt-5">' +
+            '<a href="https://g.page/r/CSBdm8qyxasfEAE/review" target="_blank" rel="noopener" class="btn btn-brand rounded-pill px-4">' +
+            '<i class="fab fa-google me-2"></i>Leave us a review on Google' +
+            '</a>' +
+            '<div class="mt-3">' +
             '<a href="' + GOOGLE_REVIEWS_URL + '" target="_blank" rel="noopener" class="btn btn-brand-outline rounded-pill px-4">' +
             '<i class="fab fa-google me-2"></i>View all reviews on Google' +
             '</a>' +
+            '</div>' +
             '</div>' +
             '</div>' +
             '</section>';

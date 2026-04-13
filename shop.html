@@ -205,10 +205,11 @@
             chunks.push('<div class="detail-label">Allergens</div>');
             chunks.push(buildAllergenPillsHtml(product));
             if (ingredients) {
+                var allergens = parsePipeArray(product.allergens || '');
                 chunks.push(
                     '<details class="shop-product-modal-ingredients-details">' +
                     '<summary class="shop-product-modal-ingredients-summary">Ingredients <i class="fas fa-chevron-down shop-product-modal-ingredients-chevron" aria-hidden="true"></i></summary>' +
-                    '<p class="shop-product-modal-ingredients">' + escapeHtml(ingredients) + '</p>' +
+                    '<p class="shop-product-modal-ingredients">' + highlightAllergens(ingredients, allergens) + '</p>' +
                     '</details>'
                 );
             }

@@ -14,6 +14,60 @@
    TO UPDATE NAV OR FOOTER: edit this file only — changes apply to all pages.
    ============================================================================= */
 
+
+var ALLERGEN_SYNONYMS = {
+    'nuts': ['almond', 'almonds', 'walnut', 'walnuts', 'hazelnut', 'hazelnuts',
+        'cashew', 'cashews', 'pecan', 'pecans', 'pistachio', 'pistachios',
+        'macadamia', 'brazil nut', 'brazil nuts', 'pine nut', 'pine nuts'],
+    'tree nuts': ['almond', 'almonds', 'walnut', 'walnuts', 'hazelnut', 'hazelnuts',
+        'cashew', 'cashews', 'pecan', 'pecans', 'pistachio', 'pistachios'],
+    'gluten': ['wheat', 'barley', 'rye', 'oat', 'oats', 'spelt'],
+    'wheat': ['wheat', 'wheat flour', 'wholemeal'],
+    'milk': ['milk', 'butter', 'cream', 'cheese', 'yogurt', 'lactose', 'whey', 'casein'],
+    'dairy': ['milk', 'butter', 'cream', 'cheese', 'yogurt', 'lactose', 'whey', 'casein'],
+};
+
+function highlightAllergens(ingredients, allergens) {
+    if (!ingredients) return '';
+
+    var safe = ingredients
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    var terms = (allergens || []).filter(Boolean);
+
+    // Expand each allergen into its synonyms if available, keeping the original too
+    var allTerms = [];
+    terms.forEach(function (term) {
+        var lower = term.toLowerCase();
+        allTerms.push(term);
+        if (ALLERGEN_SYNONYMS[lower]) {
+            allTerms = allTerms.concat(ALLERGEN_SYNONYMS[lower]);
+        }
+        // Also add singular/plural variant
+        if (lower.endsWith('s')) {
+            allTerms.push(term.slice(0, -1));
+        } else {
+            allTerms.push(term + 's');
+        }
+    });
+
+    // Deduplicate and sort longest first
+    allTerms = allTerms.filter(function (v, i, a) {
+        return a.findIndex(function (x) { return x.toLowerCase() === v.toLowerCase(); }) === i;
+    });
+    allTerms.sort(function (a, b) { return b.length - a.length; });
+
+    allTerms.forEach(function (term) {
+        var escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = new RegExp('\\b(' + escaped + ')\\b', 'gi');
+        safe = safe.replace(regex, '<strong><em>$1</em></strong>');
+    });
+
+    return safe;
+}
+
 (function () {
 
     /* ── Navigation links ─────────────────────────────────────────────────── */
@@ -57,7 +111,7 @@
             atmosphere: 5,
             stars: 5
         },
-         {
+        {
             name: 'Nichola Miller',
             text: 'The BEST caramel square I have ever tasted! Can’t wait to try all the other bakes!!!',
             food: 5,

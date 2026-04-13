@@ -121,10 +121,11 @@
         function rowToPhoto(row) {
             const cat = (row.category || '').trim().toLowerCase().replace(/\s+/g, '-');
             return {
-                src: (row.image || row.image_link || '').trim(),
+                src: (row.image || row.image_link || row.imageLink || '').trim(),
                 alt: row.name || '',
                 title: row.flavour ? row.name + ' — ' + row.flavour : row.name,
                 cat: cat,
+                date: (row.date || '').trim(),
             };
         }
 
@@ -315,7 +316,7 @@
 
         /* ── Spinner / error ──────────────────────────────────────────────── */
         function showSpinner() {
-            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted)"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading gallery…</p></div>';
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted);column-span:all"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading gallery…</p></div>';
         }
 
         function showError() {
@@ -328,6 +329,20 @@
             .then(res => { if (!res.ok) throw new Error('Network error'); return res.text(); })
             .then(text => {
                 photos = parseCSV(text).map(rowToPhoto);
+
+                // Sort most recent first — date format is DD/MM/YYYY
+                photos.sort(function (a, b) {
+                    function parseDate(s) {
+                        if (!s) return 0;
+                        var cleaned = s.replace(/[()]/g, '').trim();
+                        var parts = cleaned.split('/');
+                        return parts.length === 3 ? new Date(parts[2], parts[1] - 1, parts[0]) : 0;
+                    }
+                    return parseDate(b.date) - parseDate(a.date);
+                });
+
+                console.log(photos)
+
                 buildCatLabels();
                 buildFilterBar();
                 updateCounts();

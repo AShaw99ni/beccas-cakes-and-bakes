@@ -70,33 +70,34 @@
 
 /* ── Masonry grid ── */
 .masonry-grid {
-    columns: 4;
-    column-gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    align-items: start;
 }
+
 
 @media (max-width: 1199px) {
     .masonry-grid {
-        columns: 3;
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 767px) {
     .masonry-grid {
-        columns: 2;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 479px) {
     .masonry-grid {
-        columns: 1;
+        grid-template-columns: 1fr;
     }
 }
 
 
 /* ── Gallery item ── */
 .g-item {
-    break-inside: avoid;
-    margin-bottom: 16px;
     position: relative;
     border-radius: 14px;
     overflow: hidden;

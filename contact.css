@@ -608,3 +608,12 @@ textarea.form-control {
 .image-preview__remove:hover {
     background: var(--pink);
 }
+
+.serving-input {
+    width: 80px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 6px;
+    font-weight: 600;
+}

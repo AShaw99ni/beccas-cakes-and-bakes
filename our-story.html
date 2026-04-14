@@ -28,7 +28,7 @@
             <span class="hero-subtitle">The story behind the bakes</span>
             <div class="hero-divider"></div>
             <h1>Made with love,<br><em>free from limits</em></h1>
-            <a href="./contact.html" class="btn btn-brand btn-hero-order mt-3 rounded-pill px-4">Order Now</a>
+            <a href="./shop.html" class="btn btn-brand btn-hero-order mt-3 rounded-pill px-4">Shop Now</a>
         </div>
     </div>
 
@@ -39,8 +39,8 @@
                 <div class="col-lg-5">
                     <div class="origin-img-wrap">
                         <div class="img-placeholder origin-img-placeholder">
-                            <img src="./img/how-it-started.jpeg" alt="Becca's Cakes and Bakes" class="story-img-placeholder"
-                                style="width:100%; object-fit:cover;">
+                            <img src="./img/how-it-started.jpeg" alt="Becca's Cakes and Bakes"
+                                class="story-img-placeholder" style="width:100%; object-fit:cover;">
                         </div>
                     </div>
                 </div>
@@ -261,7 +261,21 @@
         fetch(SHEET_CSV_URL)
             .then(res => { if (!res.ok) throw new Error('Network error'); return res.text(); })
             .then(text => {
-                const photos = parseCSV(text).map(rowToPhoto);
+                const photos = parseCSV(text).map(row => ({
+                    ...rowToPhoto(row),
+                    date: (row.date || '').trim()
+                }));
+
+                photos.sort(function (a, b) {
+                    function parseDate(s) {
+                        if (!s) return 0;
+                        var cleaned = s.replace(/[()]/g, '').trim();
+                        var parts = cleaned.split('/');
+                        return parts.length === 3 ? new Date(parts[2], parts[1] - 1, parts[0]) : 0;
+                    }
+                    return parseDate(b.date) - parseDate(a.date);
+                });
+
                 renderGalleryPreview(photos);
             })
             .catch(() => {

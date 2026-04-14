@@ -158,7 +158,10 @@
                                 <label>Number of servings</label>
                                 <div class="serving-picker">
                                     <button class="serving-btn" id="servDown" type="button">−</button>
-                                    <div class="serving-val" id="servVal">12</div>
+
+                                    <input type="number" id="servInput" class="serving-input" value="12" min="1"
+                                        placeholder="e.g. 100+">
+
                                     <button class="serving-btn" id="servUp" type="button">+</button>
                                 </div>
                             </div>
@@ -166,10 +169,11 @@
                         <div class="alert alert-warning">⚠️ Please Note: Orders placed on short notice may not always be
                             possible and will be accepted at the owner’s discretion.</div>
                         <div class="field-group">
-                            <label>Cake flavour(s)</label>
+                            <label>Flavour(s)</label>
                             <div class="pill-group" id="flavourPills">
-                                <div class="pill-option" data-val="Victoria Sponge">Victoria Sponge</div>
-                                <div class="pill-option" data-val="Chocolate Fudge">Chocolate Cake</div>
+                                <div class="pill-option" data-val="Chocolate Fudge">Vanilla</div>
+                                <div class="pill-option" data-val="Chocolate Fudge">Chocolate</div>
+                                <div class="pill-option" data-val="Victoria Sponge">Vanilla & Jam</div>
                                 <div class="pill-option" data-val="Not sure yet">Not sure yet</div>
                             </div>
                         </div>
@@ -247,7 +251,8 @@
                 <!-- Step 3: Review & Send -->
                 <div class="step-panel" id="panel-3">
                     <h2>Review &amp; Send</h2>
-                    <p class="step-desc">Check everything looks right, then hit send. This will send your enquiry to Becca.</p>
+                    <p class="step-desc">Check everything looks right, then hit send. This will send your enquiry to
+                        Becca.</p>
                     <div id="reviewBox" class="review-box"></div>
                     <div class="form-nav">
                         <button class="btn-back" id="step3Back">← Edit</button>
@@ -347,7 +352,7 @@
                 document.getElementById(`extraFields-${t}`).style.display = state.topic === t ? 'block' : 'none';
             });
             const titles = {
-                custom: 'Tell us about your cake', traybake: 'Tell us about your event',
+                custom: 'Tell us about your occassion', traybake: 'Tell us about your event',
                 event: 'Tell us about the collaboration', other: 'What would you like to know?',
             };
             document.getElementById('step2Title').textContent = titles[state.topic];
@@ -384,11 +389,28 @@
         setupPills('traybakePills', true, 'traybakes');
 
         let servings = 12;
-        document.getElementById('servDown').addEventListener('click', () => {
-            if (servings > 4) { servings -= 2; document.getElementById('servVal').textContent = servings; }
+        const servInput = document.getElementById('servInput');
+
+        function updateServings(val) {
+            servings = Math.max(1, val || 1);
+            servInput.value = servings;
+        }
+
+        // typing
+        servInput.addEventListener('input', () => {
+            let val = parseInt(servInput.value);
+            if (!isNaN(val)) {
+                servings = val;
+            }
         });
+
+        // buttons
+        document.getElementById('servDown').addEventListener('click', () => {
+            updateServings(servings - 1);
+        });
+
         document.getElementById('servUp').addEventListener('click', () => {
-            if (servings < 200) { servings += 2; document.getElementById('servVal').textContent = servings; }
+            updateServings(servings + 1);
         });
 
         document.getElementById('message').addEventListener('input', function () {

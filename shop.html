@@ -61,8 +61,20 @@
                 <p style="margin-top:1rem">Could not load products. Please try again later.</p>
             </div>
 
-            <!-- Product grid -->
+            <!-- Traybakes grid -->
             <div class="product-grid" id="productGrid" style="display:none;"></div>
+
+        </div>
+    </section>
+
+    <!-- ── Cupcakes section ── -->
+    <section class="shop-section shop-section--cupcakes" id="cupcakesSection" style="display:none;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-label">Baked fresh to order</span>
+                <h2 class="section-heading">Cupcakes</h2>
+            </div>
+            <div class="product-grid" id="cupcakeGrid"></div>
         </div>
     </section>
 
@@ -412,9 +424,21 @@
                 return;
             }
 
-            // Multiple matches — filter grid and show dismissible banner
+            // Multiple matches — filter grids and show dismissible banner
             cards.forEach(function (c) { c.style.display = 'none'; });
             matches.forEach(function (c) { c.style.display = ''; });
+
+            // Show/hide sections based on whether they have visible matches
+            var traybakeMatches = matches.filter(function (c) {
+                return document.getElementById('productGrid').contains(c);
+            });
+            var cupcakeMatches = matches.filter(function (c) {
+                return document.getElementById('cupcakeGrid').contains(c);
+            });
+            var cupcakesSection = document.getElementById('cupcakesSection');
+            if (cupcakesSection) {
+                cupcakesSection.style.display = cupcakeMatches.length ? '' : 'none';
+            }
 
             var grid = document.getElementById('productGrid');
             var banner = document.createElement('div');
@@ -424,10 +448,14 @@
                 '<button class="shop-category-banner__clear" aria-label="Show all products">× Show all</button>';
             banner.querySelector('.shop-category-banner__clear').addEventListener('click', function () {
                 cards.forEach(function (c) { c.style.display = ''; });
+                if (cupcakesSection && cupcakeMatches.length) cupcakesSection.style.display = '';
                 banner.remove();
             });
             grid.parentNode.insertBefore(banner, grid);
-            grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Scroll to whichever section has the first match
+            var firstMatch = matches[0];
+            firstMatch.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         /* ── Deep link ── */
@@ -472,6 +500,10 @@
             });
         }
 
+        function isCupcake(row) {
+            return (row.category || '').trim().toLowerCase().includes('cupcake');
+        }
+
         /* ── Fetch products and render ── */
         fetch(SHEET_CSV_URL)
             .then(function (res) { if (!res.ok) throw new Error(); return res.text(); })
@@ -487,9 +519,23 @@
                     maybeOpenProductFromQuery(null);
                     return;
                 }
+
+                var traybakeRows = rows.filter(function (r) { return !isCupcake(r); });
+                var cupcakeRows = rows.filter(isCupcake);
+
                 var grid = document.getElementById('productGrid');
-                grid.style.display = 'grid';
-                rows.forEach(function (row) { grid.appendChild(buildCard(row)); });
+                if (traybakeRows.length) {
+                    grid.style.display = 'grid';
+                    traybakeRows.forEach(function (row) { grid.appendChild(buildCard(row)); });
+                }
+
+                var cupcakeGrid = document.getElementById('cupcakeGrid');
+                var cupcakesSection = document.getElementById('cupcakesSection');
+                if (cupcakeRows.length) {
+                    cupcakesSection.style.display = '';
+                    cupcakeRows.forEach(function (row) { cupcakeGrid.appendChild(buildCard(row)); });
+                }
+
                 maybeFilterFromQuery();
                 maybeOpenProductFromQuery(rows);
             })

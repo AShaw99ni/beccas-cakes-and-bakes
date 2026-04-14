@@ -13,7 +13,9 @@ exports.handler = async function (event) {
     }
 
     const { fname, lname, email, phone, topic, topicLabel, occasion, eventDate,
-        servings, flavours, cakeDesc, traybakes, traybakeDate, traybakeQty,
+        bakeTypes, cakeServings, cakeFlavour, cakeDesign,
+        cupcakeServings, cupcakeFlavours, cupcakeDesign,
+        traybakeItems, traybakeDate,
         message, images } = payload;
 
     const transporter = nodemailer.createTransport({
@@ -133,30 +135,52 @@ exports.handler = async function (event) {
         row('Email', `<a href="mailto:${email}" style="color:${pink};text-decoration:none;">${email}</a>`) +
         row('Phone', phone);
 
+    function designBlock(label, text) {
+        if (!text) return '';
+        return `<tr><td colspan="2" style="padding:12px 0;">
+            <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;
+                letter-spacing:0.1em;text-transform:uppercase;color:${muted};margin-bottom:6px;">
+                ${label}
+            </div>
+            <div style="font-family:Arial,sans-serif;font-size:15px;color:${deep};
+                line-height:1.65;white-space:pre-wrap;">${text}</div>
+        </td></tr>`;
+    }
+
     let detailRows = '';
     if (topic === 'custom') {
-        detailRows = section('Order details',
-            row('Occasion', occasion) +
-            row('Date needed', eventDate) +
-            row('Servings', servings) +
-            row('Flavours', flavours) +
-            (cakeDesc ? `<tr><td colspan="2" style="padding:12px 0;">
-                <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;
-                    letter-spacing:0.1em;text-transform:uppercase;color:${muted};margin-bottom:6px;">
-                    Design ideas
-                </div>
-                <div style="font-family:Arial,sans-serif;font-size:15px;color:${deep};
-                    line-height:1.65;white-space:pre-wrap;">${cakeDesc}</div>
-            </td></tr>` : '')
-        );
+        let orderRows = row('Occasion', occasion) + row('Date needed', eventDate);
+
+        if (Array.isArray(bakeTypes) && bakeTypes.includes('cake')) {
+            orderRows += `<tr><td colspan="2" style="padding:10px 0 2px;">
+                <strong style="font-family:Arial,sans-serif;font-size:13px;color:${pink};">🎂 Cake</strong>
+            </td></tr>`;
+            orderRows += row('Servings', cakeServings);
+            orderRows += row('Flavour', cakeFlavour);
+            orderRows += designBlock('Design ideas', cakeDesign);
+        }
+
+        if (Array.isArray(bakeTypes) && bakeTypes.includes('cupcake')) {
+            orderRows += `<tr><td colspan="2" style="padding:10px 0 2px;">
+                <strong style="font-family:Arial,sans-serif;font-size:13px;color:${pink};">🧁 Cupcakes</strong>
+            </td></tr>`;
+            orderRows += row('Servings', cupcakeServings);
+            orderRows += row('Flavours', Array.isArray(cupcakeFlavours) ? cupcakeFlavours.join(', ') : cupcakeFlavours);
+            orderRows += designBlock('Design ideas', cupcakeDesign);
+        }
+
+        detailRows = section('Order details', orderRows);
     }
 
     if (topic === 'traybake') {
-        detailRows = section('Event details',
-            row('Items', traybakes) +
-            row('Quantity', traybakeQty) +
-            row('Date needed', traybakeDate)
-        );
+        let traybakeRows = '';
+        if (Array.isArray(traybakeItems) && traybakeItems.length) {
+            traybakeRows += traybakeItems.map(item =>
+                row(item.name, `${item.qty} servings`)
+            ).join('');
+        }
+        traybakeRows += row('Date needed', traybakeDate);
+        detailRows = section('Event details', traybakeRows);
     }
 
     const messageBlock = message ? section('Message',
@@ -195,18 +219,29 @@ exports.handler = async function (event) {
     if (topic === 'custom') {
         textLines.push('',
             `Occasion: ${occasion || '—'}`,
-            `Date:     ${eventDate || '—'}`,
-            `Servings: ${servings}`,
-            `Flavours: ${flavours || '—'}`,
-            '', `Design ideas:`, cakeDesc || '—'
+            `Date:     ${eventDate || '—'}`
         );
+        if (Array.isArray(bakeTypes) && bakeTypes.includes('cake')) {
+            textLines.push('', '🎂 Cake',
+                `  Servings: ${cakeServings || '—'}`,
+                `  Flavour:  ${cakeFlavour || '—'}`,
+                `  Design:   ${cakeDesign || '—'}`
+            );
+        }
+        if (Array.isArray(bakeTypes) && bakeTypes.includes('cupcake')) {
+            textLines.push('', '🧁 Cupcakes',
+                `  Servings: ${cupcakeServings || '—'}`,
+                `  Flavours: ${Array.isArray(cupcakeFlavours) ? cupcakeFlavours.join(', ') : (cupcakeFlavours || '—')}`,
+                `  Design:   ${cupcakeDesign || '—'}`
+            );
+        }
     }
     if (topic === 'traybake') {
-        textLines.push('',
-            `Items:    ${traybakes || '—'}`,
-            `Quantity: ${traybakeQty || '—'}`,
-            `Date:     ${traybakeDate || '—'}`
-        );
+        textLines.push('');
+        if (Array.isArray(traybakeItems) && traybakeItems.length) {
+            traybakeItems.forEach(item => textLines.push(`  ${item.name}: ${item.qty} servings`));
+        }
+        textLines.push(`Date: ${traybakeDate || '—'}`);
     }
     if (message) textLines.push('', `Message:`, message);
 

@@ -771,6 +771,70 @@
 
         step3Back.onclick = () => goTo(2);
 
+        document.getElementById('sendBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('sendBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+            const g = id => document.getElementById(id)?.value?.trim() || '';
+
+            const payload = {
+                fname: g('fname'),
+                lname: g('lname'),
+                email: g('email'),
+                phone: g('phone'),
+                topic: state.topic,
+                topicLabel: TOPIC_LABELS[state.topic] || state.topic,
+                message: g('message'),
+                images: state.images || [],
+            };
+
+            if (state.topic === 'custom') {
+                payload.occasion = state.occasion || '';
+                payload.eventDate = g('eventDate');
+                payload.bakeTypes = state.bakeTypes;
+
+                if (state.bakeTypes.includes('cake')) {
+                    payload.cakeServings = g('cakeServings');
+                    payload.cakeFlavour = state.cakeFlavour || '';
+                    payload.cakeDesign = g('cakeDesign');
+                }
+
+                if (state.bakeTypes.includes('cupcake')) {
+                    payload.cupcakeServings = g('cupcakeServings');
+                    payload.cupcakeFlavours = state.cupcakeFlavours;
+                    payload.cupcakeDesign = g('cupcakeDesign');
+                }
+            }
+
+            if (state.topic === 'traybake') {
+                payload.traybakeItems = state.traybakeItems;
+                payload.traybakeDate = g('traybakeDate');
+            }
+
+            try {
+                const res = await fetch('/.netlify/functions/send-contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+
+                if (res.ok) {
+                    document.getElementById(`panel-3`).classList.remove('active');
+                    document.getElementById('successPanel').classList.add('active');
+                } else {
+                    const data = await res.json().catch(() => ({}));
+                    alert('Sorry, something went wrong. Please try again.\n' + (data.error || ''));
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Becca';
+                }
+            } catch (err) {
+                alert('Could not send your enquiry. Please check your connection and try again.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Becca';
+            }
+        });
+
         /* ─────────────────────────────
            SAFE REVIEW BUILDER (FIXED)
         ──────────────────────────── */

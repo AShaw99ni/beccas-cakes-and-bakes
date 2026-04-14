@@ -618,6 +618,76 @@ textarea.form-control {
     font-weight: 600;
 }
 
+/* ── Shop nudge (Step 1) ── */
+.shop-nudge {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--pink-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.shop-nudge .btn-next {
+    font-size: 0.8rem;
+    padding: 0.65rem 1.2rem;
+    text-decoration: none;
+}
+
+.shop-nudge__text {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.shop-nudge__btn {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--pink);
+    text-decoration: none;
+    border: 2px solid var(--pink-light);
+    border-radius: 50px;
+    padding: 0.45rem 1.2rem;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.shop-nudge__btn:hover {
+    border-color: var(--pink);
+    background: #fdf5ff;
+}
+
+/* ── Back button at top of step 2 ── */
+.btn-back-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--pink);
+    color: white;
+    border: none;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.65rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-back-top:hover {
+    background: var(--pink-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(171, 29, 121, 0.3);
+}
+
+
 /* =============================================================================
    TRAYBAKE ORDER TABLE
    ============================================================================= */

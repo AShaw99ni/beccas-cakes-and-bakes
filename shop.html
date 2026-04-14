@@ -32,27 +32,20 @@
         </div>
     </div>
 
-    <!-- ── Products ── -->
-    <section class="shop-section">
+    <!-- ── Intro: notice + loading states ── -->
+    <section class="shop-section shop-section--intro">
         <div class="container">
-            <!-- ── Order notice ── -->
             <div class="notice-banner">
                 <p><i class="fas fa-clock"></i>
                     Orders are <strong>made fresh to order</strong>. Please place your order at least <strong>5–7 days
                         in advance</strong>. Collection is every <strong>Tuesday 12pm–6pm</strong>.</p>
             </div>
             <div id="shop-deep-link-notice" class="shop-deep-link-notice" style="display:none;" role="status"></div>
-            <div class="text-center mb-5">
-                <span class="section-label">Becca's classics</span>
-                <h2 class="section-heading">Traybakes</h2>
-            </div>
 
             <!-- Spinner -->
-            <div id="shopSpinner" class="product-grid" style="display:block;">
-                <div style="text-align:center;padding:3rem;color:var(--muted)">
-                    <i class="fas fa-spinner fa-spin fa-2x"></i>
-                    <p style="margin-top:1rem">Loading products…</p>
-                </div>
+            <div id="shopSpinner" style="text-align:center;padding:3rem;color:var(--muted)">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p style="margin-top:1rem">Loading products…</p>
             </div>
 
             <!-- Error -->
@@ -60,23 +53,11 @@
                 <i class="fas fa-exclamation-circle fa-2x"></i>
                 <p style="margin-top:1rem">Could not load products. Please try again later.</p>
             </div>
-
-            <!-- Traybakes grid -->
-            <div class="product-grid" id="productGrid" style="display:none;"></div>
-
         </div>
     </section>
 
-    <!-- ── Cupcakes section ── -->
-    <section class="shop-section shop-section--cupcakes" id="cupcakesSection" style="display:none;">
-        <div class="container">
-            <div class="text-center mb-5">
-                <span class="section-label">Baked fresh to order</span>
-                <h2 class="section-heading">Cupcakes</h2>
-            </div>
-            <div class="product-grid" id="cupcakeGrid"></div>
-        </div>
-    </section>
+    <!-- ── Category sections injected by JS ── -->
+    <div id="shop-sections-container"></div>
 
     <!-- ── CTA ── -->
     <div class="shop-cta-wrap">
@@ -256,6 +237,11 @@
             }
         };
 
+        function isAvailable(product) {
+            var a = (product.available || '').trim().toLowerCase();
+            return a === 'yes' || a === 'true';
+        }
+
         /* ── Build product card ── */
         function buildCard(product) {
             var cart = window.BeccaCart.getCart();
@@ -265,20 +251,29 @@
             const hasImage = imgSrc !== '';
             const nameEsc = escapeHtml(product.name);
             const attrName = escapeHtml(product.name);
-            const currentQty = cart[product.name] ? cart[product.name].qty : 0;
+            const available = isAvailable(product);
+            const currentQty = available && cart[product.name] ? cart[product.name].qty : 0;
 
             var card = document.createElement('div');
-            card.className = 'shop-product-card';
+            card.className = 'shop-product-card' + (available ? '' : ' shop-product-card--unavailable');
             card.dataset.productName = product.name;
             card.dataset.category = (product.category || '').trim();
-            card.setAttribute('role', 'button');
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('aria-label', 'View details for ' + product.name);
+
+            if (available) {
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', 'View details for ' + product.name);
+            } else {
+                card.setAttribute('aria-disabled', 'true');
+                card.setAttribute('aria-label', product.name + ' — currently unavailable');
+            }
+
             card.innerHTML =
                 '<div class="shop-product-card__img-wrap' + (hasImage ? '' : ' is-placeholder') + '">' +
                 (hasImage
                     ? '<img src="' + imgSrc + '" alt="' + nameEsc + '" loading="lazy">'
                     : '<div class="shop-img-placeholder"><i class="fas fa-camera"></i><span>Photo coming soon</span></div>') +
+                (available ? '' : '<div class="shop-product-card__unavailable-badge">Currently unavailable</div>') +
                 '</div>' +
                 '<div class="shop-product-card__body">' +
                 '<div class="shop-product-card__header">' +
@@ -286,30 +281,34 @@
                 '<div class="shop-product-card__name">' + nameEsc + '</div>' +
                 (serves ? '<div class="shop-product-card__serves"><i class="fas fa-users"></i> ' + escapeHtml(serves) + '</div>' : '') +
                 '</div>' +
-                '<i class="fas fa-chevron-right shop-product-card__expand-icon" aria-hidden="true"></i>' +
+                (available ? '<i class="fas fa-chevron-right shop-product-card__expand-icon" aria-hidden="true"></i>' : '') +
                 '</div>' +
                 buildAllergenPillsHtml(product) +
                 '<div class="shop-product-card__price">£' + price.toFixed(2) + '</div>' +
-                '<div class="shop-product-card__qty" id="qty-wrap-' + slugify(product.name) + '">' +
-                '<button type="button" class="qty-btn qty-btn--minus" data-name="' + attrName + '" aria-label="Remove one">−</button>' +
-                '<span class="qty-val" id="qty-' + slugify(product.name) + '">' + currentQty + '</span>' +
-                '<button type="button" class="qty-btn qty-btn--plus" data-name="' + attrName + '" aria-label="Add one">+</button>' +
-                '</div>' +
+                (available
+                    ? '<div class="shop-product-card__qty" id="qty-wrap-' + slugify(product.name) + '">' +
+                      '<button type="button" class="qty-btn qty-btn--minus" data-name="' + attrName + '" aria-label="Remove one">−</button>' +
+                      '<span class="qty-val" id="qty-' + slugify(product.name) + '">' + currentQty + '</span>' +
+                      '<button type="button" class="qty-btn qty-btn--plus" data-name="' + attrName + '" aria-label="Add one">+</button>' +
+                      '</div>'
+                    : '') +
                 '</div>';
 
-            card.querySelector('.shop-product-card__qty').addEventListener('click', function (e) { e.stopPropagation(); });
-            card.querySelector('.qty-btn--plus').addEventListener('click', function (e) {
-                e.stopPropagation();
-                window.BeccaCart.addToCart(product);
-            });
-            card.querySelector('.qty-btn--minus').addEventListener('click', function (e) {
-                e.stopPropagation();
-                window.BeccaCart.removeFromCart(product);
-            });
-            card.addEventListener('click', function () { openShopProductModal(product); });
-            card.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openShopProductModal(product); }
-            });
+            if (available) {
+                card.querySelector('.shop-product-card__qty').addEventListener('click', function (e) { e.stopPropagation(); });
+                card.querySelector('.qty-btn--plus').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    window.BeccaCart.addToCart(product);
+                });
+                card.querySelector('.qty-btn--minus').addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    window.BeccaCart.removeFromCart(product);
+                });
+                card.addEventListener('click', function () { openShopProductModal(product); });
+                card.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openShopProductModal(product); }
+                });
+            }
 
             return card;
         }
@@ -428,19 +427,14 @@
             cards.forEach(function (c) { c.style.display = 'none'; });
             matches.forEach(function (c) { c.style.display = ''; });
 
-            // Show/hide sections based on whether they have visible matches
-            var traybakeMatches = matches.filter(function (c) {
-                return document.getElementById('productGrid').contains(c);
+            // Show/hide category sections based on whether they contain matches
+            var allSections = document.querySelectorAll('#shop-sections-container .shop-section');
+            allSections.forEach(function (sec) {
+                var hasMatch = matches.some(function (m) { return sec.contains(m); });
+                sec.style.display = hasMatch ? '' : 'none';
             });
-            var cupcakeMatches = matches.filter(function (c) {
-                return document.getElementById('cupcakeGrid').contains(c);
-            });
-            var cupcakesSection = document.getElementById('cupcakesSection');
-            if (cupcakesSection) {
-                cupcakesSection.style.display = cupcakeMatches.length ? '' : 'none';
-            }
 
-            var grid = document.getElementById('productGrid');
+            var sectionsContainer = document.getElementById('shop-sections-container');
             var banner = document.createElement('div');
             banner.className = 'shop-category-banner';
             banner.innerHTML =
@@ -448,14 +442,13 @@
                 '<button class="shop-category-banner__clear" aria-label="Show all products">× Show all</button>';
             banner.querySelector('.shop-category-banner__clear').addEventListener('click', function () {
                 cards.forEach(function (c) { c.style.display = ''; });
-                if (cupcakesSection && cupcakeMatches.length) cupcakesSection.style.display = '';
+                allSections.forEach(function (sec) { sec.style.display = ''; });
                 banner.remove();
             });
-            grid.parentNode.insertBefore(banner, grid);
+            sectionsContainer.parentNode.insertBefore(banner, sectionsContainer);
 
             // Scroll to whichever section has the first match
-            var firstMatch = matches[0];
-            firstMatch.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            matches[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         /* ── Deep link ── */
@@ -500,8 +493,31 @@
             });
         }
 
-        function isCupcake(row) {
-            return (row.category || '').trim().toLowerCase().includes('cupcake');
+        /* ── Build a category section element ── */
+        function createCategorySection(categoryName, products, index) {
+            var isCupcakeCat = categoryName.toLowerCase().includes('cupcake');
+
+            var section = document.createElement('section');
+            section.className = 'shop-section' + (isCupcakeCat ? ' shop-section--cupcakes' : '');
+            section.dataset.category = categoryName;
+
+            var container = document.createElement('div');
+            container.className = 'container';
+
+            var heading = document.createElement('div');
+            heading.className = 'text-center mb-5';
+            heading.innerHTML = '<h2 class="section-heading">' + escapeHtml(categoryName) + '</h2>';
+
+            var grid = document.createElement('div');
+            grid.className = 'product-grid';
+
+            products.forEach(function (p) { grid.appendChild(buildCard(p)); });
+
+            container.appendChild(heading);
+            container.appendChild(grid);
+            section.appendChild(container);
+
+            return section;
         }
 
         /* ── Fetch products and render ── */
@@ -509,35 +525,35 @@
             .then(function (res) { if (!res.ok) throw new Error(); return res.text(); })
             .then(function (text) {
                 var allRows = parseCSV(text);
-                var rows = allRows.filter(function (r) {
-                    var a = (r.available || '').trim().toLowerCase();
-                    return a === 'yes' || a === 'true';
-                });
                 document.getElementById('shopSpinner').style.display = 'none';
-                if (!rows.length) {
-                    document.getElementById('shopError').style.display = 'flex';
+                if (!allRows.length) {
+                    document.getElementById('shopError').style.display = 'block';
                     maybeOpenProductFromQuery(null);
                     return;
                 }
 
-                var traybakeRows = rows.filter(function (r) { return !isCupcake(r); });
-                var cupcakeRows = rows.filter(isCupcake);
+                // Group products by category, preserving CSV order
+                var categories = [];
+                var categoryMap = {};
+                allRows.forEach(function (row) {
+                    var cat = (row.category || '').trim() || 'Other';
+                    if (!categoryMap[cat]) {
+                        categoryMap[cat] = [];
+                        categories.push(cat);
+                    }
+                    categoryMap[cat].push(row);
+                });
 
-                var grid = document.getElementById('productGrid');
-                if (traybakeRows.length) {
-                    grid.style.display = 'grid';
-                    traybakeRows.forEach(function (row) { grid.appendChild(buildCard(row)); });
-                }
+                var sectionsContainer = document.getElementById('shop-sections-container');
+                categories.forEach(function (cat, i) {
+                    var section = createCategorySection(cat, categoryMap[cat], i);
+                    sectionsContainer.appendChild(section);
+                });
 
-                var cupcakeGrid = document.getElementById('cupcakeGrid');
-                var cupcakesSection = document.getElementById('cupcakesSection');
-                if (cupcakeRows.length) {
-                    cupcakesSection.style.display = '';
-                    cupcakeRows.forEach(function (row) { cupcakeGrid.appendChild(buildCard(row)); });
-                }
-
+                // Only available products are candidates for deep-link / filter actions
+                var availableRows = allRows.filter(isAvailable);
                 maybeFilterFromQuery();
-                maybeOpenProductFromQuery(rows);
+                maybeOpenProductFromQuery(availableRows);
             })
             .catch(function (err) {
                 console.error('Fetch failed:', err);

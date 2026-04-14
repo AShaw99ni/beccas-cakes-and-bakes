@@ -60,6 +60,14 @@
     padding: 80px 0 100px;
 }
 
+.shop-section--intro {
+    padding-bottom: 0;
+}
+
+#shop-sections-container .section-heading {
+    text-transform: capitalize;
+}
+
 .shop-section--cupcakes {
     background: #fff;
     border-top: 1px solid var(--pink-light, #e2c4f9);
@@ -116,6 +124,7 @@
 }
 
 .shop-product-card__img-wrap {
+    position: relative;
     width: 100%;
     height: 200px;
     overflow: hidden;
@@ -132,6 +141,40 @@
 
 .shop-product-card:hover .shop-product-card__img-wrap img {
     transform: scale(1.04);
+}
+
+/* ── Unavailable card ── */
+.shop-product-card--unavailable {
+    cursor: default;
+    opacity: 0.55;
+    filter: grayscale(60%);
+}
+
+.shop-product-card--unavailable:hover {
+    transform: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border-color: transparent;
+}
+
+.shop-product-card--unavailable:hover .shop-product-card__img-wrap img {
+    transform: none;
+}
+
+.shop-product-card__unavailable-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    pointer-events: none;
 }
 
 .shop-img-placeholder {

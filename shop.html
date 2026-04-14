@@ -103,7 +103,10 @@
                 <h2 class="shop-product-modal-name" id="shop-product-modal-title"></h2>
                 <div id="shop-product-modal-content"></div>
                 <div class="shop-product-modal-basket">
-                    <div class="shop-product-card__qty shop-product-modal-qty">
+                    <button type="button" class="modal-add-to-basket-btn" id="shop-modal-add-btn">
+                        <i class="fas fa-shopping-bag"></i> Add to basket
+                    </button>
+                    <div class="shop-product-modal-qty" id="shop-modal-stepper" style="display:none;">
                         <button type="button" class="qty-btn qty-btn--minus" id="shop-product-modal-qty-minus"
                             aria-label="Remove one">−</button>
                         <span class="qty-val" id="shop-product-modal-qty-val">0</span>
@@ -223,11 +226,21 @@
 
         window.shopUpdateQtyDisplay = function (name) {
             var cart = window.BeccaCart.getCart();
+            var qty = cart[name] ? cart[name].qty : 0;
+
             var el = document.getElementById('qty-' + slugify(name));
-            if (el) el.textContent = cart[name] ? cart[name].qty : 0;
-            var modalQty = document.getElementById('shop-product-modal-qty-val');
-            if (modalQty && shopModalProduct && shopModalProduct.name === name) {
-                modalQty.textContent = cart[name] ? cart[name].qty : 0;
+            if (el) el.textContent = qty;
+
+            // Update modal: toggle between add button and stepper
+            if (shopModalProduct && shopModalProduct.name === name) {
+                var addBtn = document.getElementById('shop-modal-add-btn');
+                var stepper = document.getElementById('shop-modal-stepper');
+                var modalQty = document.getElementById('shop-product-modal-qty-val');
+                if (addBtn && stepper) {
+                    addBtn.style.display = qty > 0 ? 'none' : '';
+                    stepper.style.display = qty > 0 ? 'flex' : 'none';
+                }
+                if (modalQty) modalQty.textContent = qty;
             }
         };
 
@@ -301,8 +314,15 @@
             document.getElementById('shop-product-modal-content').innerHTML = buildShopModalContentHtml(product);
             shopModalProduct = product;
 
+            var qty = cart[product.name] ? cart[product.name].qty : 0;
             var modalQtyEl = document.getElementById('shop-product-modal-qty-val');
-            if (modalQtyEl) modalQtyEl.textContent = cart[product.name] ? cart[product.name].qty : 0;
+            if (modalQtyEl) modalQtyEl.textContent = qty;
+            var addBtn = document.getElementById('shop-modal-add-btn');
+            var stepper = document.getElementById('shop-modal-stepper');
+            if (addBtn && stepper) {
+                addBtn.style.display = qty > 0 ? 'none' : '';
+                stepper.style.display = qty > 0 ? 'flex' : 'none';
+            }
 
             if (imgSrc) {
                 imgEl.src = imgSrc;
@@ -335,6 +355,9 @@
             });
         }
 
+        document.getElementById('shop-modal-add-btn').addEventListener('click', function () {
+            if (shopModalProduct) window.BeccaCart.addToCart(shopModalProduct);
+        });
         document.getElementById('shop-product-modal-qty-plus').addEventListener('click', function (e) {
             e.stopPropagation();
             if (shopModalProduct) window.BeccaCart.addToCart(shopModalProduct);

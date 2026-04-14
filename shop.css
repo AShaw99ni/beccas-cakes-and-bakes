@@ -287,6 +287,36 @@
     cursor: default;
 }
 
+.modal-add-to-basket-btn {
+    width: 100%;
+    background: var(--pink);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-add-to-basket-btn:hover {
+    background: var(--pink-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(171, 29, 121, 0.3);
+}
+
+.shop-product-modal-qty {
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
 /* ── Shop product detail modal (description only — matches allergen-advice modal) ── */
 #shop-product-overlay {
     display: none;

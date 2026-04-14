@@ -136,6 +136,8 @@
                     <!-- Custom cake extra fields (shown only for custom topic) -->
                     <div id="extraFields-custom" class="extra-fields">
                         <hr class="field-divider">
+
+                        <!-- Occasion + Date FIRST -->
                         <div class="field-group">
                             <label>Occasion <span class="req">*</span></label>
                             <div class="pill-group" id="occasionPills">
@@ -148,56 +150,118 @@
                             </div>
                             <div class="error-msg" id="err-occasion">Please select an occasion.</div>
                         </div>
+
                         <div class="date-time-row">
                             <div class="field-group">
                                 <label for="eventDate">Date needed <span class="req">*</span></label>
                                 <input type="date" id="eventDate" class="form-control">
                                 <div class="error-msg" id="err-date">Please select a date.</div>
                             </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            ⚠️ Please Note: Orders placed on short notice may not always be possible.
+                        </div>
+
+                        <!-- Cake / Cupcake selection -->
+                        <div class="field-group">
+                            <label>What would you like? <span class="req">*</span></label>
+                            <div class="pill-group" id="bakeTypePills">
+                                <div class="pill-option" data-val="cake">Cake</div>
+                                <div class="pill-option" data-val="cupcake">Cupcakes</div>
+                            </div>
+                            <div class="error-msg" id="err-bakeType">Please select at least one option.</div>
+                        </div>
+
+                        <!-- 🎂 CAKE FORM -->
+                        <div id="cakeFields" class="extra-fields">
+                            <hr class="field-divider">
+                            <h4>Cake Details</h4>
+                            <div class="date-time-row">
+                                <div class="field-group">
+                                    <label>Number of servings</label>
+                                    <input type="number" id="cakeServings" class="form-control" min="1">
+                                    <div class="error-msg" id="err-cakeServings">Please enter number of servings.</div>
+
+                                </div>
+
+                            </div>
+
+
                             <div class="field-group">
-                                <label>Number of servings</label>
-                                <div class="serving-picker">
-                                    <button class="serving-btn" id="servDown" type="button">−</button>
+                                <label>Flavour</label>
+                                <div class="pill-group" id="cakeFlavourPills">
+                                    <div class="pill-option" data-val="Victoria Sponge">Victoria Sponge</div>
+                                    <div class="pill-option" data-val="Chocolate">Chocolate</div>
+                                </div>
+                                <div class="error-msg" id="err-cakeFlavour">Please select a flavour.</div>
 
-                                    <input type="number" id="servInput" class="serving-input" value="12" min="1"
-                                        placeholder="e.g. 100+">
+                            </div>
 
-                                    <button class="serving-btn" id="servUp" type="button">+</button>
+                            <div class="field-group">
+                                <label>Design / decoration ideas</label>
+                                <textarea id="cakeDesign" class="form-control"></textarea>
+                                <div class="error-msg" id="err-cakeDesign">Please add design details.</div>
+                            </div>
+                        </div>
+
+                        <!-- 🧁 CUPCAKE FORM -->
+                        <div id="cupcakeFields" class="extra-fields">
+                            <hr class="field-divider">
+                            <h4>Cupcake Details</h4>
+                            <div class="date-time-row">
+                                <div class="field-group">
+                                    <label>Number of servings</label>
+                                    <input type="number" id="cupcakeServings" class="form-control" min="1">
+                                    <div class="error-msg" id="err-cupcakeServings">Please enter number of servings.
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="field-group">
+                                <label>Flavour(s)</label>
+                                <div class="pill-group" id="cupcakeFlavourPills">
+                                    <div class="pill-option" data-val="Vanilla">Vanilla</div>
+                                    <div class="pill-option" data-val="Chocolate">Chocolate</div>
+                                    <div class="pill-option" data-val="Vanilla & Jam">Vanilla & Jam</div>
+                                </div>
+                                <div class="error-msg" id="err-cupcakeFlavours">Please select at least one flavour.
+
                                 </div>
                             </div>
-                        </div>
-                        <div class="alert alert-warning">⚠️ Please Note: Orders placed on short notice may not always be
-                            possible and will be accepted at the owner’s discretion.</div>
-                        <div class="field-group">
-                            <label>Flavour(s)</label>
-                            <div class="pill-group" id="flavourPills">
-                                <div class="pill-option" data-val="Chocolate Fudge">Vanilla</div>
-                                <div class="pill-option" data-val="Chocolate Fudge">Chocolate</div>
-                                <div class="pill-option" data-val="Victoria Sponge">Vanilla & Jam</div>
-                                <div class="pill-option" data-val="Not sure yet">Not sure yet</div>
+
+                            <div class="field-group">
+                                <label>Design / decoration ideas</label>
+                                <textarea id="cupcakeDesign" class="form-control"></textarea>
+                                <div class="error-msg" id="err-cupcakeDesign">Please add design details.</div>
                             </div>
                         </div>
-                        <div class="field-group">
-                            <label for="cakeDesc">Design / decoration ideas <span class="req">*</span></label>
-                            <textarea id="cakeDesc" class="form-control"
-                                placeholder="Describe colours, themes, wording, tiers, or share a photo idea…"
-                                maxlength="800"></textarea>
-                            <div class="char-counter"><span id="cakeDescCount">0</span> / 800</div>
-                            <div class="error-msg" id="err-cakeDesc">Please describe your design ideas.</div>
-                        </div>
-                        <div class="field-group">
-                            <label for="images">Inspiration images <span class="req">(at least one)</span></label>
+
+                        <!-- Inspiration images (GLOBAL - applies to whole order) -->
+                        <div class="field-group field-group--top-gap">
+                            <hr class="field-divider">
+
+                            <label for="images">Inspiration images <span class="optional">(optional)</span></label>
+
                             <div class="image-upload-area" id="imageUploadArea">
                                 <input type="file" id="imageInput" accept="image/jpeg,image/png" multiple
                                     style="display:none;">
+
                                 <button type="button" class="image-upload-btn" id="imageUploadBtn">
                                     <i class="fas fa-camera"></i> Add photos
                                 </button>
-                                <p class="image-upload-hint">JPG or PNG · Max 2MB each · Up to 3 images</p>
+
+                                <p class="image-upload-hint">
+                                    JPG or PNG · Max 2MB each · Up to 3 images
+                                </p>
                             </div>
+
                             <div class="image-previews" id="imagePreviews"></div>
-                            <div class="error-msg" id="err-images">Please attach at least one image.</div>
+                            <div class="error-msg" id="err-images"></div>
                         </div>
+
                     </div>
 
                     <!-- Traybake extra fields (shown only for traybake topic) -->
@@ -218,6 +282,9 @@
                             <div class="field-group">
                                 <label for="traybakeDate">Date needed</label>
                                 <input type="date" id="traybakeDate" class="form-control">
+                            </div>
+                            <div class="alert alert-warning">
+                                ⚠️ Please Note: Orders placed on short notice may not always be possible.
                             </div>
                             <div class="field-group">
                                 <label for="traybakeQty">Approx. quantity</label>
@@ -295,8 +362,6 @@
     <script src="./components.js"></script>
 
     <script>
-        const BECCA_EMAIL = 'beccascakesandbakes.ni@gmail.com';
-
         const TOPIC_LABELS = {
             custom: '🎂 Custom Cake Order',
             traybake: '🏢 Corporate Event',
@@ -304,314 +369,300 @@
             other: '💬 General Enquiry',
         };
 
-        let state = { topic: null, occasion: null, flavours: [], traybakes: [], servings: 12, images: [] };
-        let currentStep = 1;
+        let state = {
+            topic: null,
+            occasion: null,
+            bakeTypes: [],
+            cakeFlavour: null,
+            cupcakeFlavours: [],
+            traybakes: [],
+            images: []
+        };
 
-        /* ── Step navigation ── */
+        let currentStep = 1;
+        let servings = 12;
+
+        /* ─────────────────────────────
+           NAVIGATION
+        ───────────────────────────── */
         function goTo(step) {
             document.getElementById(`panel-${currentStep}`).classList.remove('active');
             document.getElementById(`panel-${step}`).classList.add('active');
+
             [1, 2, 3].forEach(n => {
-                const si = document.getElementById(`si-${n}`);
-                si.classList.remove('active', 'done');
-                if (n === step) si.classList.add('active');
-                if (n < step) si.classList.add('done');
+                const el = document.getElementById(`si-${n}`);
+                el.classList.remove('active', 'done');
+
+                if (n === step) el.classList.add('active');
+                if (n < step) el.classList.add('done');
+
                 const num = document.querySelector(`#si-${n} .step-num`);
-                num.innerHTML = n < step ? '<i class="fas fa-check" style="font-size:0.7rem;"></i>' : String(n);
+                num.innerHTML = n < step
+                    ? '<i class="fas fa-check" style="font-size:0.7rem;"></i>'
+                    : String(n);
             });
-            [1, 2].forEach(n => document.getElementById(`sl-${n}`).classList.toggle('done', n < step));
+
+            [1, 2].forEach(n =>
+                document.getElementById(`sl-${n}`).classList.toggle('done', n < step)
+            );
+
             currentStep = step;
             window.scrollTo({ top: document.querySelector('.form-card').offsetTop - 80, behavior: 'smooth' });
         }
 
-        /* ── Step 1 ── */
+        /* ─────────────────────────────
+           STEP 1
+        ───────────────────────────── */
         document.getElementById('topicGrid').addEventListener('click', e => {
             const card = e.target.closest('.topic-card');
             if (!card) return;
+
             document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
+
             state.topic = card.dataset.topic;
         });
 
-        document.getElementById('topicGrid').addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                const card = e.target.closest('.topic-card');
-                if (card) { card.click(); e.preventDefault(); }
-            }
-        });
-
         document.getElementById('step1Next').addEventListener('click', () => {
-            if (!state.topic) {
-                const grid = document.getElementById('topicGrid');
-                grid.style.outline = '2px solid var(--pink)';
-                grid.style.borderRadius = '12px';
-                setTimeout(() => grid.style.outline = '', 1200);
-                return;
-            }
+            if (!state.topic) return;
+
             ['custom', 'traybake'].forEach(t => {
-                document.getElementById(`extraFields-${t}`).style.display = state.topic === t ? 'block' : 'none';
+                const el = document.getElementById(`extraFields-${t}`);
+                if (el) el.style.display = state.topic === t ? 'block' : 'none';
             });
+
             const titles = {
-                custom: 'Tell us about your occassion', traybake: 'Tell us about your event',
-                event: 'Tell us about the collaboration', other: 'What would you like to know?',
+                custom: 'Tell us about your occasion',
+                traybake: 'Tell us about your event',
+                event: 'Tell us about the collaboration',
+                other: 'What would you like to know?',
             };
+
             document.getElementById('step2Title').textContent = titles[state.topic];
-            const msgLabel = document.getElementById('messageLabel');
-            if (state.topic === 'custom') {
-                msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
-            } else {
-                msgLabel.innerHTML = 'Your message <span class="req">*</span>';
-            }
             goTo(2);
         });
 
-        /* ── Step 2 ── */
-        function setupPills(containerId, multiSelect, stateKey) {
-            document.getElementById(containerId).addEventListener('click', e => {
+        /* ─────────────────────────────
+           PILL SYSTEM
+        ───────────────────────────── */
+        function setupPills(id, multi, key, onChange) {
+            document.getElementById(id).addEventListener('click', e => {
                 const pill = e.target.closest('.pill-option');
                 if (!pill) return;
-                if (multiSelect) {
+
+                if (multi) {
                     pill.classList.toggle('selected');
+
                     const val = pill.dataset.val;
-                    state[stateKey] = state[stateKey].includes(val)
-                        ? state[stateKey].filter(v => v !== val)
-                        : [...state[stateKey], val];
+                    state[key] = state[key].includes(val)
+                        ? state[key].filter(v => v !== val)
+                        : [...state[key], val];
                 } else {
-                    document.querySelectorAll(`#${containerId} .pill-option`).forEach(p => p.classList.remove('selected'));
+                    document.querySelectorAll(`#${id} .pill-option`)
+                        .forEach(p => p.classList.remove('selected'));
+
                     pill.classList.add('selected');
-                    state[stateKey] = pill.dataset.val;
+                    state[key] = pill.dataset.val;
                 }
+
+                // ✅ THIS IS THE IMPORTANT FIX
+                if (typeof onChange === 'function') onChange();
             });
         }
 
         setupPills('occasionPills', false, 'occasion');
-        setupPills('flavourPills', true, 'flavours');
         setupPills('traybakePills', true, 'traybakes');
+        setupPills('bakeTypePills', true, 'bakeTypes', () => {
+            document.getElementById('cakeFields').style.display =
+                state.bakeTypes.includes('cake') ? 'block' : 'none';
 
-        let servings = 12;
-        const servInput = document.getElementById('servInput');
+            document.getElementById('cupcakeFields').style.display =
+                state.bakeTypes.includes('cupcake') ? 'block' : 'none';
+        });
 
-        function updateServings(val) {
-            servings = Math.max(1, val || 1);
-            servInput.value = servings;
+        setupPills('cakeFlavourPills', false, 'cakeFlavour');
+        setupPills('cupcakeFlavourPills', true, 'cupcakeFlavours');
+
+        /* ─────────────────────────────
+           SERVINGS (FIXED + SIMPLE)
+        ───────────────────────────── */
+        const cakeServings = document.getElementById('cakeServings');
+
+        if (cakeServings) {
+            cakeServings.addEventListener('input', () => {
+                const v = parseInt(cakeServings.value);
+                if (!isNaN(v)) servings = v;
+            });
         }
 
-        // typing
-        servInput.addEventListener('input', () => {
-            let val = parseInt(servInput.value);
-            if (!isNaN(val)) {
-                servings = val;
+
+        const validators = {
+            fname: { rules: ["required"] },
+            lname: { rules: ["required"] },
+            email: { rules: ["required", "email"] },
+            phone: { rules: ["required"] },
+
+            eventDate: {
+                rules: ["requiredIfCustom"]
+            },
+
+            occasion: {
+                rules: ["requiredIfCustom"]
+            },
+
+            bakeTypes: {
+                rules: ["requiredIfCustomBakeType"]
+            },
+
+            cakeServings: {
+                rules: ["requiredIfCake"]
+            },
+
+            cakeFlavour: {
+                rules: ["requiredIfCake"]
+            },
+
+            cakeDesign: {
+                rules: ["requiredIfCake"]
+            },
+
+            cupcakeServings: {
+                rules: ["requiredIfCupcake"]
+            },
+
+            cupcakeFlavours: {
+                rules: ["requiredIfCupcakeArray"]
+            },
+
+            cupcakeDesign: {
+                rules: ["requiredIfCupcake"]
+            },
+
+            message: {
+                rules: ["requiredIfNotCustom"]
             }
-        });
+        };
 
-        // buttons
-        document.getElementById('servDown').addEventListener('click', () => {
-            updateServings(servings - 1);
-        });
-
-        document.getElementById('servUp').addEventListener('click', () => {
-            updateServings(servings + 1);
-        });
-
-        document.getElementById('message').addEventListener('input', function () {
-            document.getElementById('msgCount').textContent = this.value.length;
-        });
-        document.getElementById('cakeDesc').addEventListener('input', function () {
-            document.getElementById('cakeDescCount').textContent = this.value.length;
-        });
-
-        /* ── Image upload ── */
-        const imageInput = document.getElementById('imageInput');
-        const imageUploadBtn = document.getElementById('imageUploadBtn');
-        const imagePreviews = document.getElementById('imagePreviews');
-
-        imageUploadBtn.addEventListener('click', () => imageInput.click());
-
-        imageInput.addEventListener('change', function () {
-            const files = Array.from(this.files);
-            const errEl = document.getElementById('err-images');
-            document.getElementById('imageUploadArea').classList.remove('error');
-            document.getElementById('err-images').classList.remove('show');
-            errEl.style.display = 'none';
-            errEl.textContent = '';
-
-            const remaining = 3 - state.images.length;
-            if (files.length > remaining) {
-                errEl.textContent = `You can only add ${remaining} more image${remaining === 1 ? '' : 's'}.`;
-                errEl.style.display = 'block';
-            }
-
-            const toAdd = files.slice(0, remaining);
-            toAdd.forEach(function (file) {
-                if (file.size > 2 * 1024 * 1024) {
-                    errEl.textContent = `${file.name} is over 2MB and was skipped.`;
-                    errEl.style.display = 'block';
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    state.images.push({ name: file.name, data: e.target.result });
-                    renderPreviews();
-                    if (state.images.length >= 3) imageUploadBtn.disabled = true;
-                };
-                reader.readAsDataURL(file);
-            });
-            this.value = '';
-        });
-
-        function renderPreviews() {
-            imagePreviews.innerHTML = state.images.map(function (img, i) {
-                return '<div class="image-preview">' +
-                    '<img src="' + img.data + '" alt="' + img.name + '">' +
-                    '<button type="button" class="image-preview__remove" data-index="' + i + '" aria-label="Remove image">' +
-                    '<i class="fas fa-times"></i>' +
-                    '</button>' +
-                    '</div>';
-            }).join('');
-
-            imagePreviews.querySelectorAll('.image-preview__remove').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    state.images.splice(parseInt(btn.dataset.index), 1);
-                    imageUploadBtn.disabled = false;
-
-                    // ✅ clear error styling when user interacts
-                    document.getElementById('imageUploadArea').classList.remove('error');
-                    document.getElementById('err-images').classList.remove('show');
-
-                    renderPreviews();
-                });
-            });
-        }
-
-        function showError(fieldId, errId) {
-            document.getElementById(fieldId).classList.add('error');
-            document.getElementById(errId).classList.add('show');
-        }
-
-        ['fname', 'lname', 'phone', 'email', 'message', 'cakeDesc', 'imageInput'].forEach(id => {
-            document.getElementById(id).addEventListener('input', function () {
-                this.classList.remove('error');
-                const err = document.getElementById(`err-${id}`);
-                if (err) err.classList.remove('show');
-            });
-        });
-
-        function validateStep2() {
+        /* ─────────────────────────────
+           RULE ENGINE
+        ───────────────────────────── */
+        function runRules() {
             let ok = true;
-            const rx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!document.getElementById('fname').value.trim()) { showError('fname', 'err-fname'); ok = false; }
-            if (!document.getElementById('lname').value.trim()) { showError('lname', 'err-lname'); ok = false; }
-            if (!rx.test(document.getElementById('email').value.trim())) { showError('email', 'err-email'); ok = false; }
-            if (!document.getElementById('phone').value.trim()) { showError('phone', 'err-phone'); ok = false; }
-            if (state.topic === 'custom') {
-                if (!state.occasion) { document.getElementById('err-occasion').classList.add('show'); ok = false; }
-                if (!document.getElementById('eventDate').value) { showError('eventDate', 'err-date'); ok = false; }
-                if (!document.getElementById('cakeDesc').value.trim()) { showError('cakeDesc', 'err-cakeDesc'); ok = false; }
-                if (state.images.length === 0) {
-                    document.getElementById('imageUploadArea').classList.add('error');
-                    document.getElementById('err-images').classList.add('show');
-                    ok = false;
+
+            const show = (id, err) => {
+                document.getElementById(id)?.classList.add('error');
+                document.getElementById(err)?.classList.add('show');
+            };
+
+            const val = id => document.getElementById(id)?.value?.trim();
+
+            const rules = {
+
+                required: (id) =>
+                    val(id),
+
+                email: (id) =>
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val(id)),
+
+                requiredIfCustom: (id) =>
+                    state.topic !== 'custom' || !!val(id),
+
+                requiredIfNotCustom: (id) =>
+                    state.topic === 'custom' || !!val(id),
+
+                requiredIfCustomBakeType: () =>
+                    state.topic !== 'custom' || state.bakeTypes.length > 0,
+
+                requiredIfCake: (id) =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cake') || !!val(id),
+
+                requiredIfCupcake: (id) =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cupcake') || !!val(id),
+
+                requiredIfCupcakeArray: () =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cupcake') || state.cupcakeFlavours.length > 0
+            };
+
+            for (const fieldId in validators) {
+                const field = validators[fieldId];
+
+                for (const rule of field.rules) {
+                    const valid = rules[rule](fieldId);
+
+                    if (!valid) {
+                        ok = false;
+
+                        // map errors safely
+                        const errMap = {
+                            fname: "err-fname",
+                            lname: "err-lname",
+                            email: "err-email",
+                            phone: "err-phone",
+                            eventDate: "err-date",
+                            occasion: "err-occasion",
+                            bakeTypes: "err-bakeType",
+                            cakeServings: "err-cakeServings",
+                            cakeFlavour: "err-cakeFlavour",
+                            cakeDesign: "err-cakeDesign",
+                            cupcakeServings: "err-cupcakeServings",
+                            cupcakeFlavours: "err-cupcakeFlavours",
+                            cupcakeDesign: "err-cupcakeDesign",
+                            message: "err-message"
+                        };
+
+                        show(fieldId, errMap[fieldId]);
+                        break;
+                    }
                 }
             }
-            if (state.topic !== 'custom') {
-                if (!document.getElementById('message').value.trim()) { showError('message', 'err-message'); ok = false; }
-            }
+
             return ok;
         }
 
-        document.getElementById('step2Back').addEventListener('click', () => goTo(1));
-        document.getElementById('step2Next').addEventListener('click', () => {
+        function validateStep2() {
+            return runRules();
+        }
+        /* ─────────────────────────────
+           NEXT / BACK
+        ───────────────────────────── */
+        step2Back.onclick = () => goTo(1);
+
+        step2Next.onclick = () => {
             if (!validateStep2()) return;
             buildReview();
             goTo(3);
-        });
+        };
 
-        /* ── Step 3 ── */
+        step3Back.onclick = () => goTo(2);
+
+        /* ─────────────────────────────
+           REVIEW
+        ───────────────────────────── */
         function buildReview() {
             const g = id => document.getElementById(id).value.trim();
+
             const lines = [
-                `📋 ENQUIRY TYPE: ${TOPIC_LABELS[state.topic]}`, '',
-                `👤 Name:  ${g('fname')} ${g('lname')}`,
-                `✉️  Email: ${g('email')}`,
-                `📞 Phone: ${g('phone')}`,
+                `📋 ${TOPIC_LABELS[state.topic]}`,
+                '',
+                `👤 ${g('fname')} ${g('lname')}`,
+                `✉️ ${g('email')}`,
+                `📞 ${g('phone')}`,
             ];
+
             if (state.topic === 'custom') {
-                lines.push('',
+                lines.push(
+                    '',
                     `🎉 Occasion: ${state.occasion || '—'}`,
-                    `📅 Date:     ${document.getElementById('eventDate').value || '—'}`,
+                    `📅 Date: ${eventDate.value || '—'}`,
                     `🍰 Servings: ${servings}`,
-                    `🎂 Flavours: ${state.flavours.length ? state.flavours.join(', ') : '—'}`
-                );
-                const desc = g('cakeDesc');
-                if (desc) lines.push('', `🎨 Design ideas:\n${desc}`);
-                if (state.images.length) {
-                    lines.push('', `📸 Inspiration images: ${state.images.length} attached`);
-                }
-            }
-            if (state.topic === 'traybake') {
-                const td = document.getElementById('traybakeDate').value;
-                lines.push('',
-                    `🍫 Items:    ${state.traybakes.length ? state.traybakes.join(', ') : '—'}`,
-                    `📦 Quantity: ${document.getElementById('traybakeQty').value || '—'}`,
-                    ...(td ? [`📅 Date:     ${td}`] : [])
+                    `🎂 Cake flavour: ${state.cakeFlavour || '—'}`,
+                    `🧁 Cupcake flavours: ${state.cupcakeFlavours.join(', ') || '—'}`
                 );
             }
-            lines.push('', `💬 Message:\n${g('message')}`);
-            document.getElementById('reviewBox').textContent = lines.join('\n');
+
+            lines.push('', `💬 ${message.value}`);
+            reviewBox.textContent = lines.join('\n');
         }
-
-        document.getElementById('step3Back').addEventListener('click', () => goTo(2));
-
-        /* ── Submit via Netlify function ── */
-        document.getElementById('sendBtn').addEventListener('click', async function () {
-            const btn = document.getElementById('sendBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
-
-            const g = id => document.getElementById(id).value.trim();
-
-            const payload = {
-                fname: g('fname'),
-                lname: g('lname'),
-                email: g('email'),
-                phone: g('phone'),
-                topic: state.topic,
-                topicLabel: TOPIC_LABELS[state.topic].replace(/^[^\w]+/, ''),
-                occasion: state.occasion,
-                eventDate: document.getElementById('eventDate').value,
-                servings: servings,
-                flavours: state.flavours.join(', '),
-                cakeDesc: g('cakeDesc'),
-                traybakes: state.traybakes.join(', '),
-                traybakeDate: document.getElementById('traybakeDate').value,
-                traybakeQty: document.getElementById('traybakeQty').value,
-                message: g('message'),
-                images: state.images,
-            };
-
-            try {
-                const res = await fetch('/.netlify/functions/send-contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                });
-                const data = await res.json();
-                if (!data.ok) throw new Error(data.error || 'Unknown error');
-
-                document.getElementById(`panel-${currentStep}`).classList.remove('active');
-                document.getElementById('stepIndicator').style.display = 'none';
-                document.getElementById('successPanel').classList.add('active');
-            } catch (err) {
-                console.error(err);
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Becca';
-                const errDiv = document.createElement('p');
-                errDiv.style.cssText = 'color:#c0392b;font-size:0.85rem;margin-top:12px;text-align:center;';
-                errDiv.textContent = 'Something went wrong. Please try again or email us directly.';
-                btn.parentNode.appendChild(errDiv);
-                setTimeout(() => errDiv.remove(), 5000);
-            }
-        });
     </script>
 </body>
 

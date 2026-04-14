@@ -245,6 +245,7 @@
             var card = document.createElement('div');
             card.className = 'shop-product-card';
             card.dataset.productName = product.name;
+            card.dataset.category = (product.category || '').trim();
             card.setAttribute('role', 'button');
             card.setAttribute('tabindex', '0');
             card.setAttribute('aria-label', 'View details for ' + product.name);
@@ -354,6 +355,58 @@
             if (shopOv && shopOv.classList.contains('is-open')) closeShopProductModal();
         });
 
+        /* ── Allergen filter from query param ── */
+        function maybeFilterFromQuery() {
+            var params = new URLSearchParams(window.location.search);
+            var term = params.get('filter');
+            if (!term) return;
+
+            // Strip param from URL
+            var url = new URL(window.location.href);
+            url.searchParams.delete('filter');
+            var qs = url.searchParams.toString();
+            history.replaceState({}, '', url.pathname + (qs ? '?' + qs : '') + url.hash);
+
+            var needle = term.trim().toLowerCase();
+            var cards = Array.from(document.querySelectorAll('.shop-product-card'));
+            var matches = cards.filter(function (c) {
+                return (c.dataset.productName || '').toLowerCase().includes(needle);
+            });
+
+            if (matches.length === 0) {
+                var noticeEl = document.getElementById('shop-deep-link-notice');
+                if (noticeEl) {
+                    noticeEl.textContent = 'We couldn\'t find that product available right now. Browse below or get in touch for a custom order.';
+                    noticeEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (matches.length === 1) {
+                // Single match — scroll and open modal directly
+                matches[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(function () { matches[0].click(); }, 450);
+                return;
+            }
+
+            // Multiple matches — filter grid and show dismissible banner
+            cards.forEach(function (c) { c.style.display = 'none'; });
+            matches.forEach(function (c) { c.style.display = ''; });
+
+            var grid = document.getElementById('productGrid');
+            var banner = document.createElement('div');
+            banner.className = 'shop-category-banner';
+            banner.innerHTML =
+                '<span><i class="fas fa-filter"></i> Showing results for: <strong>' + escapeHtml(term) + '</strong></span>' +
+                '<button class="shop-category-banner__clear" aria-label="Show all products">× Show all</button>';
+            banner.querySelector('.shop-category-banner__clear').addEventListener('click', function () {
+                cards.forEach(function (c) { c.style.display = ''; });
+                banner.remove();
+            });
+            grid.parentNode.insertBefore(banner, grid);
+            grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         /* ── Deep link ── */
         function stripProductQueryParam() {
             var url = new URL(window.location.href);
@@ -414,6 +467,7 @@
                 var grid = document.getElementById('productGrid');
                 grid.style.display = 'grid';
                 rows.forEach(function (row) { grid.appendChild(buildCard(row)); });
+                maybeFilterFromQuery();
                 maybeOpenProductFromQuery(rows);
             })
             .catch(function (err) {

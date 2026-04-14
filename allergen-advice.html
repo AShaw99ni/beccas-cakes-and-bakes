@@ -151,11 +151,16 @@
                 name: row.name,
                 category: (row.category || '').trim(),
                 available: (row.available || '').trim(),
+                hideFromAllergens: (row.hidden_from_allergens || '').trim().toLowerCase(),
                 ingredients: row.ingredients,
                 allergens: row.allergens ? row.allergens.split('|').map(function (s) { return s.trim(); }).filter(Boolean) : [],
                 mayContain: row.mayContain ? row.mayContain.split('|').map(function (s) { return s.trim(); }).filter(Boolean) : [],
                 image: (row.image_url || row.image || '').trim(),
             };
+        }
+
+        function isHidden(product) {
+            return product.hideFromAllergens === 'true' || product.hideFromAllergens === 'yes';
         }
 
         function buildCategoryTabs(products) {
@@ -255,12 +260,11 @@
 
             var shopWrap = document.getElementById('product-modal-shop-wrap');
             var shopLink = document.getElementById('product-modal-shop-link');
-            var avail = (product.available || '').trim().toLowerCase();
-            var isAvailable = avail === 'yes' || avail === 'true';
             if (shopWrap) {
-                shopWrap.hidden = !isAvailable;
-                if (isAvailable && shopLink) {
-                    shopLink.href = './shop.html?product=' + encodeURIComponent(product.name);
+                shopWrap.hidden = false;
+                if (shopLink) {
+                    shopLink.href = './shop.html?filter=' + encodeURIComponent(product.name);
+                    shopLink.textContent = 'View in shop';
                 }
             }
 
@@ -330,7 +334,7 @@
         fetch(SHEET_CSV_URL)
             .then(res => { if (!res.ok) throw new Error('Network error'); return res.text(); })
             .then(text => {
-                allProducts = parseCSV(text).map(rowToProduct);
+                allProducts = parseCSV(text).map(rowToProduct).filter(p => !isHidden(p));
                 buildCategoryTabs(allProducts);
                 applyFilters();
             })

@@ -517,6 +517,71 @@
         });
 
         /* ─────────────────────────────
+           IMAGE UPLOAD
+        ───────────────────────────── */
+        const MAX_IMAGES = 3;
+        const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+
+        document.getElementById('imageUploadBtn').addEventListener('click', () => {
+            document.getElementById('imageInput').click();
+        });
+
+        document.getElementById('imageInput').addEventListener('change', function () {
+            const errEl = document.getElementById('err-images');
+            errEl.textContent = '';
+            errEl.classList.remove('show');
+
+            const files = Array.from(this.files);
+            const remaining = MAX_IMAGES - state.images.length;
+
+            if (files.length > remaining) {
+                errEl.textContent = `You can only add ${MAX_IMAGES} images in total. ${state.images.length} already added.`;
+                errEl.classList.add('show');
+                this.value = '';
+                return;
+            }
+
+            files.forEach(file => {
+                if (file.size > MAX_SIZE_BYTES) {
+                    errEl.textContent = `"${file.name}" is over 2MB. Please choose a smaller image.`;
+                    errEl.classList.add('show');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = e => {
+                    state.images.push({ name: file.name, data: e.target.result });
+                    renderImagePreviews();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            this.value = '';
+        });
+
+        function renderImagePreviews() {
+            const container = document.getElementById('imagePreviews');
+            const uploadBtn = document.getElementById('imageUploadBtn');
+            container.innerHTML = state.images.map((img, i) => `
+                <div class="image-preview">
+                    <img src="${img.data}" alt="${img.name}">
+                    <button type="button" class="image-preview__remove" data-index="${i}" aria-label="Remove ${img.name}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.image-preview__remove').forEach(removeBtn => {
+                removeBtn.addEventListener('click', () => {
+                    state.images.splice(parseInt(removeBtn.dataset.index), 1);
+                    renderImagePreviews();
+                });
+            });
+
+            // Hide the upload button when limit reached
+            uploadBtn.style.display = state.images.length >= MAX_IMAGES ? 'none' : '';
+        }
+
+        /* ─────────────────────────────
            TRAYBAKE ITEM PICKER
         ───────────────────────────── */
         function addTraybakeRow(name) {

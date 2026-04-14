@@ -193,7 +193,9 @@ function highlightAllergens(ingredients, allergens) {
             '<span class="navbar-toggler-icon"></span>' +
             '</button>' +
             '<div class="collapse navbar-collapse" id="mainNavbar">' +
-            '<ul class="navbar-nav me-auto">' + LEFT_LINKS.map(navLinkHTML).join('') + '</ul>' +
+            '<ul class="navbar-nav me-auto">' +
+            '<li class="nav-item fw-bold d-lg-none"><a class="nav-link' + (activePage() === 'home' ? ' active' : '') + '" href="./new-index.html">Home</a></li>' +
+            LEFT_LINKS.map(navLinkHTML).join('') + '</ul>' +
             '<a class="navbar-brand navbar-center d-none d-lg-block" href="./new-index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
             '<ul class="navbar-nav ms-auto align-items-center">' +
             RIGHT_LINKS.map(navLinkHTML).join('') +

@@ -136,7 +136,8 @@
 }
 
 /* Decorative offset frame */
-.becca-img-wrap::before {
+.becca-img-wrap::before,
+.origin-img-wrap::before {
     content: '';
     position: absolute;
     inset: -12px;

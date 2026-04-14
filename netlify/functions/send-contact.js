@@ -274,7 +274,7 @@ exports.handler = async function (event) {
         <p style="font-family:Arial,sans-serif;font-size:15px;color:${muted};
             margin:0 0 24px;line-height:1.6;">
             Becca has received your enquiry and will get back to you within
-            <strong style="color:${deep};">48 hours</strong>.
+            <strong style="color:${deep};">72 hours</strong>.
             Here's a summary of what you sent.
         </p>
         ${section('Your details', contactRows)}
@@ -313,7 +313,7 @@ exports.handler = async function (event) {
             from: `"Becca's Cakes and Bakes" <${process.env.NOTIFY_EMAIL_USER}>`,
             to: email,
             subject: `We've received your enquiry! 🎂`,
-            text: [`Hi ${fname},`, '', `Thanks for getting in touch! Becca has received your enquiry and will get back to you within 48 hours.`, '', ...textLines, '', 'Becca x'].join('\n'),
+            text: [`Hi ${fname},`, '', `Thanks for getting in touch! Becca has received your enquiry and will get back to you within 72 hours.`, '', ...textLines, '', 'Becca x'].join('\n'),
             html: emailWrapper(`We've got your enquiry, ${fname}!`, customerBody),
         });
 

@@ -563,18 +563,56 @@ function highlightAllergens(ingredients, allergens) {
         }
     }
 
+    /* ── Authoritative price fetch ────────────────────────────────────────── */
+    var PRICE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
+
+    function parseCSVRowSimple(line) {
+        var result = [], cur = '', inQuotes = false;
+        for (var i = 0; i < line.length; i++) {
+            var ch = line[i];
+            if (ch === '"') {
+                if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+                else inQuotes = !inQuotes;
+            } else if (ch === ',' && !inQuotes) {
+                result.push(cur); cur = '';
+            } else { cur += ch; }
+        }
+        result.push(cur);
+        return result;
+    }
+
+    function fetchPriceMap() {
+        return fetch(PRICE_SHEET_CSV_URL)
+            .then(function (res) { if (!res.ok) throw new Error('fetch failed'); return res.text(); })
+            .then(function (text) {
+                var lines = text.trim().split('\n');
+                if (lines.length < 2) throw new Error('empty sheet');
+                var headers = parseCSVRowSimple(lines[0]).map(function (h) { return h.trim(); });
+                var nameIdx = headers.indexOf('name');
+                var priceIdx = headers.indexOf('price');
+                if (nameIdx === -1 || priceIdx === -1) throw new Error('missing columns');
+                var map = {};
+                for (var i = 1; i < lines.length; i++) {
+                    var vals = parseCSVRowSimple(lines[i]);
+                    var n = (vals[nameIdx] || '').trim();
+                    var p = parseFloat((vals[priceIdx] || '').trim());
+                    if (n && !isNaN(p)) map[n] = p;
+                }
+                return map;
+            });
+    }
+
     /* ── Checkout modal ───────────────────────────────────────────────────── */
     function openCheckout() {
         closeCart();
-        var cart = window.BeccaCart.getCart();
+
+        // Show modal immediately with a loading state in the summary
         var summary = document.getElementById('checkout-summary');
-        summary.innerHTML = Object.values(cart).map(function (item) {
-            return '<div class="checkout-summary-row">' +
-                '<span>' + item.product.name + ' \u00d7 ' + item.qty + '</span>' +
-                '<span>\u00a3' + (parseFloat(item.product.price) * item.qty).toFixed(2) + '</span>' +
-                '</div>';
-        }).join('');
-        document.getElementById('checkout-total-amount').textContent = '\u00a3' + window.BeccaCart.getCartTotal().toFixed(2);
+        var totalEl = document.getElementById('checkout-total-amount');
+        summary.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--muted);font-size:0.9rem;">' +
+            '<i class="fas fa-spinner fa-spin"></i> Loading prices…</div>';
+        if (totalEl) totalEl.textContent = '';
+
         document.getElementById('checkout-form-wrap').style.display = 'block';
         document.getElementById('checkout-loading').style.display = 'none';
         document.getElementById('checkout-error-msg').style.display = 'none';
@@ -584,6 +622,40 @@ function highlightAllergens(ingredients, allergens) {
             requestAnimationFrame(function () { overlay.classList.add('is-open'); });
         });
         document.body.style.overflow = 'hidden';
+
+        // Fetch authoritative prices, then render summary
+        var cart = window.BeccaCart.getCart();
+        fetchPriceMap()
+            .then(function (priceMap) {
+                var rows = Object.values(cart);
+                summary.innerHTML = rows.map(function (item) {
+                    var unitPrice = priceMap.hasOwnProperty(item.product.name)
+                        ? priceMap[item.product.name]
+                        : parseFloat(item.product.price) || 0;
+                    return '<div class="checkout-summary-row">' +
+                        '<span>' + item.product.name + ' \u00d7 ' + item.qty + '</span>' +
+                        '<span>\u00a3' + (unitPrice * item.qty).toFixed(2) + '</span>' +
+                        '</div>';
+                }).join('');
+                var total = rows.reduce(function (sum, item) {
+                    var unitPrice = priceMap.hasOwnProperty(item.product.name)
+                        ? priceMap[item.product.name]
+                        : parseFloat(item.product.price) || 0;
+                    return sum + unitPrice * item.qty;
+                }, 0);
+                if (totalEl) totalEl.textContent = '\u00a3' + total.toFixed(2);
+            })
+            .catch(function () {
+                // Fall back to stored prices if the fetch fails
+                var rows = Object.values(cart);
+                summary.innerHTML = rows.map(function (item) {
+                    return '<div class="checkout-summary-row">' +
+                        '<span>' + item.product.name + ' \u00d7 ' + item.qty + '</span>' +
+                        '<span>\u00a3' + (parseFloat(item.product.price) * item.qty).toFixed(2) + '</span>' +
+                        '</div>';
+                }).join('');
+                if (totalEl) totalEl.textContent = '\u00a3' + window.BeccaCart.getCartTotal().toFixed(2);
+            });
     }
 
     function closeCheckout() {

@@ -425,9 +425,16 @@ function highlightAllergens(ingredients, allergens) {
             try { localStorage.setItem('becca_cart', JSON.stringify(cart)); } catch (e) { }
         }
 
+        function getUnitPrice(item) {
+            if (_priceMapCache && _priceMapCache.hasOwnProperty(item.product.name)) {
+                return _priceMapCache[item.product.name];
+            }
+            return parseFloat(item.product.price) || 0;
+        }
+
         function cartTotal() {
             return Object.values(cart).reduce(function (sum, item) {
-                return sum + (parseFloat(item.product.price) * item.qty);
+                return sum + (getUnitPrice(item) * item.qty);
             }, 0);
         }
 
@@ -467,7 +474,7 @@ function highlightAllergens(ingredients, allergens) {
                     return '<div class="cart-item">' +
                         '<div class="cart-item__info">' +
                         '<div class="cart-item__name">' + escapedName + '</div>' +
-                        '<div class="cart-item__price">£' + (parseFloat(item.product.price) * item.qty).toFixed(2) + '</div>' +
+                        '<div class="cart-item__price">£' + (getUnitPrice(item) * item.qty).toFixed(2) + '</div>' +
                         '</div>' +
                         '<div class="cart-item__qty">' +
                         '<button class="qty-btn qty-btn--minus cart-qty-btn" data-name="' + escapedName + '">−</button>' +
@@ -566,6 +573,8 @@ function highlightAllergens(ingredients, allergens) {
     /* ── Authoritative price fetch ────────────────────────────────────────── */
     var PRICE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
 
+    var _priceMapCache = null;
+
     function parseCSVRowSimple(line) {
         var result = [], cur = '', inQuotes = false;
         for (var i = 0; i < line.length; i++) {
@@ -582,6 +591,7 @@ function highlightAllergens(ingredients, allergens) {
     }
 
     function fetchPriceMap() {
+        if (_priceMapCache) return Promise.resolve(_priceMapCache);
         return fetch(PRICE_SHEET_CSV_URL)
             .then(function (res) { if (!res.ok) throw new Error('fetch failed'); return res.text(); })
             .then(function (text) {
@@ -598,9 +608,15 @@ function highlightAllergens(ingredients, allergens) {
                     var p = parseFloat((vals[priceIdx] || '').trim());
                     if (n && !isNaN(p)) map[n] = p;
                 }
+                _priceMapCache = map;
                 return map;
             });
     }
+
+    // Prefetch prices immediately so the cart drawer shows correct amounts as soon as possible
+    fetchPriceMap().then(function () {
+        if (window.BeccaCart) window.BeccaCart.updateCartUI();
+    }).catch(function () {});
 
     /* ── Checkout modal ───────────────────────────────────────────────────── */
     function openCheckout() {

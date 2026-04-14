@@ -148,6 +148,8 @@
                                 <div class="pill-option" data-val="Graduation">Graduation</div>
                                 <div class="pill-option" data-val="Other">Other</div>
                             </div>
+                            <input type="text" id="occasionOther" class="form-control" placeholder="Please specify…"
+                                style="display:none; margin-top:10px;">
                             <div class="error-msg" id="err-occasion">Please select an occasion.</div>
                         </div>
 
@@ -179,8 +181,9 @@
                             <h4>Cake Details</h4>
                             <div class="date-time-row">
                                 <div class="field-group">
-                                    <label>Number of servings</label>
-                                    <input type="number" id="cakeServings" class="form-control" min="1">
+                                    <label>Number of servings<span class="req">*</span></label>
+                                    <input type="number" id="cakeServings" class="form-control" min="1"
+                                        placeholder="12">
                                     <div class="error-msg" id="err-cakeServings">Please enter number of servings.</div>
 
                                 </div>
@@ -189,7 +192,7 @@
 
 
                             <div class="field-group">
-                                <label>Flavour</label>
+                                <label>Flavour<span class="req">*</span></label>
                                 <div class="pill-group" id="cakeFlavourPills">
                                     <div class="pill-option" data-val="Victoria Sponge">Victoria Sponge</div>
                                     <div class="pill-option" data-val="Chocolate">Chocolate</div>
@@ -199,7 +202,7 @@
                             </div>
 
                             <div class="field-group">
-                                <label>Design / decoration ideas</label>
+                                <label>Design / decoration ideas<span class="req">*</span></label>
                                 <textarea id="cakeDesign" class="form-control"></textarea>
                                 <div class="error-msg" id="err-cakeDesign">Please add design details.</div>
                             </div>
@@ -211,8 +214,9 @@
                             <h4>Cupcake Details</h4>
                             <div class="date-time-row">
                                 <div class="field-group">
-                                    <label>Number of servings</label>
-                                    <input type="number" id="cupcakeServings" class="form-control" min="1">
+                                    <label>Number of servings<span class="req">*</span></label>
+                                    <input type="number" id="cupcakeServings" class="form-control" min="1"
+                                        placeholder="6">
                                     <div class="error-msg" id="err-cupcakeServings">Please enter number of servings.
                                     </div>
 
@@ -221,7 +225,7 @@
                             </div>
 
                             <div class="field-group">
-                                <label>Flavour(s)</label>
+                                <label>Flavour(s)<span class="req">*</span></label>
                                 <div class="pill-group" id="cupcakeFlavourPills">
                                     <div class="pill-option" data-val="Vanilla">Vanilla</div>
                                     <div class="pill-option" data-val="Chocolate">Chocolate</div>
@@ -233,7 +237,7 @@
                             </div>
 
                             <div class="field-group">
-                                <label>Design / decoration ideas</label>
+                                <label>Design / decoration ideas<span class="req">*</span></label>
                                 <textarea id="cupcakeDesign" class="form-control"></textarea>
                                 <div class="error-msg" id="err-cupcakeDesign">Please add design details.</div>
                             </div>
@@ -268,34 +272,33 @@
                     <div id="extraFields-traybake" class="extra-fields">
                         <hr class="field-divider">
                         <div class="field-group">
-                            <label>What would you like?</label>
+                            <label>What would you like? <span class="optional">(select all that apply)</span></label>
                             <div class="pill-group" id="traybakePills">
                                 <div class="pill-option" data-val="Brownies">Brownies</div>
                                 <div class="pill-option" data-val="Brookies">Brookies</div>
                                 <div class="pill-option" data-val="School Cake">School Cake</div>
-                                <div class="pill-option" data-val="'Rice Krispie' Bars">'Rice Krispie' Bars</div>
+                                <div class="pill-option" data-val="Rice Krispie Bars">Rice Krispie Bars</div>
                                 <div class="pill-option" data-val="Caramel Squares">Caramel Squares</div>
-                                <div class="pill-option" data-val="Mixed selection">Mixed selection</div>
                             </div>
                         </div>
-                        <div class="date-time-row">
-                            <div class="field-group">
-                                <label for="traybakeDate">Date needed</label>
-                                <input type="date" id="traybakeDate" class="form-control">
+
+                        <!-- Order table — populated as pills are toggled -->
+                        <div id="traybakeOrderList" class="traybake-order-list" style="display:none;">
+                            <div class="traybake-order-header">
+                                <span>Item</span>
+                                <span>Servings</span>
+                                <span></span>
                             </div>
-                            <div class="alert alert-warning">
-                                ⚠️ Please Note: Orders placed on short notice may not always be possible.
-                            </div>
-                            <div class="field-group">
-                                <label for="traybakeQty">Approx. quantity</label>
-                                <select class="form-select" id="traybakeQty">
-                                    <option value="">Select…</option>
-                                    <option>Up to 12 pieces</option>
-                                    <option>12–24 pieces</option>
-                                    <option>24–48 pieces</option>
-                                    <option>48+ pieces</option>
-                                </select>
-                            </div>
+                            <div id="traybakeOrderRows"></div>
+                        </div>
+
+                        <div class="field-group" style="margin-top:20px;">
+                            <label for="traybakeDate">Date needed <span class="req">*</span></label>
+                            <input type="date" id="traybakeDate" class="form-control">
+                            <div class="error-msg" id="err-traybakeDate">Please select a date.</div>
+                        </div>
+                        <div class="alert alert-warning">
+                            ⚠️ Please Note: Orders placed on short notice may not always be possible.
                         </div>
                     </div>
 
@@ -375,7 +378,7 @@
             bakeTypes: [],
             cakeFlavour: null,
             cupcakeFlavours: [],
-            traybakes: [],
+            traybakeItems: [],
             images: []
         };
 
@@ -439,6 +442,14 @@
             };
 
             document.getElementById('step2Title').textContent = titles[state.topic];
+
+            const msgLabel = document.getElementById('messageLabel');
+            if (state.topic === 'custom' || state.topic === 'traybake') {
+                msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
+            } else {
+                msgLabel.innerHTML = 'Your message <span class="req">*</span>';
+            }
+
             goTo(2);
         });
 
@@ -465,13 +476,101 @@
                     state[key] = pill.dataset.val;
                 }
 
-                // ✅ THIS IS THE IMPORTANT FIX
+                // ✅ FIX: clear occasion error instantly
+                if (key === 'occasion') {
+                    document.getElementById('err-occasion')?.classList.remove('show');
+                }
+
                 if (typeof onChange === 'function') onChange();
             });
         }
 
-        setupPills('occasionPills', false, 'occasion');
-        setupPills('traybakePills', true, 'traybakes');
+        document.getElementById('occasionPills').addEventListener('click', e => {
+            const pill = e.target.closest('.pill-option');
+            if (!pill) return;
+
+            document.querySelectorAll('#occasionPills .pill-option').forEach(p => p.classList.remove('selected'));
+            pill.classList.add('selected');
+
+            const otherInput = document.getElementById('occasionOther');
+            if (pill.dataset.val === 'Other') {
+                otherInput.style.display = 'block';
+                otherInput.focus();
+                state.occasion = otherInput.value.trim() || null;
+            } else {
+                otherInput.style.display = 'none';
+                state.occasion = pill.dataset.val;
+            }
+
+            document.getElementById('err-occasion')?.classList.remove('show');
+        });
+
+        document.getElementById('occasionOther').addEventListener('input', e => {
+            state.occasion = e.target.value.trim() || null;
+        });
+
+        /* ─────────────────────────────
+           TRAYBAKE ITEM PICKER
+        ───────────────────────────── */
+        function addTraybakeRow(name) {
+            const row = document.createElement('div');
+            row.className = 'traybake-order-row';
+            row.dataset.item = name;
+            row.innerHTML = `
+                <span class="traybake-item-name">${name}</span>
+                <div class="serving-picker">
+                    <button type="button" class="serving-btn" data-action="dec">−</button>
+                    <span class="serving-val">12</span>
+                    <button type="button" class="serving-btn" data-action="inc">+</button>
+                </div>
+                <button type="button" class="traybake-remove-btn" aria-label="Remove ${name}">
+                    <i class="fas fa-times"></i>
+                </button>`;
+
+            const item = { name, qty: 12 };
+            state.traybakeItems.push(item);
+
+            row.querySelector('[data-action="dec"]').addEventListener('click', () => {
+                if (item.qty > 1) {
+                    item.qty--;
+                    row.querySelector('.serving-val').textContent = item.qty;
+                }
+            });
+            row.querySelector('[data-action="inc"]').addEventListener('click', () => {
+                item.qty++;
+                row.querySelector('.serving-val').textContent = item.qty;
+            });
+            row.querySelector('.traybake-remove-btn').addEventListener('click', () => {
+                document.querySelectorAll('#traybakePills .pill-option').forEach(p => {
+                    if (p.dataset.val === name) p.classList.remove('selected');
+                });
+                state.traybakeItems = state.traybakeItems.filter(i => i.name !== name);
+                row.remove();
+                document.getElementById('traybakeOrderList').style.display =
+                    state.traybakeItems.length > 0 ? 'block' : 'none';
+            });
+
+            document.getElementById('traybakeOrderRows').appendChild(row);
+            document.getElementById('traybakeOrderList').style.display = 'block';
+        }
+
+        document.getElementById('traybakePills').addEventListener('click', e => {
+            const pill = e.target.closest('.pill-option');
+            if (!pill) return;
+            const name = pill.dataset.val;
+            const isSelected = pill.classList.toggle('selected');
+            if (isSelected) {
+                addTraybakeRow(name);
+            } else {
+                state.traybakeItems = state.traybakeItems.filter(i => i.name !== name);
+                document.querySelectorAll('#traybakeOrderRows .traybake-order-row').forEach(r => {
+                    if (r.dataset.item === name) r.remove();
+                });
+                document.getElementById('traybakeOrderList').style.display =
+                    state.traybakeItems.length > 0 ? 'block' : 'none';
+            }
+        });
+
         setupPills('bakeTypePills', true, 'bakeTypes', () => {
             document.getElementById('cakeFields').style.display =
                 state.bakeTypes.includes('cake') ? 'block' : 'none';
@@ -507,7 +606,7 @@
             },
 
             occasion: {
-                rules: ["requiredIfCustom"]
+                rules: ["requiredIfOccasion"]
             },
 
             bakeTypes: {
@@ -518,13 +617,11 @@
                 rules: ["requiredIfCake"]
             },
 
-            cakeFlavour: {
-                rules: ["requiredIfCake"]
-            },
+            cakeFlavour: { rules: ["requiredIfCakeFlavour"] },
 
-            cakeDesign: {
-                rules: ["requiredIfCake"]
-            },
+
+            cakeDesign: { rules: ["requiredIfCakeDesign"] },
+
 
             cupcakeServings: {
                 rules: ["requiredIfCupcake"]
@@ -534,8 +631,10 @@
                 rules: ["requiredIfCupcakeArray"]
             },
 
-            cupcakeDesign: {
-                rules: ["requiredIfCupcake"]
+            cupcakeDesign: { rules: ["requiredIfCupcakeDesign"] },
+
+            traybakeDate: {
+                rules: ["requiredIfTraybake"]
             },
 
             message: {
@@ -549,70 +648,99 @@
         function runRules() {
             let ok = true;
 
+            const errMap = {
+                fname: "err-fname",
+                lname: "err-lname",
+                email: "err-email",
+                phone: "err-phone",
+                eventDate: "err-date",
+                occasion: "err-occasion",
+                bakeTypes: "err-bakeType",
+                cakeServings: "err-cakeServings",
+                cakeFlavour: "err-cakeFlavour",
+                cakeDesign: "err-cakeDesign",
+                cupcakeServings: "err-cupcakeServings",
+                cupcakeFlavours: "err-cupcakeFlavours",
+                cupcakeDesign: "err-cupcakeDesign",
+                traybakeDate: "err-traybakeDate",
+                message: "err-message"
+            };
+
             const show = (id, err) => {
                 document.getElementById(id)?.classList.add('error');
                 document.getElementById(err)?.classList.add('show');
             };
 
-            const val = id => document.getElementById(id)?.value?.trim();
+            const hide = (id, err) => {
+                document.getElementById(id)?.classList.remove('error');
+                document.getElementById(err)?.classList.remove('show');
+            };
 
             const rules = {
 
                 required: (id) =>
-                    val(id),
+                    !!document.getElementById(id)?.value?.trim(),
 
                 email: (id) =>
-                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val(id)),
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById(id)?.value?.trim()),
 
                 requiredIfCustom: (id) =>
-                    state.topic !== 'custom' || !!val(id),
+                    state.topic !== 'custom' || !!document.getElementById(id)?.value?.trim(),
 
                 requiredIfNotCustom: (id) =>
-                    state.topic === 'custom' || !!val(id),
+                    state.topic === 'custom' || state.topic === 'traybake' || !!document.getElementById(id)?.value?.trim(),
+
+                requiredIfTraybake: (id) =>
+                    state.topic !== 'traybake' || !!document.getElementById(id)?.value?.trim(),
+
+                requiredIfOccasion: () =>
+                    state.topic !== 'custom' || !!state.occasion,
 
                 requiredIfCustomBakeType: () =>
                     state.topic !== 'custom' || state.bakeTypes.length > 0,
 
-                requiredIfCake: (id) =>
-                    state.topic !== 'custom' || !state.bakeTypes.includes('cake') || !!val(id),
+                requiredIfCake: () =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cake') ||
+                    (document.getElementById('cakeServings')?.value?.trim()),
 
-                requiredIfCupcake: (id) =>
-                    state.topic !== 'custom' || !state.bakeTypes.includes('cupcake') || !!val(id),
+                requiredIfCakeFlavour: () =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cake') ||
+                    state.cakeFlavour,
+
+                requiredIfCakeDesign: () =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cake') ||
+                    document.getElementById('cakeDesign')?.value?.trim(),
+
+                requiredIfCupcake: () =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cupcake') ||
+                    document.getElementById('cupcakeServings')?.value?.trim(),
 
                 requiredIfCupcakeArray: () =>
-                    state.topic !== 'custom' || !state.bakeTypes.includes('cupcake') || state.cupcakeFlavours.length > 0
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cupcake') ||
+                    state.cupcakeFlavours.length > 0,
+
+                requiredIfCupcakeDesign: () =>
+                    state.topic !== 'custom' || !state.bakeTypes.includes('cupcake') ||
+                    document.getElementById('cupcakeDesign')?.value?.trim(),
             };
 
             for (const fieldId in validators) {
                 const field = validators[fieldId];
+                let fieldOk = true;
 
                 for (const rule of field.rules) {
                     const valid = rules[rule](fieldId);
 
                     if (!valid) {
+                        fieldOk = false;
                         ok = false;
-
-                        // map errors safely
-                        const errMap = {
-                            fname: "err-fname",
-                            lname: "err-lname",
-                            email: "err-email",
-                            phone: "err-phone",
-                            eventDate: "err-date",
-                            occasion: "err-occasion",
-                            bakeTypes: "err-bakeType",
-                            cakeServings: "err-cakeServings",
-                            cakeFlavour: "err-cakeFlavour",
-                            cakeDesign: "err-cakeDesign",
-                            cupcakeServings: "err-cupcakeServings",
-                            cupcakeFlavours: "err-cupcakeFlavours",
-                            cupcakeDesign: "err-cupcakeDesign",
-                            message: "err-message"
-                        };
-
                         show(fieldId, errMap[fieldId]);
                         break;
                     }
+                }
+
+                if (fieldOk) {
+                    hide(fieldId, errMap[fieldId]);
                 }
             }
 
@@ -623,23 +751,26 @@
             return runRules();
         }
         /* ─────────────────────────────
-           NEXT / BACK
-        ───────────────────────────── */
+   NEXT / BACK (FIXED)
+──────────────────────────── */
         step2Back.onclick = () => goTo(1);
 
         step2Next.onclick = () => {
             if (!validateStep2()) return;
-            buildReview();
+
+            buildReviewSafe();   // <- FIXED
             goTo(3);
         };
 
         step3Back.onclick = () => goTo(2);
 
         /* ─────────────────────────────
-           REVIEW
-        ───────────────────────────── */
-        function buildReview() {
-            const g = id => document.getElementById(id).value.trim();
+           SAFE REVIEW BUILDER (FIXED)
+        ──────────────────────────── */
+        function buildReviewSafe() {
+            const g = id => document.getElementById(id)?.value?.trim() || "";
+
+            const reviewBox = document.getElementById('reviewBox');
 
             const lines = [
                 `📋 ${TOPIC_LABELS[state.topic]}`,
@@ -650,17 +781,50 @@
             ];
 
             if (state.topic === 'custom') {
+                const eventDate = document.getElementById('eventDate')?.value || "";
+
                 lines.push(
                     '',
                     `🎉 Occasion: ${state.occasion || '—'}`,
-                    `📅 Date: ${eventDate.value || '—'}`,
-                    `🍰 Servings: ${servings}`,
-                    `🎂 Cake flavour: ${state.cakeFlavour || '—'}`,
-                    `🧁 Cupcake flavours: ${state.cupcakeFlavours.join(', ') || '—'}`
+                    `📅 Date: ${eventDate || '—'}`
                 );
+
+                if (state.bakeTypes.includes('cake')) {
+                    const cakeServingsVal = document.getElementById('cakeServings')?.value?.trim();
+                    const cakeDesign = document.getElementById('cakeDesign')?.value?.trim();
+
+                    lines.push('', '🎂 Cake');
+                    if (cakeServingsVal) lines.push(`   Servings: ${cakeServingsVal}`);
+                    if (state.cakeFlavour) lines.push(`   Flavour: ${state.cakeFlavour}`);
+                    if (cakeDesign) lines.push(`   Design ideas: ${cakeDesign}`);
+                }
+
+                if (state.bakeTypes.includes('cupcake')) {
+                    const cupcakeServingsVal = document.getElementById('cupcakeServings')?.value?.trim();
+                    const cupcakeDesign = document.getElementById('cupcakeDesign')?.value?.trim();
+
+                    lines.push('', '🧁 Cupcakes');
+                    if (cupcakeServingsVal) lines.push(`   Servings: ${cupcakeServingsVal}`);
+                    if (state.cupcakeFlavours?.length) lines.push(`   Flavours: ${state.cupcakeFlavours.join(', ')}`);
+                    if (cupcakeDesign) lines.push(`   Design ideas: ${cupcakeDesign}`);
+                }
             }
 
-            lines.push('', `💬 ${message.value}`);
+            if (state.topic === 'traybake') {
+                const trayDate = document.getElementById('traybakeDate')?.value || "";
+
+                if (state.traybakeItems?.length) {
+                    lines.push('', '🍫 Items:');
+                    state.traybakeItems.forEach(item => {
+                        lines.push(`   ${item.name}: ${item.qty} servings`);
+                    });
+                }
+                if (trayDate) lines.push('', `📅 Date: ${trayDate}`);
+            }
+
+            const messageVal = document.getElementById('message')?.value?.trim();
+            lines.push('', `💬 Message:\n${messageVal || '—'}`);
+
             reviewBox.textContent = lines.join('\n');
         }
     </script>

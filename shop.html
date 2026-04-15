@@ -404,9 +404,11 @@
             history.replaceState({}, '', url.pathname + (qs ? '?' + qs : '') + url.hash);
 
             var needle = term.trim().toLowerCase();
+            var needleWords = needle.split(/\s+/);
             var cards = Array.from(document.querySelectorAll('.shop-product-card'));
             var matches = cards.filter(function (c) {
-                return (c.dataset.productName || '').toLowerCase().includes(needle);
+                var name = (c.dataset.productName || '').toLowerCase();
+                return name.includes(needle) || needleWords.every(function (w) { return name.includes(w); });
             });
 
             if (matches.length === 0) {

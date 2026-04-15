@@ -7,37 +7,6 @@
 
 
 
-/* ── Order notice ── */
-.shop-notice-wrap {
-    background: #fff8e7;
-    border-bottom: 1px solid #f0dfa0;
-    padding: 16px 0;
-}
-
-.shop-notice {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    max-width: 700px;
-    margin: 0 auto;
-    font-family: 'Lato', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: #6b5000;
-    line-height: 1.6;
-}
-
-.shop-notice i {
-    font-size: 1.1rem;
-    color: #8a6400;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.shop-notice p {
-    margin: 0;
-}
-
 /* Deep link (?product=) — product not available */
 .shop-deep-link-notice {
     max-width: 700px;
@@ -71,19 +40,6 @@
 .shop-section--cupcakes {
     background: #fff;
     border-top: 1px solid var(--pink-light, #e2c4f9);
-}
-
-
-/* ── Spinner / error ── */
-.shop-spinner,
-.shop-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding: 4rem 0;
-    color: var(--muted);
-    font-family: 'Lato', sans-serif;
 }
 
 
@@ -246,51 +202,18 @@
     transition: transform 0.2s ease;
 }
 
-/* ── Allergen pills (match allergen-advice.html) ── */
-.shop-product-card .allergen-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 2px;
-    margin-bottom: 4px;
-}
-
-.shop-product-card .pill {
-    font-size: 0.75rem;
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 50px;
-    letter-spacing: 0.04em;
-}
-
-.shop-product-card .pill-free {
-    background: #edf7f0;
-    color: #1a7a3a;
-    border: 1px solid #b5e2c4;
-}
-
-.shop-product-card .pill-contains {
-    background: #fff3f0;
-    color: #b33a1a;
-    border: 1px solid #f5c2b4;
-}
-
-.shop-product-card .pill-may {
-    background: #fffbec;
-    color: #8a6400;
-    border: 1px solid #f0dfa0;
-}
-
-/* Same pills inside shop product modal */
+/* ── Allergen pills (card + modal) ── */
+.shop-product-card .allergen-pills,
 #shop-product-modal-content .allergen-pills {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-top: 4px;
-    margin-bottom: 0;
 }
 
+.shop-product-card .allergen-pills { margin-top: 2px; margin-bottom: 4px; }
+#shop-product-modal-content .allergen-pills { margin-top: 4px; }
+
+.shop-product-card .pill,
 #shop-product-modal-content .pill {
     font-size: 0.75rem;
     font-family: 'Lato', sans-serif;
@@ -300,18 +223,21 @@
     letter-spacing: 0.04em;
 }
 
+.shop-product-card .pill-free,
 #shop-product-modal-content .pill-free {
     background: #edf7f0;
     color: #1a7a3a;
     border: 1px solid #b5e2c4;
 }
 
+.shop-product-card .pill-contains,
 #shop-product-modal-content .pill-contains {
     background: #fff3f0;
     color: #b33a1a;
     border: 1px solid #f5c2b4;
 }
 
+.shop-product-card .pill-may,
 #shop-product-modal-content .pill-may {
     background: #fffbec;
     color: #8a6400;

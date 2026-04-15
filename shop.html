@@ -62,25 +62,23 @@
     <div id="shop-sections-container"></div>
 
     <!-- ── CTA ── -->
-    <div class="shop-cta-wrap">
-        <section class="section-cta">
-            <div class="section-cta__inner container">
-                <span class="section-label">Cant see what you need?</span>
-                <h2 class="section-heading section-cta__heading">
-                    Lets bake something<br><em>completely custom</em>
-                </h2>
-                <p class="section-cta__body">
-                    Every bake is made to order — if you have something specific in mind, just get in touch and Becca
-                    will work with you to make it happen.
-                </p>
-                <div class="section-cta__actions">
-                    <a href="./contact.html" class="btn btn-light text-dark fw-bold rounded-pill px-4 py-2">Get in
-                        Touch</a>
-                    <a href="./upcoming-events.html" class="section-cta__ghost-btn">Find us at a market →</a>
-                </div>
+    <section class="section-cta">
+        <div class="section-cta__inner container">
+            <span class="section-label">Cant see what you need?</span>
+            <h2 class="section-heading section-cta__heading">
+                Lets bake something<br><em>completely custom</em>
+            </h2>
+            <p class="section-cta__body">
+                Every bake is made to order — if you have something specific in mind, just get in touch and Becca
+                will work with you to make it happen.
+            </p>
+            <div class="section-cta__actions">
+                <a href="./contact.html" class="btn btn-light text-dark fw-bold rounded-pill px-4 py-2">Get in
+                    Touch</a>
+                <a href="./upcoming-events.html" class="section-cta__ghost-btn">Find us at a market →</a>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
     <!-- ── Footer (injected by components.js) ── -->
     <div id="site-footer"></div>
@@ -252,7 +250,6 @@
             const imgSrc = product.image || product.imageLink || '';
             const hasImage = imgSrc !== '';
             const nameEsc = escapeHtml(product.name);
-            const attrName = escapeHtml(product.name);
             const available = isAvailable(product);
             const currentQty = available && cart[product.name] ? cart[product.name].qty : 0;
 
@@ -289,9 +286,9 @@
                 '<div class="shop-product-card__price">£' + price.toFixed(2) + '</div>' +
                 (available
                     ? '<div class="shop-product-card__qty" id="qty-wrap-' + slugify(product.name) + '">' +
-                    '<button type="button" class="qty-btn qty-btn--minus" data-name="' + attrName + '" aria-label="Remove one">−</button>' +
+                    '<button type="button" class="qty-btn qty-btn--minus" aria-label="Remove one">−</button>' +
                     '<span class="qty-val" id="qty-' + slugify(product.name) + '">' + currentQty + '</span>' +
-                    '<button type="button" class="qty-btn qty-btn--plus" data-name="' + attrName + '" aria-label="Add one">+</button>' +
+                    '<button type="button" class="qty-btn qty-btn--plus" aria-label="Add one">+</button>' +
                     '</div>'
                     : '') +
                 '</div>';

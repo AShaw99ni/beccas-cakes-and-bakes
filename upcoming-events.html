@@ -100,24 +100,6 @@
     <script src="./components.js"></script>
 
     <script>
-        /* ══════════════════════════════════════════════════════════════════════
-           EVENTS — loaded from Google Sheet (published as CSV)
-
-           TO UPDATE EVENTS:
-             1. Open the Google Sheet linked below
-             2. Add / edit / remove rows
-             3. Changes appear on the site within ~1 minute, no redeploy needed
-
-           SHEET COLUMNS (row 1 must be these exact headers):
-             date      | YYYY-MM-DD        e.g. 2026-03-15
-             type      | stall / order / tiktok
-             title     | Event name
-             time      | e.g. 9:00am – 2:00pm   (leave blank if n/a)
-             location  | Venue or @handle        (leave blank if n/a)
-             note      | Extra info              (leave blank if n/a)
-        ══════════════════════════════════════════════════════════════════════ */
-
-        // ← Paste your published CSV URL here after setting up the sheet
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=478510148&single=true&output=csv';
 
         /* ── Helpers ──────────────────────────────────────────────────────── */

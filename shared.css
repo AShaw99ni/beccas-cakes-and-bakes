@@ -338,65 +338,6 @@ h6 {
 }
 
 
-/* =============================================================================
-   HOMEPAGE BANNER  (image-based hero, index.html only)
-   ============================================================================= */
-
-.banner {
-    position: relative;
-    width: 100%;
-    height: 80vh;
-    overflow: hidden;
-    top: 5%;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.369);
-}
-
-.banner-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.banner-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--navbar-bg);
-    padding: 30px 40px;
-    text-align: center;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.banner-overlay h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 4vw, 2.8rem);
-    color: var(--deep);
-    margin: 0 0 6px;
-    line-height: 1.2;
-}
-
-.banner-overlay h6 {
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    font-size: 1rem;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    border-bottom: 1px dotted var(--pink);
-    padding-bottom: 12px;
-    margin-bottom: 18px;
-}
-
-.banner-hero-divider {
-    width: 50px;
-    height: 3px;
-    background-color: var(--pink);
-    margin: 10px auto 14px;
-    border-radius: 2px;
-}
-
 
 /* =============================================================================
    TYPOGRAPHY UTILITIES
@@ -470,24 +411,6 @@ h6 {
     border-color: var(--pink);
 }
 
-/* Legacy — kept for backwards compatibility */
-.order-btn {
-    display: inline-block;
-    background-color: var(--pink);
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 25px;
-    border-radius: 50px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
-    transition: background-color 0.3s ease;
-}
-
-.order-btn:hover {
-    background-color: var(--pink-dark);
-    color: #fff;
-}
-
 .btn-hero-order {
     font-size: 0.92rem;
     padding: 0.55rem 1.6rem;
@@ -499,48 +422,6 @@ h6 {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(171, 29, 121, 0.4);
 }
-
-hr.dotted {
-    border-top: 2px dotted #000;
-}
-
-.primary-button {
-    color: var(--pink);
-}
-
-
-/* =============================================================================
-   HOMEPAGE CONTENT SECTIONS
-   ============================================================================= */
-
-.custom-section {
-    background: var(--cream);
-    padding: 60px 40px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.369);
-}
-
-.custom-section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-    color: var(--deep);
-    margin-bottom: 1rem;
-}
-
-.custom-section p {
-    font-family: 'Lato', sans-serif;
-    font-size: 1.05rem;
-    color: var(--body-text);
-    line-height: 1.85;
-    font-weight: 300;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.custom-section--lavender {
-    background-color: rgba(226, 196, 249, 0.85);
-}
-
 
 /* =============================================================================
    TIKTOK CARDS

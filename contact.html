@@ -297,6 +297,8 @@
                                 <div class="pill-option" data-val="School Cake">School Cake</div>
                                 <div class="pill-option" data-val="Rice Krispie Bars">Rice Krispie Bars</div>
                                 <div class="pill-option" data-val="Caramel Squares">Caramel Squares</div>
+                                <div class="pill-option" data-val="Cake">Cake</div>
+                                <div class="pill-option" data-val="Cupcakes">Cupcakes</div>
                             </div>
                         </div>
 
@@ -391,7 +393,7 @@
         };
 
         let currentStep = 1;
-        let servings = 12;
+        let servings = 9;
 
         /* ─────────────────────────────
            NAVIGATION
@@ -452,7 +454,7 @@
             document.getElementById('step2Title').textContent = titles[state.topic];
 
             const msgLabel = document.getElementById('messageLabel');
-            if (state.topic === 'custom' || state.topic === 'traybake') {
+            if (state.topic === 'custom') {
                 msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
             } else {
                 msgLabel.innerHTML = 'Your message <span class="req">*</span>';
@@ -593,14 +595,14 @@
                 <span class="traybake-item-name">${name}</span>
                 <div class="serving-picker">
                     <button type="button" class="serving-btn" data-action="dec">−</button>
-                    <span class="serving-val">12</span>
+                    <span class="serving-val">9</span>
                     <button type="button" class="serving-btn" data-action="inc">+</button>
                 </div>
                 <button type="button" class="traybake-remove-btn" aria-label="Remove ${name}">
                     <i class="fas fa-times"></i>
                 </button>`;
 
-            const item = { name, qty: 12 };
+            const item = { name, qty: 9 };
             state.traybakeItems.push(item);
 
             row.querySelector('[data-action="dec"]').addEventListener('click', () => {
@@ -761,7 +763,7 @@
                     state.topic !== 'custom' || !!document.getElementById(id)?.value?.trim(),
 
                 requiredIfNotCustom: (id) =>
-                    state.topic === 'custom' || state.topic === 'traybake' || !!document.getElementById(id)?.value?.trim(),
+                    state.topic === 'custom' || !!document.getElementById(id)?.value?.trim(),
 
                 requiredIfTraybake: (id) =>
                     state.topic !== 'traybake' || !!document.getElementById(id)?.value?.trim(),

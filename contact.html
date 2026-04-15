@@ -393,7 +393,6 @@
         };
 
         let currentStep = 1;
-        let servings = 9;
 
         /* ─────────────────────────────
            NAVIGATION
@@ -484,11 +483,6 @@
 
                     pill.classList.add('selected');
                     state[key] = pill.dataset.val;
-                }
-
-                // ✅ FIX: clear occasion error instantly
-                if (key === 'occasion') {
-                    document.getElementById('err-occasion')?.classList.remove('show');
                 }
 
                 if (typeof onChange === 'function') onChange();
@@ -657,19 +651,6 @@
         setupPills('cakeFlavourPills', false, 'cakeFlavour');
         setupPills('cupcakeFlavourPills', true, 'cupcakeFlavours');
 
-        /* ─────────────────────────────
-           SERVINGS (FIXED + SIMPLE)
-        ───────────────────────────── */
-        const cakeServings = document.getElementById('cakeServings');
-
-        if (cakeServings) {
-            cakeServings.addEventListener('input', () => {
-                const v = parseInt(cakeServings.value);
-                if (!isNaN(v)) servings = v;
-            });
-        }
-
-
         const validators = {
             fname: { rules: ["required"] },
             lname: { rules: ["required"] },
@@ -822,16 +803,13 @@
             return ok;
         }
 
-        function validateStep2() {
-            return runRules();
-        }
         /* ─────────────────────────────
-   NEXT / BACK (FIXED)
-──────────────────────────── */
+           NEXT / BACK
+        ───────────────────────────── */
         step2Back.onclick = () => goTo(1);
 
         step2Next.onclick = () => {
-            if (!validateStep2()) return;
+            if (!runRules()) return;
 
             buildReviewSafe();   // <- FIXED
             goTo(3);

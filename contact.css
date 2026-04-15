@@ -609,15 +609,6 @@ textarea.form-control {
     background: var(--pink);
 }
 
-.serving-input {
-    width: 80px;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 6px;
-    font-weight: 600;
-}
-
 /* ── Shop nudge (Step 1) ── */
 .shop-nudge {
     text-align: center;
@@ -634,33 +625,6 @@ textarea.form-control {
     font-size: 0.8rem;
     padding: 0.65rem 1.2rem;
     text-decoration: none;
-}
-
-.shop-nudge__text {
-    font-family: 'Lato', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 300;
-    color: var(--muted);
-    display: block;
-    margin-bottom: 10px;
-}
-
-.shop-nudge__btn {
-    font-family: 'Lato', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--pink);
-    text-decoration: none;
-    border: 2px solid var(--pink-light);
-    border-radius: 50px;
-    padding: 0.45rem 1.2rem;
-    display: inline-block;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
-}
-
-.shop-nudge__btn:hover {
-    border-color: var(--pink);
-    background: #fdf5ff;
 }
 
 /* ── Back button at top of step 2 ── */

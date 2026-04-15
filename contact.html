@@ -145,7 +145,18 @@
                     <div id="extraFields-custom" class="extra-fields">
                         <hr class="field-divider">
 
-                        <!-- Occasion + Date FIRST -->
+                        <div class="date-time-row">
+                            <div class="field-group">
+                                <label for="eventDate">Date needed <span class="req">*</span></label>
+                                <input type="date" id="eventDate" class="form-control">
+                                <div class="error-msg" id="err-date">Please select a date.</div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            ⚠️ Please Note: Orders placed on short notice may not always be possible.
+                        </div>
+
                         <div class="field-group">
                             <label>Occasion <span class="req">*</span></label>
                             <div class="pill-group" id="occasionPills">
@@ -159,18 +170,6 @@
                             <input type="text" id="occasionOther" class="form-control" placeholder="Please specify…"
                                 style="display:none; margin-top:10px;">
                             <div class="error-msg" id="err-occasion">Please select an occasion.</div>
-                        </div>
-
-                        <div class="date-time-row">
-                            <div class="field-group">
-                                <label for="eventDate">Date needed <span class="req">*</span></label>
-                                <input type="date" id="eventDate" class="form-control">
-                                <div class="error-msg" id="err-date">Please select a date.</div>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-warning">
-                            ⚠️ Please Note: Orders placed on short notice may not always be possible.
                         </div>
 
                         <!-- Cake / Cupcake selection -->
@@ -276,6 +275,15 @@
 
                     </div>
 
+                    <div class="field-group" style="margin-top:20px;">
+                        <label for="traybakeDate">Date needed <span class="req">*</span></label>
+                        <input type="date" id="traybakeDate" class="form-control">
+                        <div class="error-msg" id="err-traybakeDate">Please select a date.</div>
+                    </div>
+                    <div class="alert alert-warning">
+                        ⚠️ Please Note: Orders placed on short notice may not always be possible.
+                    </div>
+
                     <!-- Traybake extra fields (shown only for traybake topic) -->
                     <div id="extraFields-traybake" class="extra-fields">
                         <hr class="field-divider">
@@ -298,15 +306,6 @@
                                 <span></span>
                             </div>
                             <div id="traybakeOrderRows"></div>
-                        </div>
-
-                        <div class="field-group" style="margin-top:20px;">
-                            <label for="traybakeDate">Date needed <span class="req">*</span></label>
-                            <input type="date" id="traybakeDate" class="form-control">
-                            <div class="error-msg" id="err-traybakeDate">Please select a date.</div>
-                        </div>
-                        <div class="alert alert-warning">
-                            ⚠️ Please Note: Orders placed on short notice may not always be possible.
                         </div>
                     </div>
 
@@ -921,8 +920,8 @@
 
                 lines.push(
                     '',
-                    `🎉 Occasion: ${state.occasion || '—'}`,
-                    `📅 Date: ${eventDate || '—'}`
+                    `📅 Date: ${eventDate || '—'}`,
+                    `🎉 Occasion: ${state.occasion || '—'}`
                 );
 
                 if (state.bakeTypes.includes('cake')) {

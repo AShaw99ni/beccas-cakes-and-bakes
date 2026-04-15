@@ -107,12 +107,8 @@
     <script src="./components.js"></script>
 
     <script>
-        /* ── Google Sheet CSV URL ────────────────────────────────────────────
-           1. Open your Google Sheet
-           2. File → Share → Publish to web → Sheet1 → CSV → Publish
-           3. Copy the URL and paste it below
-        ─────────────────────────────────────────────────────────────────── */
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
+        const FALLBACK_IMG = 'https://drive.google.com/thumbnail?id=1sjXVLKsW-nqLmYcePWS2lGrfVi6yCMTE&sz=w1200';
 
         /* ── CSV parser (handles quoted fields containing commas) ─────────── */
         function parseCSV(text) {
@@ -190,12 +186,17 @@
             });
         }
 
+        /* ── Allergen pills HTML ──────────────────────────────────────────── */
+        function buildAllergenPillsHtml(product) {
+            const contains = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
+            const may = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
+            return `<span class="pill pill-free">Gluten free</span><span class="pill pill-free">Dairy free</span>${contains}${may}`;
+        }
+
         /* ── Build card HTML ──────────────────────────────────────────────── */
         function buildCard(product) {
-            const containsPills = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
-            const mayPills = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
             const catLabel = product.category || '—';
-            const imgSrc = product.image || 'https://drive.google.com/thumbnail?id=1sjXVLKsW-nqLmYcePWS2lGrfVi6yCMTE&sz=w1200';
+            const imgSrc = product.image || FALLBACK_IMG;
             const isPlaceholder = !product.image;
             const dataProduct = JSON.stringify(product).replace(/'/g, '&#39;');
 
@@ -213,12 +214,7 @@
                             </div>
                             <i class="fas fa-chevron-right expand-icon"></i>
                         </div>
-                        <div class="allergen-pills">
-                            <span class="pill pill-free">Gluten free</span>
-                            <span class="pill pill-free">Dairy free</span>
-                            ${containsPills}
-                            ${mayPills}
-                        </div>
+                        <div class="allergen-pills">${buildAllergenPillsHtml(product)}</div>
                     </div>
                 </div>`;
         }
@@ -241,21 +237,17 @@
 
         /* ── Modal open/close ─────────────────────────────────────────────── */
         function openProductModal(product) {
-            const containsPills = product.allergens.map(a => `<span class="pill pill-contains">Contains ${a}</span>`).join('');
-            const mayPills = product.mayContain.map(a => `<span class="pill pill-may">May contain ${a}</span>`).join('');
             const catLabel = product.category || '—';
-            const imgSrc = product.image || 'https://drive.google.com/thumbnail?id=1sjXVLKsW-nqLmYcePWS2lGrfVi6yCMTE&sz=w1200';
+            const imgSrc = product.image || FALLBACK_IMG;
             const isPlaceholder = !product.image;
 
-            document.getElementById('product-modal-img').src = imgSrc;
-            document.getElementById('product-modal-img').alt = product.name;
+            const imgEl = document.getElementById('product-modal-img');
+            imgEl.src = imgSrc;
+            imgEl.alt = product.name;
             document.getElementById('product-modal-img-wrap').className = 'product-modal-img-wrap' + (isPlaceholder ? ' is-placeholder' : '');
             document.getElementById('product-modal-category').textContent = catLabel;
             document.getElementById('product-modal-name').textContent = product.name;
-            document.getElementById('product-modal-pills').innerHTML =
-                '<span class="pill pill-free">Gluten free</span>' +
-                '<span class="pill pill-free">Dairy free</span>' +
-                containsPills + mayPills;
+            document.getElementById('product-modal-pills').innerHTML = buildAllergenPillsHtml(product);
             document.getElementById('product-modal-ingredients').innerHTML = highlightAllergens(product.ingredients, product.allergens);
 
             var shopWrap = document.getElementById('product-modal-shop-wrap');

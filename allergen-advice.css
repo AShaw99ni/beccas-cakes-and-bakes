@@ -190,10 +190,6 @@
     margin-top: 4px;
 }
 
-.product-card.expanded .expand-icon {
-    transform: rotate(180deg);
-}
-
 
 /* ── Allergen pills ── */
 .allergen-pills {
@@ -230,11 +226,6 @@
     border: 1px solid #f0dfa0;
 }
 
-
-/* ── Expanded ingredient detail (hidden — now shown in modal) ── */
-.product-detail {
-    display: none;
-}
 
 .detail-label {
     font-size: 0.72rem;

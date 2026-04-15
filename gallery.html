@@ -81,11 +81,6 @@
     <script src="./components.js"></script>
 
     <script>
-        /* ── Google Sheet CSV URL ────────────────────────────────────────────
-           1. Open your Google Sheet
-           2. File → Share → Publish to web → Sheet1 → CSV → Publish
-           3. Copy the URL and paste it below
-        ─────────────────────────────────────────────────────────────────── */
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=28611426&single=true&output=csv';
 
         /* ── CSV parser ───────────────────────────────────────────────────── */
@@ -178,12 +173,12 @@
             const hasImg = photo.src && photo.src !== '';
             const imgEl = hasImg
                 ? `<img src="${photo.src}" alt="${photo.alt}" loading="lazy">`
-                : `<div class="img-placeholder gallery-placeholder" style="min-height:${photo.ph || 260}px;">
+                : `<div class="img-placeholder gallery-placeholder" style="min-height:260px;">
                        <i class="fas fa-camera"></i><span>Add photo here</span>
                    </div>`;
 
             return `
-                <div class="g-item${photo.tall ? ' tall' : ''}"
+                <div class="g-item"
                      data-cat="${photo.cat}" data-index="${index}"
                      role="button" tabindex="0" aria-label="View ${photo.title}">
                     ${imgEl}
@@ -316,7 +311,7 @@
 
         /* ── Spinner / error ──────────────────────────────────────────────── */
         function showSpinner() {
-            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted);column-span:all"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading gallery…</p></div>';
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted)"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem">Loading gallery…</p></div>';
         }
 
         function showError() {
@@ -340,8 +335,6 @@
                     }
                     return parseDate(b.date) - parseDate(a.date);
                 });
-
-                console.log(photos)
 
                 buildCatLabels();
                 buildFilterBar();

@@ -136,11 +136,6 @@
     opacity: 0.45;
 }
 
-/* Taller placeholder for portrait photos */
-.g-item.tall .gallery-placeholder {
-    min-height: 480px;
-}
-
 
 /* ── Hover overlay ── */
 .g-overlay {

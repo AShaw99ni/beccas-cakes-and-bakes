@@ -175,7 +175,8 @@
 
 @media (max-width: 767.98px) {
 
-    .becca-img-wrap::before { display: none; }
+    .becca-img-wrap::before,
+    .origin-img-wrap::before { display: none; }
 }
 
 

@@ -536,6 +536,7 @@
                 var categories = [];
                 var categoryMap = {};
                 allRows.forEach(function (row) {
+                    if ((row.hidden_from_shop || '').trim().toLowerCase() === 'true') return;
                     var cat = (row.category || '').trim() || 'Other';
                     if (!categoryMap[cat]) {
                         categoryMap[cat] = [];

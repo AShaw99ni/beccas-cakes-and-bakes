@@ -88,6 +88,7 @@
             <button id="product-modal-close" aria-label="Close">&times;</button>
             <div class="product-modal-img-wrap" id="product-modal-img-wrap">
                 <img id="product-modal-img" src="" alt="">
+                <div class="shop-img-placeholder" id="product-modal-img-placeholder" style="display:none"><i class="fas fa-camera"></i><span>Photo coming soon</span></div>
             </div>
             <div class="product-modal-body">
                 <div class="product-category" id="product-modal-category"></div>
@@ -111,7 +112,6 @@
 
     <script>
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
-        const FALLBACK_IMG = 'https://drive.google.com/thumbnail?id=1sjXVLKsW-nqLmYcePWS2lGrfVi6yCMTE&sz=w1200';
 
         /* ── CSV parser (handles quoted fields containing commas) ─────────── */
         function parseCSV(text) {
@@ -199,15 +199,16 @@
         /* ── Build card HTML ──────────────────────────────────────────────── */
         function buildCard(product) {
             const catLabel = product.category || '—';
-            const imgSrc = product.image || FALLBACK_IMG;
+            const imgSrc = product.image;
             const isPlaceholder = !product.image;
             const dataProduct = JSON.stringify(product).replace(/'/g, '&#39;');
 
             return `
                 <div class="product-card" data-category="${product.category}" data-name="${product.name.toLowerCase()}" data-product='${dataProduct}'>
                     <div class="product-card-img-wrap${isPlaceholder ? ' is-placeholder' : ''}">
-                        <img src="${imgSrc}" alt="${product.name}" loading="lazy">
-                        ${isPlaceholder ? '<span class="placeholder-badge">Photo coming soon</span>' : ''}
+                        ${isPlaceholder
+                            ? '<div class="shop-img-placeholder"><i class="fas fa-camera"></i><span>Photo coming soon</span></div>'
+                            : `<img src="${imgSrc}" alt="${product.name}" loading="lazy">`}
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-header">
@@ -241,12 +242,21 @@
         /* ── Modal open/close ─────────────────────────────────────────────── */
         function openProductModal(product) {
             const catLabel = product.category || '—';
-            const imgSrc = product.image || FALLBACK_IMG;
             const isPlaceholder = !product.image;
 
             const imgEl = document.getElementById('product-modal-img');
-            imgEl.src = imgSrc;
-            imgEl.alt = product.name;
+            const placeholderEl = document.getElementById('product-modal-img-placeholder');
+            if (isPlaceholder) {
+                imgEl.removeAttribute('src');
+                imgEl.alt = '';
+                imgEl.style.display = 'none';
+                placeholderEl.style.display = '';
+            } else {
+                imgEl.src = product.image;
+                imgEl.alt = product.name;
+                imgEl.style.display = '';
+                placeholderEl.style.display = 'none';
+            }
             document.getElementById('product-modal-img-wrap').className = 'product-modal-img-wrap' + (isPlaceholder ? ' is-placeholder' : '');
             document.getElementById('product-modal-category').textContent = catLabel;
             document.getElementById('product-modal-name').textContent = product.name;

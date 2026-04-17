@@ -147,6 +147,8 @@ exports.handler = async function (event) {
 
     // Resolve each cart item against server price and check capacity
     const resolvedItems = [];
+    const adjustments = {}; // products where requested qty exceeds remaining
+
     for (const item of items) {
         const serverPrice = priceMap[item.name];
         if (serverPrice === undefined) {
@@ -156,12 +158,27 @@ exports.handler = async function (event) {
         const maxQty = maxQtyMap[item.name];
         if (maxQty !== null && maxQty !== undefined) {
             const currentSold = soldCounts[item.name] || 0;
-            if (currentSold + item.quantity > maxQty) {
-                return { statusCode: 400, body: JSON.stringify({ error: `Sorry, "${item.name}" has sold out.` }) };
+            const remaining = maxQty - currentSold;
+            if (remaining <= 0) {
+                return { statusCode: 400, body: JSON.stringify({ error: `Sorry, "${item.name}" is no longer available.` }) };
+            }
+            if (item.quantity > remaining) {
+                adjustments[item.name] = remaining;
             }
         }
 
         resolvedItems.push({ name: item.name, quantity: item.quantity, price: serverPrice });
+    }
+
+    // If any items need quantity adjustments, tell the client so it can update the cart
+    if (Object.keys(adjustments).length > 0) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                error: 'Some items in your basket weren\'t fully available. Your order has been adjusted — please review and try again.',
+                adjustTo: adjustments,
+            }),
+        };
     }
 
     // ── Create Stripe session ─────────────────────────────────────────────────

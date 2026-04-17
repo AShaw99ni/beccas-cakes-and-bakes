@@ -518,12 +518,21 @@ function highlightAllergens(ingredients, allergens) {
             if (window.shopUpdateQtyDisplay) window.shopUpdateQtyDisplay(product.name);
         }
 
+        function setQty(name, qty) {
+            if (!cart[name]) return;
+            if (qty <= 0) { delete cart[name]; }
+            else { cart[name].qty = qty; }
+            persist();
+            updateCartUI();
+            if (window.shopUpdateQtyDisplay) window.shopUpdateQtyDisplay(name);
+        }
+
         function clearCart() { cart = {}; persist(); updateCartUI(); }
         function getCart() { return cart; }
         function getCartTotal() { return cartTotal(); }
         function getCartCount() { return cartCount(); }
 
-        return { addToCart, removeFromCart, clearCart, getCart, getCartTotal, getCartCount, updateCartUI };
+        return { addToCart, removeFromCart, setQty, clearCart, getCart, getCartTotal, getCartCount, updateCartUI };
     })();
 
     window.addToCart = window.BeccaCart.addToCart;
@@ -895,6 +904,42 @@ function highlightAllergens(ingredients, allergens) {
                 })
                 .then(function (result) {
                     if (!result.ok) {
+                        // If the server sent quantity adjustments, apply them to the cart
+                        // and re-render the summary before showing the error
+                        if (result.data.adjustTo) {
+                            var adjustTo = result.data.adjustTo;
+                            // Build a specific message listing each adjusted product
+                            var adjustLines = Object.keys(adjustTo).map(function (name) {
+                                var remaining = adjustTo[name];
+                                return 'Only ' + remaining + ' of \u201c' + name + '\u201d ' +
+                                    (remaining === 1 ? 'is' : 'are') + ' available \u2014 your quantity has been updated.';
+                            });
+                            var adjustMsg = adjustLines.join(' ') + ' Review your order below and try again.';
+
+                            Object.keys(adjustTo).forEach(function (name) {
+                                window.BeccaCart.setQty(name, adjustTo[name]);
+                            });
+                            var summary = document.getElementById('checkout-summary');
+                            var totalEl = document.getElementById('checkout-total-amount');
+                            var updatedCart = window.BeccaCart.getCart();
+                            summary.innerHTML = Object.values(updatedCart).map(function (item) {
+                                var unitPrice = _priceMapCache && _priceMapCache.hasOwnProperty(item.product.name)
+                                    ? _priceMapCache[item.product.name]
+                                    : parseFloat(item.product.price) || 0;
+                                return '<div class="checkout-summary-row">' +
+                                    '<span>' + item.product.name + ' \u00d7 ' + item.qty + '</span>' +
+                                    '<span>\u00a3' + (unitPrice * item.qty).toFixed(2) + '</span>' +
+                                    '</div>';
+                            }).join('');
+                            var newTotal = Object.values(updatedCart).reduce(function (sum, item) {
+                                var unitPrice = _priceMapCache && _priceMapCache.hasOwnProperty(item.product.name)
+                                    ? _priceMapCache[item.product.name]
+                                    : parseFloat(item.product.price) || 0;
+                                return sum + unitPrice * item.qty;
+                            }, 0);
+                            if (totalEl) totalEl.textContent = '\u00a3' + newTotal.toFixed(2);
+                            throw new Error(adjustMsg);
+                        }
                         throw new Error(result.data.error || 'Something went wrong. Please try again.');
                     }
                     if (result.data.url) { window.location.href = result.data.url; }

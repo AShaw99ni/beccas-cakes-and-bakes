@@ -591,7 +591,11 @@ function highlightAllergens(ingredients, allergens) {
                 d.setDate(next.getDate() + (i * 7));
                 i++;
                 var value = d.toISOString().split('T')[0];
-                if (marketDates.has(value)) continue; // skip market Saturdays
+                // Also check the Sunday of the same weekend
+                var sunday = new Date(d);
+                sunday.setDate(d.getDate() + 1);
+                var sundayValue = sunday.toISOString().split('T')[0];
+                if (marketDates.has(value) || marketDates.has(sundayValue)) continue; // skip market weekends
                 var label = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
                 var opt = document.createElement('option');
                 opt.value = value;

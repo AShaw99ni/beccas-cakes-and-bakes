@@ -103,6 +103,7 @@
                         <button type="button" class="qty-btn qty-btn--plus" id="shop-product-modal-qty-plus"
                             aria-label="Add one">+</button>
                     </div>
+                    <p class="shop-modal-unavailable-msg" id="shop-modal-unavailable-msg" style="display:none;"></p>
                 </div>
             </div>
         </div>
@@ -206,6 +207,25 @@
                     }
                 }
             });
+
+            // If the product modal is open, re-apply availability state to it too
+            if (shopModalProduct) {
+                var addBtn = document.getElementById('shop-modal-add-btn');
+                var stepper = document.getElementById('shop-modal-stepper');
+                var unavailableMsg = document.getElementById('shop-modal-unavailable-msg');
+                var productStatus = status.products && status.products[shopModalProduct.name];
+                var soldOut = productStatus && productStatus.remaining === 0;
+                if (!status.windowOpen || soldOut) {
+                    if (addBtn) addBtn.style.display = 'none';
+                    if (stepper) stepper.style.display = 'none';
+                    if (unavailableMsg) {
+                        unavailableMsg.textContent = soldOut
+                            ? 'This item is currently unavailable.'
+                            : 'Orders are currently closed.';
+                        unavailableMsg.style.display = '';
+                    }
+                }
+            }
         }
 
         function fetchShopStatus() {
@@ -431,9 +451,27 @@
             if (modalQtyEl) modalQtyEl.textContent = qty;
             var addBtn = document.getElementById('shop-modal-add-btn');
             var stepper = document.getElementById('shop-modal-stepper');
-            if (addBtn && stepper) {
-                addBtn.style.display = qty > 0 ? 'none' : '';
-                stepper.style.display = qty > 0 ? 'flex' : 'none';
+            var unavailableMsg = document.getElementById('shop-modal-unavailable-msg');
+
+            var windowClosed = shopStatus && !shopStatus.windowOpen;
+            var productStatus = shopStatus && shopStatus.products && shopStatus.products[product.name];
+            var soldOut = productStatus && productStatus.remaining === 0;
+
+            if (windowClosed || soldOut) {
+                if (addBtn) addBtn.style.display = 'none';
+                if (stepper) stepper.style.display = 'none';
+                if (unavailableMsg) {
+                    unavailableMsg.textContent = soldOut
+                        ? 'This item is currently unavailable.'
+                        : 'Orders are currently closed.';
+                    unavailableMsg.style.display = '';
+                }
+            } else {
+                if (unavailableMsg) unavailableMsg.style.display = 'none';
+                if (addBtn && stepper) {
+                    addBtn.style.display = qty > 0 ? 'none' : '';
+                    stepper.style.display = qty > 0 ? 'flex' : 'none';
+                }
             }
 
             if (imgSrc) {

@@ -682,6 +682,48 @@
     transition: border-color 0.2s, color 0.2s;
 }
 
+/* ── Modal unavailable message ───────────────────────────────────────────── */
+.shop-modal-unavailable-msg {
+    margin: 0;
+    padding: 10px 16px;
+    background: var(--cream);
+    border: 1.5px solid var(--pink-light);
+    border-radius: 8px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    color: var(--muted);
+    text-align: center;
+    width: 100%;
+}
+
+/* ── Product availability badges ─────────────────────────────────────────── */
+.shop-stock-badge,
+.shop-sold-out-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 50px;
+    padding: 4px 12px;
+    pointer-events: none;
+}
+
+.shop-stock-badge {
+    background: var(--pink);
+    color: #fff;
+}
+
+.shop-sold-out-badge {
+    background: rgba(42, 26, 46, 0.82);
+    color: #fff;
+}
+
 .shop-category-banner__clear:hover {
     border-color: var(--pink);
     color: var(--pink);

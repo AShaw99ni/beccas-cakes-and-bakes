@@ -4,6 +4,19 @@
    Shared styles (navbar, footer, typography, buttons) live in shared.css.
    ============================================================================= */
 
+/* ── First bakery banner ─────────────────────────────────────────────────── */
+.first-bakery-banner {
+    background: var(--pink);
+    color: #fff;
+    text-align: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    padding: 32px 24px;
+}
+
 
 /* =============================================================================
    SCROLL REVEAL — sections fade up on scroll

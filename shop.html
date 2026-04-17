@@ -36,12 +36,7 @@
     <!-- ── Intro: notice + loading states ── -->
     <section class="shop-section shop-section--intro">
         <div class="container">
-            <div class="notice-banner">
-                <p><i class="fas fa-clock"></i>
-                    Fresh to order. Orders next open <strong>Saturday 18th April 12pm</strong>. Collection
-                    is <strong>Saturday 25th April 9:30am–12:30pm</strong>.
-                </p>
-            </div>
+            <div class="notice-banner" style="display:none;"></div>
             <div id="shop-deep-link-notice" class="shop-deep-link-notice" style="display:none;" role="status"></div>
 
             <!-- Spinner -->
@@ -224,8 +219,7 @@
                 .catch(function () { return null; });
         }
 
-        // Fetch status immediately, then poll every 60 seconds
-        fetchShopStatus();
+        // Poll every 60 seconds after initial load (initial fetch is part of Promise.all below)
         setInterval(fetchShopStatus, 60000);
 
         /* ── CSV parser ── */
@@ -630,10 +624,19 @@
             return section;
         }
 
-        /* ── Fetch products and render ── */
-        fetch(SHEET_CSV_URL)
-            .then(function (res) { if (!res.ok) throw new Error(); return res.text(); })
-            .then(function (text) {
+        /* ── Fetch products + status in parallel, render only when both are ready ── */
+        var csvPromise = fetch(SHEET_CSV_URL)
+            .then(function (res) { if (!res.ok) throw new Error(); return res.text(); });
+
+        var statusPromise = fetch('/.netlify/functions/get-shop-status')
+            .then(function (res) { return res.ok ? res.json() : null; })
+            .catch(function () { return null; });
+
+        Promise.all([csvPromise, statusPromise])
+            .then(function (results) {
+                var text = results[0];
+                var status = results[1];
+
                 var allRows = parseCSV(text);
                 document.getElementById('shopSpinner').style.display = 'none';
                 if (!allRows.length) {
@@ -661,8 +664,8 @@
                     sectionsContainer.appendChild(section);
                 });
 
-                // Apply shop status to newly rendered cards (status may already be loaded)
-                if (shopStatus) applyShopStatus(shopStatus);
+                // Apply status now that cards exist — guaranteed to have both pieces of data
+                if (status) applyShopStatus(status);
 
                 // Only available products are candidates for deep-link / filter actions
                 var availableRows = allRows.filter(isAvailable);

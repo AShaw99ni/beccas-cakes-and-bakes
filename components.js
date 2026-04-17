@@ -286,10 +286,10 @@ function highlightAllergens(ingredients, allergens) {
             '<div class="checkout-error" id="err-co-email">Please enter a valid email.</div>' +
             '</div>' +
             '<div class="checkout-section-label mt-4">Collection date</div>' +
-            '<p class="checkout-hint">Collection is every <strong>Tuesday 12pm\u20136pm</strong>. Pick your Tuesday below \u2014 please allow at least 5\u20137 days.</p>' +
+            '<p class="checkout-hint">Collection is <strong>Saturday 9:30am\u201312:30pm</strong> on non-market weeks. Pick your Saturday below.</p>' +
             '<div class="checkout-field">' +
             '<label for="co-date">Collection date <span class="req">*</span></label>' +
-            '<select id="co-date" class="form-select"><option value="">Select a Tuesday\u2026</option></select>' +
+            '<select id="co-date" class="form-select"><option value="">Select a Saturday\u2026</option></select>' +
             '<div class="checkout-error" id="err-co-date">Please select a collection date.</div>' +
             '</div>' +
             '<div class="checkout-section-label mt-4">Order summary</div>' +
@@ -547,27 +547,59 @@ function highlightAllergens(ingredients, allergens) {
     window.openCart = openCart;
     window.closeCart = closeCart;
 
-    /* ── Tuesday date picker ──────────────────────────────────────────────── */
+    /* ── Saturday date picker (skips market-stall Saturdays) ─────────────── */
+    function fetchMarketDates() {
+        var url = SITE_CONFIG.EVENTS_CSV_URL;
+        if (!url) return Promise.resolve(new Set());
+        return fetch(url)
+            .then(function (res) { return res.ok ? res.text() : ''; })
+            .then(function (text) {
+                var stallDates = new Set();
+                if (!text) return stallDates;
+                var lines = text.trim().split('\n');
+                if (lines.length < 2) return stallDates;
+                var headers = lines[0].split(',').map(function (h) { return h.trim().toLowerCase().replace(/^"|"$/g, ''); });
+                var dateIdx = headers.indexOf('date');
+                var typeIdx = headers.indexOf('type');
+                if (dateIdx < 0 || typeIdx < 0) return stallDates;
+                lines.slice(1).forEach(function (line) {
+                    var cols = line.split(',').map(function (c) { return c.trim().replace(/^"|"$/g, ''); });
+                    if ((cols[typeIdx] || '').toLowerCase() === 'stall') {
+                        stallDates.add(cols[dateIdx]);
+                    }
+                });
+                return stallDates;
+            })
+            .catch(function () { return new Set(); });
+    }
+
     function populateTuesdayDates() {
         var select = document.getElementById('co-date');
         if (!select) return;
-        var today = new Date();
-        var cutoff = new Date(today);
-        cutoff.setDate(cutoff.getDate() + 7);
-        var day = cutoff.getDay();
-        var daysUntilTuesday = (2 - day + 7) % 7 || 7;
-        var next = new Date(cutoff);
-        next.setDate(cutoff.getDate() + (daysUntilTuesday === 0 ? 7 : daysUntilTuesday));
-        for (var i = 0; i < 8; i++) {
-            var d = new Date(next);
-            d.setDate(next.getDate() + (i * 7));
-            var label = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-            var value = d.toISOString().split('T')[0];
-            var opt = document.createElement('option');
-            opt.value = value;
-            opt.textContent = label + ' \u00b7 12pm\u20136pm';
-            select.appendChild(opt);
-        }
+        fetchMarketDates().then(function (marketDates) {
+            var today = new Date();
+            var cutoff = new Date(today);
+            cutoff.setDate(cutoff.getDate() + 7);
+            var day = cutoff.getDay();
+            var daysUntilSaturday = (6 - day + 7) % 7 || 7;
+            var next = new Date(cutoff);
+            next.setDate(cutoff.getDate() + daysUntilSaturday);
+            var added = 0;
+            var i = 0;
+            while (added < 8) {
+                var d = new Date(next);
+                d.setDate(next.getDate() + (i * 7));
+                i++;
+                var value = d.toISOString().split('T')[0];
+                if (marketDates.has(value)) continue; // skip market Saturdays
+                var label = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                var opt = document.createElement('option');
+                opt.value = value;
+                opt.textContent = label + ' \u00b7 9:30am\u201312:30pm';
+                select.appendChild(opt);
+                added++;
+            }
+        });
     }
 
     /* ── Authoritative price fetch ────────────────────────────────────────── */

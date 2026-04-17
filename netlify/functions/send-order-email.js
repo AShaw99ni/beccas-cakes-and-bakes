@@ -243,7 +243,7 @@ exports.handler = async function (event) {
         ${section('Customer details',
         row('Name', customerName) +
         row('Email', `<a href="mailto:${customerEmail}" style="color:${pink};text-decoration:none;">${customerEmail}</a>`) +
-        row('Collection', collectionDate + ', 12pm–6pm')
+        row('Collection', collectionDate + ', 9:30am–12:30pm')
     )}
         <div style="margin:24px 0 0;">
             <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;
@@ -291,7 +291,7 @@ exports.handler = async function (event) {
                 ${collectionDate}
             </div>
             <div style="font-family:Arial,sans-serif;font-size:14px;color:${muted};margin-top:4px;">
-                12pm – 6pm &middot; Belfast BT5
+                9:30am – 12:30pm &middot; Belfast BT5
             </div>
         </div>
         <div style="margin:0 0 0;">
@@ -339,7 +339,7 @@ exports.handler = async function (event) {
                 'Thank you for your order! Here\'s a summary:', '',
                 orderLines, '',
                 'Total: ' + amountPaid,
-                'Collection: ' + collectionDate + ', 12pm–6pm', '',
+                'Collection: ' + collectionDate + ', 9:30am–12:30pm', '',
                 'If you have any questions just reply to this email.', '',
                 'Becca x',
             ].join('\n'),

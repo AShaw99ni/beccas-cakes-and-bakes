@@ -22,7 +22,7 @@ function parseCSVRow(line) {
 
 /* ── Timezone helper ──────────────────────────────────────────────────────── */
 function parseUkLocal(isoLocal) {
-    const m = isoLocal.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
+    const m = isoLocal.replace(' ', 'T').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
     if (!m) throw new Error('Invalid datetime format: ' + isoLocal);
     const [, yr, mo, dy, hr, mn, sc] = m.map(Number);
     const approxUtc = new Date(Date.UTC(yr, mo - 1, dy, hr, mn, sc));

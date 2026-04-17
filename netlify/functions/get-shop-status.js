@@ -35,7 +35,7 @@ function parseCSV(text) {
 // Parses "2026-04-19T12:00:00" as Europe/London local time and returns a UTC Date.
 // Works correctly for both GMT (winter) and BST (summer, UTC+1).
 function parseUkLocal(isoLocal) {
-    const m = isoLocal.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
+    const m = isoLocal.replace(' ', 'T').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
     if (!m) throw new Error('Invalid datetime format: ' + isoLocal);
     const [, yr, mo, dy, hr, mn, sc] = m.map(Number);
 

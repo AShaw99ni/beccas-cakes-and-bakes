@@ -151,6 +151,17 @@
             var banner = document.getElementById('shop-window-banner');
             var container = document.getElementById('shop-sections-container');
 
+            // ── Update / hide static notice banner ──
+            var noticeBanner = document.querySelector('.notice-banner');
+            if (noticeBanner) {
+                if (!status.windowOpen) {
+                    noticeBanner.style.display = 'none';
+                } else {
+                    noticeBanner.style.display = '';
+                    noticeBanner.innerHTML = '<p><i class="fas fa-clock"></i> Fresh to order. Orders close <strong>' + formatUkLocal(status.closingAt) + '</strong>.</p>';
+                }
+            }
+
             // ── Window closed banner ──
             if (!status.windowOpen) {
                 var reopenStr = formatUkLocal(status.openFrom);

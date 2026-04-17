@@ -1,0 +1,11 @@
+# Local environment — contains secrets, NEVER commit this
+.env
+
+# Node
+node_modules/
+
+# macOS
+.DS_Store
+
+# Netlify build output
+.netlify/

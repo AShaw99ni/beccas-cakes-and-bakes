@@ -58,6 +58,9 @@
         </div>
     </section>
 
+    <!-- ── Order window banner (shown when shop is closed) ── -->
+    <div id="shop-window-banner" style="display:none;" role="status" aria-live="polite"></div>
+
     <!-- ── Category sections injected by JS ── -->
     <div id="shop-sections-container"></div>
 
@@ -113,11 +116,106 @@
 
     <!-- ── Scripts ── -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./site-config.js"></script>
     <script src="./components.js"></script>
 
     <script>
         /* ── CONFIG ── */
-        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
+        const SHEET_CSV_URL = SITE_CONFIG.PRODUCTS_CSV_URL;
+
+        /* ── Shop status (order window + sold counts) ── */
+        var shopStatus = null;
+
+        // Format "2026-04-19T12:00:00" (UK local) into "Sunday 19 April at 12pm"
+        function formatUkLocal(isoLocal) {
+            var parts = isoLocal.split('T');
+            var dateParts = parts[0].split('-').map(Number);
+            var timeParts = (parts[1] || '00:00:00').split(':').map(Number);
+            // Treat as UTC for display — the numbers are already in UK local time
+            var d = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1]));
+            return new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'UTC',
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                hour: 'numeric',
+                minute: timeParts[1] !== 0 ? '2-digit' : undefined,
+                hour12: true,
+            }).format(d);
+        }
+
+        function applyShopStatus(status) {
+            if (!status) return;
+            shopStatus = status;
+
+            var banner = document.getElementById('shop-window-banner');
+            var container = document.getElementById('shop-sections-container');
+
+            // ── Window closed banner ──
+            if (!status.windowOpen) {
+                var reopenStr = formatUkLocal(status.openFrom);
+                banner.innerHTML =
+                    '<div class="shop-window-banner__inner container">' +
+                    '<i class="fas fa-clock"></i>' +
+                    '<div>' +
+                    '<strong>Orders are now closed.</strong> ' +
+                    'We\u2019ve reached our maximum capacity for this window. ' +
+                    'Orders reopen <strong>' + reopenStr + '</strong>.' +
+                    '</div>' +
+                    '</div>';
+                banner.style.display = 'block';
+                if (container) container.classList.add('shop-window-closed');
+            } else {
+                banner.style.display = 'none';
+                if (container) container.classList.remove('shop-window-closed');
+            }
+
+            // ── Per-product sold-out / low-stock states ──
+            document.querySelectorAll('.shop-product-card[data-product-name]').forEach(function (card) {
+                var name = card.dataset.productName;
+                var ps = status.products[name];
+
+                // Clear previous dynamic badges and states
+                card.classList.remove('shop-product-card--sold-out');
+                var existing = card.querySelector('.shop-stock-badge, .shop-sold-out-badge');
+                if (existing) existing.remove();
+
+                if (!ps || ps.remaining === null) return; // unlimited
+
+                var imgWrap = card.querySelector('.shop-product-card__img-wrap');
+
+                if (ps.remaining === 0) {
+                    card.classList.add('shop-product-card--sold-out');
+                    if (imgWrap) {
+                        var badge = document.createElement('div');
+                        badge.className = 'shop-product-card__unavailable-badge shop-sold-out-badge';
+                        badge.textContent = 'Sold out';
+                        imgWrap.appendChild(badge);
+                    }
+                } else if (ps.remaining <= 3) {
+                    if (imgWrap) {
+                        var stockBadge = document.createElement('div');
+                        stockBadge.className = 'shop-stock-badge';
+                        stockBadge.textContent = 'Only ' + ps.remaining + ' left!';
+                        imgWrap.appendChild(stockBadge);
+                    }
+                }
+            });
+        }
+
+        function fetchShopStatus() {
+            return fetch('/.netlify/functions/get-shop-status')
+                .then(function (res) { return res.ok ? res.json() : null; })
+                .then(function (status) {
+                    if (status) applyShopStatus(status);
+                    return status;
+                })
+                .catch(function () { return null; });
+        }
+
+        // Fetch status immediately, then poll every 60 seconds
+        fetchShopStatus();
+        setInterval(fetchShopStatus, 60000);
 
         /* ── CSV parser ── */
         function parseCSV(text) {
@@ -551,6 +649,9 @@
                     var section = createCategorySection(cat, categoryMap[cat], i);
                     sectionsContainer.appendChild(section);
                 });
+
+                // Apply shop status to newly rendered cards (status may already be loaded)
+                if (shopStatus) applyShopStatus(shopStatus);
 
                 // Only available products are candidates for deep-link / filter actions
                 var availableRows = allRows.filter(isAvailable);

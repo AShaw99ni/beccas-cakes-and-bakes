@@ -7,6 +7,88 @@
 
 
 
+/* ── Order window closed banner ──────────────────────────────────────────── */
+#shop-window-banner {
+    background: linear-gradient(135deg, var(--pink) 0%, #7c1457 100%);
+    color: #fff;
+    padding: 0;
+    margin: 0;
+}
+
+.shop-window-banner__inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 24px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
+.shop-window-banner__inner i {
+    font-size: 1.2rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+/* ── Window closed — grey out all cards ──────────────────────────────────── */
+.shop-window-closed .shop-product-card {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+    filter: grayscale(40%);
+}
+
+/* ── Sold-out card ───────────────────────────────────────────────────────── */
+.shop-product-card--sold-out {
+    opacity: 0.55;
+    pointer-events: none;
+    cursor: default;
+    filter: grayscale(60%);
+}
+
+.shop-product-card--sold-out:hover {
+    transform: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border-color: transparent;
+}
+
+.shop-sold-out-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* ── Low stock badge ─────────────────────────────────────────────────────── */
+.shop-stock-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #d97706;
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
 /* Deep link (?product=) — product not available */
 .shop-deep-link-notice {
     max-width: 700px;

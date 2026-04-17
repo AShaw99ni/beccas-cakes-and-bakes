@@ -1,5 +1,48 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
+const { getStore } = require('@netlify/blobs');
+
+const PRODUCTS_CSV_URL = process.env.PRODUCTS_CSV_URL;
+
+function parseCSVRow(line) {
+    const result = [];
+    let cur = '', inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+            if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+            else inQuotes = !inQuotes;
+        } else if (ch === ',' && !inQuotes) {
+            result.push(cur); cur = '';
+        } else { cur += ch; }
+    }
+    result.push(cur);
+    return result;
+}
+
+async function fetchMaxQtyMap() {
+    try {
+        const res = await fetch(PRODUCTS_CSV_URL);
+        if (!res.ok) return {};
+        const text = await res.text();
+        const lines = text.trim().split('\n');
+        if (lines.length < 2) return {};
+        const headers = parseCSVRow(lines[0]).map(h => h.trim());
+        const nameIdx = headers.indexOf('name');
+        const maxQtyIdx = headers.indexOf('max_qty');
+        if (nameIdx === -1 || maxQtyIdx === -1) return {};
+        const map = {};
+        for (let i = 1; i < lines.length; i++) {
+            const vals = parseCSVRow(lines[i]);
+            const name = (vals[nameIdx] || '').trim();
+            const raw = (vals[maxQtyIdx] || '').trim();
+            if (name) map[name] = raw === '' ? null : parseInt(raw, 10);
+        }
+        return map;
+    } catch {
+        return {};
+    }
+}
 
 exports.handler = async function (event) {
     const sig = event.headers['stripe-signature'];
@@ -302,10 +345,68 @@ exports.handler = async function (event) {
             ].join('\n'),
             html: emailWrapper(`Order confirmed — ${amountPaid}`, customerBody),
         });
-
-        return { statusCode: 200, body: 'OK' };
     } catch (err) {
         console.error('Mail error:', err);
         return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
     }
+
+    // ── Update sold counts in Blobs ───────────────────────────────────────────
+    try {
+        const store = getStore('shop');
+        const maxQtyMap = await fetchMaxQtyMap();
+
+        const raw = await store.get('sold_counts');
+        const soldCounts = raw ? JSON.parse(raw) : {};
+
+        const overCapacityItems = [];
+
+        for (const item of lineItems.data) {
+            const productName = item.description;
+            const qty = item.quantity;
+            const maxQty = maxQtyMap[productName];
+            const currentSold = soldCounts[productName] || 0;
+
+            if (maxQty !== null && maxQty !== undefined && currentSold + qty > maxQty) {
+                // Over-capacity — do not increment, flag for Becca
+                console.warn(`Over-capacity: "${productName}" (sold ${currentSold}, ordered ${qty}, max ${maxQty})`);
+                overCapacityItems.push({ productName, qty, currentSold, maxQty });
+            } else {
+                soldCounts[productName] = currentSold + qty;
+            }
+        }
+
+        await store.set('sold_counts', JSON.stringify(soldCounts));
+
+        // Alert Becca if any items were over-capacity (rare simultaneous-checkout race)
+        if (overCapacityItems.length > 0) {
+            const alertLines = overCapacityItems.map(i =>
+                `  • ${i.productName} — ordered ${i.qty}, already sold ${i.currentSold} of ${i.maxQty}`
+            ).join('\n');
+
+            await transporter.sendMail({
+                from: `"Becca's Cakes and Bakes" <${process.env.NOTIFY_EMAIL_USER}>`,
+                to: process.env.NOTIFY_EMAIL_USER,
+                subject: `⚠️ Over-capacity order — action needed (${customerName})`,
+                text: [
+                    'An order has been paid for that exceeds the maximum quantity for one or more products.',
+                    'This happens very rarely when two customers checkout simultaneously for the last unit.',
+                    '',
+                    'Customer: ' + customerName,
+                    'Email: ' + customerEmail,
+                    'Amount paid: ' + amountPaid,
+                    '',
+                    'Over-capacity items (NOT counted toward sold totals):',
+                    alertLines,
+                    '',
+                    'Please check this order in Stripe and contact the customer to arrange a refund if needed:',
+                    'https://dashboard.stripe.com/payments',
+                ].join('\n'),
+            });
+        }
+    } catch (err) {
+        // Blobs failure must not prevent a 200 response — Stripe would retry the webhook
+        console.error('Blobs update error:', err);
+    }
+
+    return { statusCode: 200, body: 'OK' };
 };

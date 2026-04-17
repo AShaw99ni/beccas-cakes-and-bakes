@@ -571,7 +571,7 @@ function highlightAllergens(ingredients, allergens) {
     }
 
     /* ── Authoritative price fetch ────────────────────────────────────────── */
-    var PRICE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=1774292445&single=true&output=csv';
+    var PRICE_SHEET_CSV_URL = SITE_CONFIG.PRODUCTS_CSV_URL;
 
     var _priceMapCache = null;
 
@@ -852,16 +852,23 @@ function highlightAllergens(ingredients, allergens) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             })
-                .then(function (res) { return res.json(); })
-                .then(function (data) {
-                    if (data.url) { window.location.href = data.url; }
-                    else { throw new Error(data.error || 'No URL returned'); }
+                .then(function (res) {
+                    return res.json().then(function (data) {
+                        return { ok: res.ok, data: data };
+                    });
+                })
+                .then(function (result) {
+                    if (!result.ok) {
+                        throw new Error(result.data.error || 'Something went wrong. Please try again.');
+                    }
+                    if (result.data.url) { window.location.href = result.data.url; }
+                    else { throw new Error(result.data.error || 'Something went wrong. Please try again.'); }
                 })
                 .catch(function (err) {
                     console.error(err);
                     document.getElementById('checkout-loading').style.display = 'none';
                     document.getElementById('checkout-error-msg').style.display = 'flex';
-                    document.getElementById('checkout-error-text').textContent = 'Something went wrong. Please try again or contact us directly.';
+                    document.getElementById('checkout-error-text').textContent = err.message;
                 });
         });
 

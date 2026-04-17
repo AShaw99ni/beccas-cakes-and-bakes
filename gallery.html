@@ -78,10 +78,11 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./site-config.js"></script>
     <script src="./components.js"></script>
 
     <script>
-        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcb8IWT6CYXEtl_EGSEyD0ww0bEaQgQvONoDZai5DF-3_Svt83stdQR2Esb89jd5OgJKTCGYDlguBa/pub?gid=28611426&single=true&output=csv';
+        const SHEET_CSV_URL = SITE_CONFIG.STORY_CSV_URL;
 
         /* ── CSV parser ───────────────────────────────────────────────────── */
         function parseCSV(text) {

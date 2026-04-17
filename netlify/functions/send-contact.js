@@ -302,7 +302,7 @@ exports.handler = async function (event) {
     try {
         await transporter.sendMail({
             from: `"Becca's Cakes and Bakes" <${process.env.NOTIFY_EMAIL_USER}>`,
-            to: 'aaronshawni0@gmail.com',
+            to: 'beccascakesandbakes.ni@gmail.com',
             subject: `New Enquiry — ${topicLabel} from ${fname} ${lname}`,
             text: textLines.join('\n'),
             html: emailWrapper(`New ${topicLabel} enquiry from ${fname} ${lname}`, beccaBody),

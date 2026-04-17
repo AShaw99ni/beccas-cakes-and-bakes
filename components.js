@@ -188,15 +188,15 @@ function highlightAllergens(ingredients, allergens) {
     function buildNavbar() {
         return '<nav class="navbar navbar-expand-lg">' +
             '<div class="container-xl position-relative navbar-padding">' +
-            '<a class="navbar-brand d-lg-none" href="./new-index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
+            '<a class="navbar-brand d-lg-none" href="./index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
             '<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">' +
             '<span class="navbar-toggler-icon"></span>' +
             '</button>' +
             '<div class="collapse navbar-collapse" id="mainNavbar">' +
             '<ul class="navbar-nav me-auto">' +
-            '<li class="nav-item fw-bold d-lg-none"><a class="nav-link' + (activePage() === 'home' ? ' active' : '') + '" href="./new-index.html">Home</a></li>' +
+            '<li class="nav-item fw-bold d-lg-none"><a class="nav-link' + (activePage() === 'home' ? ' active' : '') + '" href="./index.html">Home</a></li>' +
             LEFT_LINKS.map(navLinkHTML).join('') + '</ul>' +
-            '<a class="navbar-brand navbar-center d-none d-lg-block" href="./new-index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
+            '<a class="navbar-brand navbar-center d-none d-lg-block" href="./index.html"><img src="./img/Logo circle.png" alt="Beccas Cakes and Bakes"></a>' +
             '<ul class="navbar-nav ms-auto align-items-center">' +
             RIGHT_LINKS.map(navLinkHTML).join('') +
             shopButtonHTML() +
@@ -210,7 +210,7 @@ function highlightAllergens(ingredients, allergens) {
             return '<a class="btn text-white btn-floating m-1 ' + s.cssClass + '" href="' + s.href + '" role="button" aria-label="' + s.label + '"><i class="' + s.icon + '"></i></a>';
         }).join('');
 
-        const HOME_LINK = { label: 'Home', href: './new-index.html' };
+        const HOME_LINK = { label: 'Home', href: './index.html' };
         const allFooterLinks = [HOME_LINK, ...NAV_LINKS, SHOP_LINK];
         const footerLinks = allFooterLinks.map(function (l) {
             return '<p><a href="' + l.href + '" class="text-reset">' + l.label + '</a></p>';

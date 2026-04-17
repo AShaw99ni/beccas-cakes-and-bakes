@@ -352,7 +352,7 @@ exports.handler = async function (event) {
 
     // ── Update sold counts in Blobs ───────────────────────────────────────────
     try {
-        const store = getStore('shop');
+        const store = getStore({ name: 'shop', siteID: process.env.NETLIFY_SITE_ID, token: process.env.NETLIFY_TOKEN });
         const maxQtyMap = await fetchMaxQtyMap();
 
         const raw = await store.get('sold_counts');

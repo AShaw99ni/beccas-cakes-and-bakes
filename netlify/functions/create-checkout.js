@@ -136,7 +136,7 @@ exports.handler = async function (event) {
     // ── Per-product capacity check ────────────────────────────────────────────
     let soldCounts = {};
     try {
-        const store = getStore('shop');
+        const store = getStore({ name: 'shop', siteID: process.env.NETLIFY_SITE_ID, token: process.env.NETLIFY_TOKEN });
         const raw = await store.get('sold_counts');
         soldCounts = raw ? JSON.parse(raw) : {};
     } catch (err) {

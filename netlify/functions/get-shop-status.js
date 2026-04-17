@@ -86,7 +86,7 @@ exports.handler = async function (event) {
     }
 
     try {
-        const store = getStore('shop');
+        const store = getStore({ name: 'shop', siteID: process.env.NETLIFY_SITE_ID, token: process.env.NETLIFY_TOKEN });
 
         // 1. Fetch config from the order-window sheet tab
         const config = await fetchConfig();

@@ -71,23 +71,6 @@
     pointer-events: none;
 }
 
-/* ── Low stock badge ─────────────────────────────────────────────────────── */
-.shop-stock-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #d97706;
-    color: #fff;
-    font-family: 'Lato', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 3px 9px;
-    border-radius: 20px;
-    white-space: nowrap;
-    pointer-events: none;
-}
 
 /* Deep link (?product=) — product not available */
 .shop-deep-link-notice {

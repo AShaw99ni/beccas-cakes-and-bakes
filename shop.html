@@ -241,6 +241,7 @@
         // Poll every 60 seconds after initial load (initial fetch is part of Promise.all below)
         setInterval(fetchShopStatus, 60000);
 
+
         /* ── CSV parser ── */
         function parseCSV(text) {
             const lines = text.trim().split('\n');

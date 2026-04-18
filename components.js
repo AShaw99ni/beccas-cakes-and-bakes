@@ -556,7 +556,7 @@ function highlightAllergens(ingredients, allergens) {
     window.openCart = openCart;
     window.closeCart = closeCart;
 
-    /* ── Saturday date picker (skips market-stall Saturdays) ─────────────── */
+    /* ── Saturday collection date picker ─────────────────────────────────── */
     function fetchMarketDates() {
         var url = SITE_CONFIG.EVENTS_CSV_URL;
         if (!url) return Promise.resolve(new Set());
@@ -582,38 +582,44 @@ function highlightAllergens(ingredients, allergens) {
             .catch(function () { return new Set(); });
     }
 
-    function populateTuesdayDates() {
+    // Populates the collection date dropdown with the next 8 Saturdays after the
+    // order window closes, skipping any weekend where there's a market (Sat or Sun).
+    function populateSaturdayDates(closingAt) {
         var select = document.getElementById('co-date');
-        if (!select) return;
+        if (!select || select.options.length > 1) return; // already populated
+
         fetchMarketDates().then(function (marketDates) {
-            var today = new Date();
-            var cutoff = new Date(today);
-            cutoff.setDate(cutoff.getDate() + 7);
-            var day = cutoff.getDay();
-            var daysUntilSaturday = (6 - day + 7) % 7 || 7;
-            var next = new Date(cutoff);
-            next.setDate(cutoff.getDate() + daysUntilSaturday);
+            // Start from the day after the order window closes
+            var closeDay = closingAt.replace(' ', 'T').split('T')[0].split('-').map(Number);
+            var d = new Date(Date.UTC(closeDay[0], closeDay[1] - 1, closeDay[2]));
+            d.setUTCDate(d.getUTCDate() + 1); // day after closing
+
+            // Advance to the next Saturday
+            while (d.getUTCDay() !== 6) {
+                d.setUTCDate(d.getUTCDate() + 1);
+            }
+
+            // Add the next 8 Saturdays, skipping any with a market that Sat or Sun
             var added = 0;
-            var i = 0;
             while (added < 8) {
-                var d = new Date(next);
-                d.setDate(next.getDate() + (i * 7));
-                i++;
-                var value = d.toISOString().split('T')[0];
-                // Also check the Sunday of the same weekend
-                var sunday = new Date(d);
-                sunday.setDate(d.getDate() + 1);
-                var sundayValue = sunday.toISOString().split('T')[0];
-                if (marketDates.has(value) || marketDates.has(sundayValue)) continue; // skip market weekends
-                var label = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                var opt = document.createElement('option');
-                opt.value = value;
-                opt.textContent = label + ' \u00b7 9:30am\u201312:30pm';
-                select.appendChild(opt);
-                added++;
+                var satStr = d.toISOString().split('T')[0];
+                var sunStr = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1)).toISOString().split('T')[0];
+
+                if (!marketDates.has(satStr) && !marketDates.has(sunStr)) {
+                    var label = d.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                    var opt = document.createElement('option');
+                    opt.value = satStr;
+                    opt.textContent = label + ' \u00b7 9:30am\u201312:30pm';
+                    select.appendChild(opt);
+                    added++;
+                }
+
+                d.setUTCDate(d.getUTCDate() + 7); // move to next Saturday
             }
         });
     }
+
+    window.populateSaturdayDates = populateSaturdayDates;
 
     /* ── Authoritative price fetch ────────────────────────────────────────── */
     var PRICE_SHEET_CSV_URL = SITE_CONFIG.PRODUCTS_CSV_URL;
@@ -972,7 +978,6 @@ function highlightAllergens(ingredients, allergens) {
             if (e.target && e.target.id === 'footer-signup-btn') openOverlay();
         });
 
-        populateTuesdayDates();
         window.BeccaCart.updateCartUI();
         initBrevo(activePage() === 'home');
     });

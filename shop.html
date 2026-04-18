@@ -143,6 +143,10 @@
             if (!status) return;
             shopStatus = status;
 
+            if (status.closingAt && window.populateSaturdayDates) {
+                window.populateSaturdayDates(status.closingAt);
+            }
+
             var banner = document.getElementById('shop-window-banner');
             var container = document.getElementById('shop-sections-container');
 

@@ -277,17 +277,16 @@
 
                     </div>
 
-                    <div class="field-group" style="margin-top:20px;">
-                        <label for="traybakeDate">Date needed <span class="req">*</span></label>
-                        <input type="date" id="traybakeDate" class="form-control">
-                        <div class="error-msg" id="err-traybakeDate">Please select a date.</div>
-                    </div>
-                    <div class="alert alert-warning">
-                        ⚠️ Please Note: Orders placed on short notice may not always be possible.
-                    </div>
-
                     <!-- Traybake extra fields (shown only for traybake topic) -->
                     <div id="extraFields-traybake" class="extra-fields">
+                        <div class="field-group" style="margin-top:20px;">
+                            <label for="traybakeDate">Date needed <span class="req">*</span></label>
+                            <input type="date" id="traybakeDate" class="form-control">
+                            <div class="error-msg" id="err-traybakeDate">Please select a date.</div>
+                        </div>
+                        <div class="alert alert-warning">
+                            ⚠️ Please Note: Orders placed on short notice may not always be possible.
+                        </div>
                         <hr class="field-divider">
                         <div class="field-group">
                             <label>What would you like? <span class="optional">(select all that apply)</span></label>
@@ -807,16 +806,15 @@
         /* ─────────────────────────────
            NEXT / BACK
         ───────────────────────────── */
-        step2Back.onclick = () => goTo(1);
+        document.getElementById('step2Back').addEventListener('click', () => goTo(1));
 
-        step2Next.onclick = () => {
+        document.getElementById('step2Next').addEventListener('click', () => {
             if (!runRules()) return;
-
-            buildReviewSafe();   // <- FIXED
+            buildReviewSafe();
             goTo(3);
-        };
+        });
 
-        step3Back.onclick = () => goTo(2);
+        document.getElementById('step3Back').addEventListener('click', () => goTo(2));
 
         document.getElementById('sendBtn').addEventListener('click', async () => {
             const btn = document.getElementById('sendBtn');

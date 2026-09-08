@@ -231,7 +231,10 @@ function highlightAllergens(ingredients, allergens) {
 
         return '<footer class="bg-body-tertiary text-center">' +
             '<div class="container p-4 pb-0">' +
-            '<section class="mb-4">' + socialButtons + '</section>' +
+            '<section class="mb-4">' +
+            '<h6 class="text-uppercase fw-bold mb-3">Find us online</h6>' +
+            socialButtons +
+            '</section>' +
             '<section class="footer-newsletter mb-4">' +
             '<h6 class="text-uppercase fw-bold mb-3">Stay in the loop</h6>' +
             '<p class="footer-newsletter__sub">Join our community and get the latest on new bakes, market appearances, and special offers.</p>' +

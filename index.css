@@ -25,6 +25,7 @@
 .section-story,
 .section-categories,
 .section-allergen,
+.section-training,
 .section-tiktok,
 .section-reviews,
 .section-cta {
@@ -36,6 +37,7 @@
 .section-story.revealed,
 .section-categories.revealed,
 .section-allergen.revealed,
+.section-training.revealed,
 .section-tiktok.revealed,
 .section-reviews.revealed,
 .section-cta.revealed {
@@ -520,6 +522,89 @@
     }
 }
 
+
+/* =============================================================================
+   TRAINING CREDENTIALS SECTION
+   ============================================================================= */
+
+.section-training {
+    background: rgba(226, 196, 249, 0.5);
+    padding: 96px 0;
+}
+
+.section-training .section-label {
+    font-size: 1rem;
+}
+
+.section-training .section-heading {
+    font-size: clamp(2.6rem, 5vw, 3.8rem);
+    margin-bottom: 0;
+}
+
+.cert-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+.cert-list li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.cert-list li::before {
+    content: '\f058';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: var(--pink);
+    font-size: 1.55rem;
+    flex-shrink: 0;
+}
+
+.training-img-wrap {
+    position: relative;
+}
+
+.training-img-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--pink-light) 0%, #f9d4ec 50%, var(--cream) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 20px 50px rgba(171, 29, 121, 0.15);
+}
+
+.training-img-placeholder__icon {
+    font-size: 2.5rem;
+    color: rgba(171, 29, 121, 0.35);
+}
+
+.training-img-placeholder__label {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(171, 29, 121, 0.5);
+    letter-spacing: 0.04em;
+}
+
+@media (max-width: 767px) {
+    .section-training {
+        padding: 64px 0;
+    }
+}
 
 /* =============================================================================
    TIKTOK SECTION

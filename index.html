@@ -209,6 +209,36 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════════════
+         TRAINING CREDENTIALS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-training">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="section-label">Our credentials</span>
+                    <h2 class="section-heading">Trained to bake with confidence</h2>
+                    <ul class="cert-list mt-4">
+                        <li>5-Star Food Hygiene Rating</li>
+                        <li>FSA Food Allergy &amp; Intolerance Training</li>
+                        <li>Level 3 HACCP</li>
+                        <li>Level 3 Food Safety &amp; Hygiene</li>
+                        <li>Safefood for Business Certification</li>
+                    </ul>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="training-img-wrap">
+                        <div class="training-img-placeholder">
+                            <i class="fas fa-camera training-img-placeholder__icon"></i>
+                            <span class="training-img-placeholder__label">Photo coming soon</span>
+                        </div>
+                        <div class="story-img-accent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
          TIKTOK SECTION
     ══════════════════════════════════════════════════════════ -->
     <section class="section-tiktok">
@@ -352,7 +382,7 @@
                 if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
             });
         }, { threshold: 0.08 });
-        document.querySelectorAll('.section-story, .section-categories, .section-allergen, .section-tiktok, .section-reviews, .section-cta').forEach(function (el) {
+        document.querySelectorAll('.section-story, .section-categories, .section-allergen, .section-training, .section-tiktok, .section-reviews, .section-cta').forEach(function (el) {
             io.observe(el);
         });
     </script>

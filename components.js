@@ -239,10 +239,20 @@ function highlightAllergens(ingredients, allergens) {
             '<i class="fa fa-envelope me-2"></i>Subscribe to our newsletter' +
             '</button>' +
             '</section>' +
-            '<section><div class="container text-center"><div class="row mt-3"><div>' +
+            '<section><div class="container text-center"><div class="row mt-3 align-items-center">' +
+            '<div class="col-4 d-flex justify-content-center align-items-center">' +
+            '<a id="b-circledLeaves27" target="_blank" href="https://restaurantguru.com/Beccas-Cakes-and-Bakes-Belfast" class="b-circledLeaves27--light b-circledLeaves27--2025" style="transform: scale(0.8); transform-origin: center;">' +
+            '<span class="b-circledLeaves27__title">Recommended</span>' +
+            '<span class="b-circledLeaves27__separator"></span>' +
+            '<span class="b-circledLeaves27__name">Becca\'s Cakes and Bakes</span>' +
+            '</a>' +
+            '</div>' +
+            '<div class="col-4">' +
             '<h6 class="text-uppercase fw-bold mb-4">Pages</h6>' +
             footerLinks +
-            '</div></div></div></section>' +
+            '</div>' +
+            '<div class="col-4"></div>' +
+            '</div></div></section>' +
             '</div>' +
             '<div class="text-center p-3 footer-copyright">' +
             '&copy; 2026 Copyright: <a class="text-body" href="https://beccascakesandbakes.co.uk/">beccascakesandbakes.co.uk</a>' +
@@ -852,6 +862,12 @@ function highlightAllergens(ingredients, allergens) {
             sibCss.rel = 'stylesheet';
             sibCss.href = 'https://sibforms.com/forms/end-form/build/sib-styles.css';
             document.head.appendChild(sibCss);
+        }
+        if (!document.querySelector('link[href*="badge-circledLeaves27"]')) {
+            var badgeCss = document.createElement('link');
+            badgeCss.rel = 'stylesheet';
+            badgeCss.href = 'https://awards.infcdn.net/2024/badge-circledLeaves27.css';
+            document.head.appendChild(badgeCss);
         }
         if (!document.querySelector('script[src*="recaptcha"]')) {
             var rcScript = document.createElement('script');

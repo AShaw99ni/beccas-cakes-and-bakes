@@ -943,6 +943,57 @@
 
             reviewBox.textContent = lines.join('\n');
         }
+
+        /* ─────────────────────────────
+           PRE-POPULATE FROM URL PARAMS
+           e.g. contact.html?topic=custom&occasion=Wedding
+        ───────────────────────────── */
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const topic = params.get('topic');
+            const occasion = params.get('occasion');
+
+            if (!topic) return;
+
+            const card = document.querySelector(`.topic-card[data-topic="${topic}"]`);
+            if (!card) return;
+
+            document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            state.topic = topic;
+
+            ['custom', 'traybake'].forEach(t => {
+                const el = document.getElementById(`extraFields-${t}`);
+                if (el) el.style.display = state.topic === t ? 'block' : 'none';
+            });
+
+            const titles = {
+                custom: 'Tell us about your occasion',
+                traybake: 'Tell us about your event',
+                event: 'Tell us about the collaboration',
+                other: 'What would you like to know?',
+            };
+            document.getElementById('step2Title').textContent = titles[topic] || 'Tell us more';
+
+            const msgLabel = document.getElementById('messageLabel');
+            if (topic === 'custom') {
+                msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
+            } else {
+                msgLabel.innerHTML = 'Your message <span class="req">*</span>';
+            }
+
+            goTo(2);
+
+            if (occasion) {
+                const pill = document.querySelector(`#occasionPills .pill-option[data-val="${occasion}"]`);
+                if (pill) {
+                    document.querySelectorAll('#occasionPills .pill-option').forEach(p => p.classList.remove('selected'));
+                    pill.classList.add('selected');
+                    state.occasion = occasion;
+                    document.getElementById('err-occasion')?.classList.remove('show');
+                }
+            }
+        })();
     </script>
 </body>
 

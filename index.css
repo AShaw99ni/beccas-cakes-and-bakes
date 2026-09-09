@@ -25,6 +25,7 @@
 .section-story,
 .section-categories,
 .section-allergen,
+.section-wedding,
 .section-training,
 .section-tiktok,
 .section-reviews,
@@ -37,6 +38,7 @@
 .section-story.revealed,
 .section-categories.revealed,
 .section-allergen.revealed,
+.section-wedding.revealed,
 .section-training.revealed,
 .section-tiktok.revealed,
 .section-reviews.revealed,
@@ -522,6 +524,160 @@
     }
 }
 
+
+/* =============================================================================
+   WEDDING CAKES SECTION
+   ============================================================================= */
+
+.section-wedding {
+    background: #FDF8F0;
+    padding: 100px 0 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Soft champagne radial glow */
+.section-wedding__glow {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 75% 40%, rgba(255, 218, 168, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 75%, rgba(255, 200, 220, 0.12) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Floral decorations */
+.wedding-floral {
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.wedding-floral--bl {
+    bottom: 0;
+    left: 0;
+    width: 220px;
+}
+
+.wedding-floral--tr {
+    top: 0;
+    right: 0;
+    width: 320px;
+}
+
+.section-wedding .section-label {
+    color: var(--pink);
+    letter-spacing: 0.22em;
+}
+
+.section-wedding .section-heading {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+.section-wedding .section-body {
+    line-height: 1.9;
+}
+
+/* Photo area */
+.wedding-img-wrap {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* Offset backing card behind main photo */
+.wedding-img-backing {
+    position: absolute;
+    inset: 0;
+    border-radius: 22px;
+    background: rgba(226, 196, 249, 0.28);
+    border: 2px solid rgba(171, 29, 121, 0.18);
+    transform: translate(14px, 14px);
+    z-index: 0;
+}
+
+.wedding-img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    display: block;
+    position: relative;
+    z-index: 1;
+    border: 3px solid var(--pink);
+    box-shadow: 0 20px 50px rgba(171, 29, 121, 0.15);
+}
+
+.wedding-img-overlay-wrap {
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 33%;
+    z-index: 2;
+}
+
+.wedding-img-overlay {
+    width: 100%;
+    border-radius: 14px;
+    display: block;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+.wedding-img-overlay-accent {
+    position: absolute;
+    inset: -8px;
+    border: 2px solid var(--pink);
+    border-radius: 18px;
+    z-index: 0;
+}
+
+/* CTA button */
+.wedding-cta-btn {
+    background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    border: none;
+    box-shadow: 0 8px 28px rgba(171, 29, 121, 0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.wedding-cta-btn:hover {
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(171, 29, 121, 0.55);
+}
+
+@media (max-width: 991px) {
+    .section-wedding {
+        padding: 72px 0 100px;
+        overflow: visible;
+    }
+
+    .wedding-floral {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .section-wedding {
+        padding: 64px 0 80px;
+        overflow: hidden;
+    }
+
+    .wedding-img-overlay-wrap {
+        bottom: -20px;
+        right: -10px;
+        width: 36%;
+    }
+}
 
 /* =============================================================================
    TRAINING CREDENTIALS SECTION

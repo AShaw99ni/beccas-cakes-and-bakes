@@ -209,6 +209,55 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════════════
+         WEDDING CAKES
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-wedding">
+        <div class="section-wedding__glow"></div>
+
+        <!-- Botanical florals -->
+        <img class="wedding-floral wedding-floral--bl" src="./img/floral-bl.png" alt="" aria-hidden="true">
+        <img class="wedding-floral wedding-floral--tr" src="./img/floral-tr.png" alt="" aria-hidden="true">
+
+        <div class="container position-relative">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="section-label">Wedding Cakes</span>
+                    <h2 class="section-heading">Weddings,<br><em>Without the Worry</em></h2>
+                    <p class="section-body mt-3">
+                        Everyone deserves to be part of the sweetest moments of your day.
+                    </p>
+                    <p class="section-body mt-3">
+                        From elegant multi-tiered centrepieces to intimate single-tier cakes, every wedding cake is
+                        designed especially for you and handcrafted to suit your vision. All of our wedding cakes are
+                        gluten and dairy free as standard, at no extra cost, with options available to cater for
+                        additional allergies too.
+                    </p>
+                    <p class="section-body mt-3">
+                        And if you already have your dream wedding cake sorted, we can create beautiful
+                        allergy-friendly cupcakes especially for the guests who might otherwise have to miss out.
+                    </p>
+                    <p class="section-body mt-3">
+                        <em>Because when you're celebrating together, everyone should get to have cake.</em>
+                    </p>
+                    <a href="./contact.html?topic=custom&occasion=Wedding" class="btn wedding-cta-btn rounded-pill px-5 py-3 mt-2">
+                        Enquire about your wedding <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="wedding-img-wrap">
+                        <div class="wedding-img-backing"></div>
+                        <img src="./img/wedding-cake.jpg" alt="Bespoke gluten and dairy free wedding cake" class="wedding-img">
+                        <div class="wedding-img-overlay-wrap">
+                            <img src="./img/wedding-cake-detail.jpg" alt="Wedding cake detail" class="wedding-img-overlay">
+                            <div class="wedding-img-overlay-accent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
          TRAINING CREDENTIALS
     ══════════════════════════════════════════════════════════ -->
     <section class="section-training">
@@ -281,9 +330,9 @@
                     </a>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3">
-                    <a href="https://www.tiktok.com/@beccascakesandbakes.ni/video/7606069897482964246" target="_blank"
+                    <a href="https://www.tiktok.com/@beccascakesandbakes.ni/video/7669372107817585942" target="_blank"
                         class="tiktok-link text-decoration-none text-dark"
-                        data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7606069897482964246">
+                        data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7669372107817585942">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
                             <div class="tiktok-thumb-wrap">
                                 <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok"
@@ -379,7 +428,7 @@
                 if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
             });
         }, { threshold: 0.08 });
-        document.querySelectorAll('.section-story, .section-categories, .section-allergen, .section-training, .section-tiktok, .section-reviews, .section-cta').forEach(function (el) {
+        document.querySelectorAll('.section-story, .section-categories, .section-allergen, .section-wedding, .section-training, .section-tiktok, .section-reviews, .section-cta').forEach(function (el) {
             io.observe(el);
         });
     </script>

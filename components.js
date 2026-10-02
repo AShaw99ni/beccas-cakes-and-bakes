@@ -256,7 +256,6 @@ function highlightAllergens(ingredients, allergens) {
             '</div>' +
             '<div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center footer-partner-col">' +
             '<h6 class="text-uppercase fw-bold mb-3">Proud to work with</h6>' +
-            '<a href="https://glutenfreeireland.com/" target="_blank" rel="noopener" aria-label="Gluten Free Ireland">' +
             '<img src="https://glutenfreeireland.com/wp-content/uploads/2025/07/email.gif" alt="Gluten Free Ireland" class="footer-partner-logo" width="300" height="100" loading="lazy">' +
             '</a>' +
             '</div>' +

@@ -28,7 +28,7 @@
             <span class="hero-subtitle">Gluten &amp; dairy free · Made in Northern Ireland</span>
             <div class="hero-divider"></div>
             <h1>Shop</h1>
-            <p class="hero-body">Fresh bakes made to order — collection Saturday 9:30am–12:30pm on non-market weeks from Belfast BT5.</p>
+            <p class="hero-body">Fresh bakes made to order — collection from Belfast BT23 area.</p>
         </div>
     </div>
 
@@ -164,13 +164,21 @@
             // ── Window closed banner ──
             if (!status.windowOpen) {
                 var reopenStr = formatUkLocal(status.openFrom);
+                // banner.innerHTML =
+                //     '<div class="shop-window-banner__inner container">' +
+                //     '<i class="fas fa-clock"></i>' +
+                //     '<div>' +
+                //     '<strong>Orders are now closed.</strong> ' +
+                //     'We\u2019ve reached our maximum capacity for this window. ' +
+                //     'Orders reopen <strong>' + reopenStr + '</strong>.' +
+                //     '</div>' +
+                //     '</div>';
+
                 banner.innerHTML =
                     '<div class="shop-window-banner__inner container">' +
                     '<i class="fas fa-clock"></i>' +
                     '<div>' +
-                    '<strong>Orders are now closed.</strong> ' +
-                    'We\u2019ve reached our maximum capacity for this window. ' +
-                    'Orders reopen <strong>' + reopenStr + '</strong>.' +
+                    '<strong>Online orders are coming soon!</strong> ' +
                     '</div>' +
                     '</div>';
                 banner.style.display = 'block';

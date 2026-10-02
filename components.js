@@ -242,19 +242,24 @@ function highlightAllergens(ingredients, allergens) {
             '<i class="fa fa-envelope me-2"></i>Subscribe to our newsletter' +
             '</button>' +
             '</section>' +
-            '<section><div class="container text-center"><div class="row mt-3 align-items-center">' +
-            '<div class="col-4 d-flex justify-content-center align-items-center">' +
-            '<a id="b-circledLeaves27" target="_blank" href="https://restaurantguru.com/Beccas-Cakes-and-Bakes-Belfast" class="b-circledLeaves27--light b-circledLeaves27--2025" style="transform: scale(0.8); transform-origin: center;">' +
+            '<section class="footer-badges mb-4"><div class="container text-center"><div class="row mt-3 gy-4 align-items-center">' +
+            '<div class="col-12 col-md-4 d-flex justify-content-center align-items-center footer-badge-col">' +
+            '<a id="b-circledLeaves27" target="_blank" href="https://restaurantguru.com/Beccas-Cakes-and-Bakes-Belfast" class="b-circledLeaves27--light b-circledLeaves27--2025">' +
             '<span class="b-circledLeaves27__title">Recommended</span>' +
             '<span class="b-circledLeaves27__separator"></span>' +
             '<span class="b-circledLeaves27__name">Becca\'s Cakes and Bakes</span>' +
             '</a>' +
             '</div>' +
-            '<div class="col-4">' +
+            '<div class="col-12 col-md-4">' +
             '<h6 class="text-uppercase fw-bold mb-4">Pages</h6>' +
             footerLinks +
             '</div>' +
-            '<div class="col-4"></div>' +
+            '<div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center footer-partner-col">' +
+            '<h6 class="text-uppercase fw-bold mb-3">Proud to work with</h6>' +
+            '<a href="https://glutenfreeireland.com/" target="_blank" rel="noopener" aria-label="Gluten Free Ireland">' +
+            '<img src="https://glutenfreeireland.com/wp-content/uploads/2025/07/email.gif" alt="Gluten Free Ireland" class="footer-partner-logo" width="300" height="100" loading="lazy">' +
+            '</a>' +
+            '</div>' +
             '</div></div></section>' +
             '</div>' +
             '<div class="text-center p-3 footer-copyright">' +

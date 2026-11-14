@@ -141,8 +141,9 @@ exports.handler = async function (event) {
         soldCounts = raw ? JSON.parse(raw) : {};
     } catch (err) {
         console.error('Blobs read error:', err);
-        // Non-fatal — if Blobs is unavailable we skip the capacity check rather than
-        // blocking all orders. The webhook will still enforce limits post-payment.
+        // Fail closed — without sold counts we can't enforce stock limits, and the
+        // post-payment sold-count update would fail too.
+        return { statusCode: 503, body: JSON.stringify({ error: 'Online orders are temporarily unavailable. Please try again shortly.' }) };
     }
 
     // Resolve each cart item against server price and check capacity

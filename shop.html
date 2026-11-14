@@ -121,6 +121,17 @@
         /* ── Shop status (order window + sold counts) ── */
         var shopStatus = null;
 
+        // Used whenever get-shop-status fails or returns something unexpected:
+        // the shop is shown closed rather than letting people add to cart without
+        // a stock/window check.
+        var SHOP_UNAVAILABLE_STATUS = { windowOpen: false, unavailable: true, products: {} };
+
+        function validShopStatus(status) {
+            return status && typeof status.windowOpen === 'boolean' && status.products
+                ? status
+                : SHOP_UNAVAILABLE_STATUS;
+        }
+
         // Format "2026-04-19T12:00:00" (UK local) into "Sunday 19 April at 12pm"
         function formatUkLocal(isoLocal) {
             var parts = isoLocal.replace(' ', 'T').split('T');
@@ -162,8 +173,18 @@
             }
 
             // ── Window closed banner ──
-            if (!status.windowOpen) {
-                var reopenStr = formatUkLocal(status.openFrom);
+            if (status.unavailable) {
+                banner.innerHTML =
+                    '<div class="shop-window-banner__inner container">' +
+                    '<i class="fas fa-clock"></i>' +
+                    '<div>' +
+                    '<strong>Online orders are temporarily unavailable.</strong> ' +
+                    'Please check back shortly.' +
+                    '</div>' +
+                    '</div>';
+                banner.style.display = 'block';
+                if (container) container.classList.add('shop-window-closed');
+            } else if (!status.windowOpen) {
                 // banner.innerHTML =
                 //     '<div class="shop-window-banner__inner container">' +
                 //     '<i class="fas fa-clock"></i>' +
@@ -243,11 +264,12 @@
         function fetchShopStatus() {
             return fetch('/.netlify/functions/get-shop-status')
                 .then(function (res) { return res.ok ? res.json() : null; })
+                .catch(function () { return null; })
                 .then(function (status) {
-                    if (status) applyShopStatus(status);
+                    status = validShopStatus(status);
+                    applyShopStatus(status);
                     return status;
-                })
-                .catch(function () { return null; });
+                });
         }
 
         // Poll every 60 seconds after initial load (initial fetch is part of Promise.all below)
@@ -466,7 +488,7 @@
             var stepper = document.getElementById('shop-modal-stepper');
             var unavailableMsg = document.getElementById('shop-modal-unavailable-msg');
 
-            var windowClosed = shopStatus && !shopStatus.windowOpen;
+            var windowClosed = !shopStatus || !shopStatus.windowOpen;
             var productStatus = shopStatus && shopStatus.products && shopStatus.products[product.name];
             var soldOut = productStatus && productStatus.remaining === 0;
 
@@ -680,7 +702,8 @@
 
         var statusPromise = fetch('/.netlify/functions/get-shop-status')
             .then(function (res) { return res.ok ? res.json() : null; })
-            .catch(function () { return null; });
+            .catch(function () { return null; })
+            .then(validShopStatus);
 
         Promise.all([csvPromise, statusPromise])
             .then(function (results) {
@@ -714,8 +737,8 @@
                     sectionsContainer.appendChild(section);
                 });
 
-                // Apply status now that cards exist — guaranteed to have both pieces of data
-                if (status) applyShopStatus(status);
+                // Apply status now that cards exist (closed if the status check failed)
+                applyShopStatus(status);
 
                 // Only available products are candidates for deep-link / filter actions
                 var availableRows = allRows.filter(isAvailable);

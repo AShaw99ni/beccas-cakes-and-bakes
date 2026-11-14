@@ -303,7 +303,7 @@
                         data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7598640369152183574">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
                             <div class="tiktok-thumb-wrap">
-                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok"
+                                <img class="tiktok-thumb card-img-top" src="img/tiktok/7598640369152183574.jpg" alt="Watch our baking video on TikTok"
                                     loading="lazy">
                                 <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
                             </div>
@@ -319,7 +319,7 @@
                         data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7628297095237078294">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
                             <div class="tiktok-thumb-wrap">
-                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok"
+                                <img class="tiktok-thumb card-img-top" src="img/tiktok/7628297095237078294.jpg" alt="Watch our baking video on TikTok"
                                     loading="lazy">
                                 <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
                             </div>
@@ -335,7 +335,7 @@
                         data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7669372107817585942">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
                             <div class="tiktok-thumb-wrap">
-                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok"
+                                <img class="tiktok-thumb card-img-top" src="img/tiktok/7669372107817585942.jpg" alt="Watch our baking video on TikTok"
                                     loading="lazy">
                                 <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
                             </div>
@@ -351,7 +351,7 @@
                         data-tiktok-url="https://www.tiktok.com/@beccascakesandbakes.ni/video/7618267466258451734">
                         <div class="card tiktok-card h-100 border-0 shadow-sm">
                             <div class="tiktok-thumb-wrap">
-                                <img class="tiktok-thumb card-img-top" alt="Watch our baking video on TikTok"
+                                <img class="tiktok-thumb card-img-top" src="img/tiktok/7618267466258451734.jpg" alt="Watch our baking video on TikTok"
                                     loading="lazy">
                                 <div class="tiktok-play-badge"><i class="fab fa-tiktok"></i></div>
                             </div>
@@ -408,18 +408,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./site-config.js"></script>
     <script src="./components.js"></script>
-
-    <!-- TikTok thumbnails via oEmbed API -->
-    <script>
-        document.querySelectorAll('.tiktok-link').forEach(function (link) {
-            var videoUrl = link.dataset.tiktokUrl;
-            var img = link.querySelector('img');
-            fetch('https://www.tiktok.com/oembed?url=' + encodeURIComponent(videoUrl))
-                .then(function (res) { return res.json(); })
-                .then(function (data) { if (data.thumbnail_url) img.src = data.thumbnail_url; })
-                .catch(function () { img.src = 'fallback.jpg'; });
-        });
-    </script>
 
     <!-- Scroll reveal -->
     <script>

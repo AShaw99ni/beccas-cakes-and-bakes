@@ -1,0 +1,5 @@
+# Only the scheduled job lives here — all other build/site settings stay in the Netlify dashboard.
+
+# Refresh homepage Google reviews once a day (00:00 UTC)
+[functions."fetch-google-reviews"]
+  schedule = "@daily"

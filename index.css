@@ -910,6 +910,12 @@
     font-size: 1rem;
 }
 
+/* Keeps the same 6px spacing between header stars as before they were wrapped */
+.reviews-stars {
+    display: inline-flex;
+    gap: 6px;
+}
+
 .reviews-rating-text {
     font-family: 'Lato', sans-serif;
     font-size: 0.9rem;
@@ -918,9 +924,12 @@
     margin-left: 4px;
 }
 
+/* Centred wrapping row — lays out any count from 1–5 cleanly
+   (5 → 3 top / 2 centred below) */
 .reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 24px;
     align-items: stretch;
 }
@@ -933,7 +942,8 @@
     border: 2px solid transparent;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex: 0 1 calc((100% - 48px) / 3);
+    min-width: 0;
     transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 
@@ -964,6 +974,16 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.review-card__avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .review-card__name {
@@ -973,11 +993,27 @@
     color: var(--deep);
 }
 
+.review-card__name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.review-card__name a:hover {
+    text-decoration: underline;
+}
+
 .review-card__stars {
     color: #f5a623;
     font-size: 0.78rem;
     letter-spacing: 2px;
     margin-top: 3px;
+}
+
+.review-card__when {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 2px;
 }
 
 .review-card__text {
@@ -988,11 +1024,39 @@
     line-height: 1.75;
     margin: 0;
     flex: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    overflow: hidden;
+}
+
+.review-card__more {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--pink-dark);
+    margin-top: 0.75rem;
+    align-self: flex-start;
+}
+
+.reviews-attribution {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+    margin: 1.5rem 0 0;
+}
+
+@media (max-width: 991px) {
+    .review-card {
+        flex-basis: calc((100% - 24px) / 2);
+    }
 }
 
 @media (max-width: 767px) {
-    .reviews-grid {
-        grid-template-columns: 1fr;
+    .review-card {
+        flex-basis: 100%;
     }
 
     .section-reviews {

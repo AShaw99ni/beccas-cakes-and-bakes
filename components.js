@@ -107,69 +107,46 @@ function highlightAllergens(ingredients, allergens) {
     ];
 
     /* ── Reviews ──────────────────────────────────────────────────────────── */
-    const REVIEWS = [
+    // Live reviews come from Google daily via /.netlify/functions/get-reviews,
+    // but Google only ever returns 5. The homepage shows REVIEWS_TO_SHOW cards:
+    // the live ones first, topped up from these hand-picked Google reviews.
+    // If the live fetch fails, the first REVIEWS_TO_SHOW of these show instead.
+    const REVIEWS_TO_SHOW = 6;
+    const HAND_PICKED_REVIEWS = [
         {
             name: 'Tracy',
             text: 'Amazing cake, online communication was spot on and everything was explained and made clear from order to payment to collection.',
-            food: 5,
-            service: 5,
-            atmosphere: 5,
-            stars: 5
+            rating: 5
         },
         {
             name: 'Cliodhna Curley',
             text: "Ordered some Cupcakes from Beccas Cakes and Bakes for Mother's Day and can honestly say I loved everything about them! Being someone with ceoliac and who also struggles with diary finding a nice treat is very far few inbetween so when i came across this bakery i was so happy! They tasted amazing! The texture was perfect! I would highly highly recommend you will not be disappointed! And Becca herself is so lovely and so educated in everything around allergens etc which really puts you at ease!",
-            food: 5,
-            service: 5,
-            atmosphere: 5,
-            stars: 5
+            rating: 5
         },
         {
             name: 'Nichola Miller',
             text: 'The BEST caramel square I have ever tasted! Can’t wait to try all the other bakes!!!',
-            food: 5,
-            service: 5,
-            atmosphere: 5,
-            stars: 5
+            rating: 5
         },
         {
             name: 'Taylor Pollock',
             text: "Unreal school cake, great people and service!",
-            service: 5,
-            atmosphere: 5,
-            stars: 5
+            rating: 5
         },
         {
             name: 'Jordyn Berryman',
             text: 'I recently tried this dairy-free, gluten-free bakery and was really impressed. I ordered their chocolate Bueno cupcakes for a party, and they were a great choice. The cupcakes were soft and moist with a rich chocolate flavour, and the topping was creamy and really tasty. They looked great and went down really well with everyone at the party. You honestly wouldn’t guess they were dairy-free and gluten-free. I’d definitely order from them again!',
-            food: 5,
-            service: 5,
-            atmosphere: 5,
-            stars: 5
+            rating: 5
         },
         {
             name: 'Leah McCorry',
             text: "I recently tried a range of treats from my friend’s home bakery and honestly everything has been incredible. I’ve had the caramel squares, themed Barbie cupcakes, cake, crispy treats and brownies — and every single one has been delicious. The caramel squares were perfectly rich and gooey, the brownies were indulgent and chocolatey, and the cupcakes looked amazing while tasting just as good. What’s even more impressive is that everything is gluten- and dairy-free, yet you genuinely wouldn’t be able to tell. The texture and flavour are just as good (if not better) than traditional bakes. The themed Barbie cupcakes were such a hit and beautifully done. It’s clear a lot of care and attention goes into both the look and taste of the bakes.",
-            food: 5,
-            service: 5,
-            atmosphere: 5,
-            stars: 5
+            rating: 5
         },
         {
             name: 'Abby Butterworth',
             text: 'Delicious bakes! Amazing inclusivity. GF and DF bakes but everyone can definitely enjoy! Yum!',
-            food: 5,
-            service: 5,
-            atmosphere: 5,
-            stars: 5
-        },
-        {
-            name: 'Ronan Clarke',
-            text: 'The strawberry and white chocolate rice crispy treats were amazing',
-            food: 5,
-            service: 5,
-            atmosphere: 5,
-            stars: 5
+            rating: 5
         },
     ];
 
@@ -394,34 +371,74 @@ function highlightAllergens(ingredients, allergens) {
             '</div></div>';
     }
 
-    function buildReviews() {
-        var stars = '<i class="fas fa-star"></i>'.repeat(5);
+    function escapeHtml(str) {
+        return String(str == null ? '' : str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
 
-        var cards = REVIEWS.map(function (r) {
-            var initial = r.name.charAt(0).toUpperCase();
-            return '<div class="review-card">' +
-                '<div class="review-card__header">' +
-                '<div class="review-card__avatar">' + initial + '</div>' +
-                '<div>' +
-                '<div class="review-card__name">' + r.name + '</div>' +
-                '<div class="review-card__stars">' + stars + '</div>' +
-                '</div>' +
-                '</div>' +
-                '<p class="review-card__text">\u201c' + r.text + '\u201d</p>' +
-                '</div>';
-        }).join('');
+    // Full / half / empty stars for a 0–5 rating, rounded to the nearest half
+    function starsHtml(rating) {
+        var r = Math.round(Math.max(0, Math.min(5, Number(rating) || 0)) * 2) / 2;
+        var full = Math.floor(r);
+        var half = r % 1 ? 1 : 0;
+        return '<i class="fas fa-star"></i>'.repeat(full) +
+            '<i class="fas fa-star-half-alt"></i>'.repeat(half) +
+            '<i class="far fa-star"></i>'.repeat(5 - full - half);
+    }
+
+    var REVIEW_READ_MORE_CHARS = 300;
+
+    function normaliseName(name) {
+        return String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    }
+
+    function reviewCardHtml(r) {
+        var name = escapeHtml(r.name);
+        var initial = escapeHtml(String(r.name || '?').charAt(0).toUpperCase());
+        // Photo sits over the initial; if it fails to load it removes itself and the initial shows
+        var photo = /^https:\/\//.test(r.photoUrl || '')
+            ? '<img src="' + escapeHtml(r.photoUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">'
+            : '';
+        var nameHtml = /^https:\/\//.test(r.profileUrl || '')
+            ? '<a href="' + escapeHtml(r.profileUrl) + '" target="_blank" rel="noopener">' + name + '</a>'
+            : name;
+        var readMore = (r.text || '').length > REVIEW_READ_MORE_CHARS
+            ? '<a href="' + GOOGLE_REVIEWS_URL + '" target="_blank" rel="noopener" class="review-card__more">Read more on Google</a>'
+            : '';
+        return '<div class="review-card">' +
+            '<div class="review-card__header">' +
+            '<div class="review-card__avatar">' + initial + photo + '</div>' +
+            '<div>' +
+            '<div class="review-card__name">' + nameHtml + '</div>' +
+            '<div class="review-card__stars">' + starsHtml(r.rating) + '</div>' +
+            (r.when ? '<div class="review-card__when">' + escapeHtml(r.when) + '</div>' : '') +
+            '</div>' +
+            '</div>' +
+            '<p class="review-card__text">\u201c' + escapeHtml(r.text) + '\u201d</p>' +
+            readMore +
+            '</div>';
+    }
+
+    function buildReviews() {
+        var cards = HAND_PICKED_REVIEWS.slice(0, REVIEWS_TO_SHOW).map(reviewCardHtml).join('');
 
         return '<section class="section-reviews">' +
             '<div class="container">' +
             '<div class="text-center mb-5">' +
             '<span class="section-label">What people are saying</span>' +
             '<h2 class="section-heading">Reviews from our customers</h2>' +
-            '<div class="reviews-stars-header">' + stars +
+            '<div class="reviews-stars-header">' +
+            '<span class="reviews-stars">' + starsHtml(5) + '</span>' +
             '<span class="reviews-rating-text">5.0 on Google</span>' +
             '</div>' +
             '</div>' +
             '<div class="reviews-grid">' + cards + '</div>' +
-            '<div class="text-center mt-5">' +
+            '<p class="reviews-attribution"><i class="fab fa-google me-1"></i>Reviews from Google</p>' +
+            '<div class="text-center mt-4">' +
             '<a href="https://g.page/r/CSBdm8qyxasfEAE/review" target="_blank" rel="noopener" class="btn btn-brand rounded-pill px-4">' +
             '<i class="fab fa-google me-2"></i>Leave us a review on Google' +
             '</a>' +
@@ -435,11 +452,45 @@ function highlightAllergens(ingredients, allergens) {
             '</section>';
     }
 
-    // Reviews — home page only
+    // Swaps the fallback cards for the live Google reviews. On any failure the
+    // fallback stays in place.
+    function loadLiveReviews(section) {
+        fetch('/.netlify/functions/get-reviews')
+            .then(function (res) {
+                if (!res.ok) throw new Error('get-reviews HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function (data) {
+                if (!data || !Array.isArray(data.reviews) || !data.reviews.length) return;
+
+                // Live first, then hand-picked ones not already shown (matched by name)
+                var shownNames = data.reviews.map(function (r) { return normaliseName(r.name); });
+                var topUp = HAND_PICKED_REVIEWS.filter(function (r) {
+                    return shownNames.indexOf(normaliseName(r.name)) === -1;
+                });
+                var reviews = data.reviews.concat(topUp).slice(0, REVIEWS_TO_SHOW);
+                section.querySelector('.reviews-grid').innerHTML = reviews.map(reviewCardHtml).join('');
+
+                var rating = Number(data.overallRating);
+                var total = Number(data.totalReviews);
+                if (rating) {
+                    section.querySelector('.reviews-stars').innerHTML = starsHtml(rating);
+                    section.querySelector('.reviews-rating-text').textContent =
+                        rating.toFixed(1) + ' on Google' + (total ? ' (' + total + ' reviews)' : '');
+                }
+            })
+            .catch(function (err) {
+                console.warn('Could not load live reviews, showing fallback:', err);
+            });
+    }
+
+    // Reviews — home page only. The section is inserted synchronously so the
+    // scroll-reveal observer in index.html finds it; live reviews fill in after.
     if (activePage() === 'home') {
         var ctaBanner = document.querySelector('.section-cta');
         if (ctaBanner) {
             ctaBanner.insertAdjacentHTML('beforebegin', buildReviews());
+            loadLiveReviews(document.querySelector('.section-reviews'));
         }
     }
 

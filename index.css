@@ -934,6 +934,11 @@
     align-items: stretch;
 }
 
+/* Reserves space while reviews load so the page doesn't jump */
+.reviews-grid--loading {
+    min-height: 420px;
+}
+
 .review-card {
     background: white;
     border-radius: 16px;

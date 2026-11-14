@@ -107,11 +107,11 @@ function highlightAllergens(ingredients, allergens) {
     ];
 
     /* ── Reviews ──────────────────────────────────────────────────────────── */
-    // Live reviews come from Google daily via /.netlify/functions/get-reviews,
-    // but Google only ever returns 5. The homepage shows REVIEWS_TO_SHOW cards:
-    // the live ones first, topped up from these hand-picked Google reviews.
-    // If the live fetch fails, the first REVIEWS_TO_SHOW of these show instead.
-    const REVIEWS_TO_SHOW = 6;
+    // Live reviews come from Google daily via /.netlify/functions/get-reviews
+    // (Google returns up to 5). These hand-picked reviews are only shown if the
+    // live ones can't be loaded — FALLBACK_REVIEWS_TO_SHOW of them.
+    const FALLBACK_REVIEWS_TO_SHOW = 6;
+    const LIVE_REVIEWS_TIMEOUT_MS = 6000;
     const HAND_PICKED_REVIEWS = [
         {
             name: 'Tracy',
@@ -392,9 +392,6 @@ function highlightAllergens(ingredients, allergens) {
 
     var REVIEW_READ_MORE_CHARS = 300;
 
-    function normaliseName(name) {
-        return String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
-    }
 
     function reviewCardHtml(r) {
         var name = escapeHtml(r.name);
@@ -423,20 +420,20 @@ function highlightAllergens(ingredients, allergens) {
             '</div>';
     }
 
+    // Section shell with an empty grid — filled by loadReviews() with the live
+    // reviews, or the hand-picked fallback if they can't be loaded.
     function buildReviews() {
-        var cards = HAND_PICKED_REVIEWS.slice(0, REVIEWS_TO_SHOW).map(reviewCardHtml).join('');
-
         return '<section class="section-reviews">' +
             '<div class="container">' +
             '<div class="text-center mb-5">' +
             '<span class="section-label">What people are saying</span>' +
             '<h2 class="section-heading">Reviews from our customers</h2>' +
-            '<div class="reviews-stars-header">' +
-            '<span class="reviews-stars">' + starsHtml(5) + '</span>' +
-            '<span class="reviews-rating-text">5.0 on Google</span>' +
+            '<div class="reviews-stars-header" hidden>' +
+            '<span class="reviews-stars"></span>' +
+            '<span class="reviews-rating-text"></span>' +
             '</div>' +
             '</div>' +
-            '<div class="reviews-grid">' + cards + '</div>' +
+            '<div class="reviews-grid reviews-grid--loading" aria-busy="true"></div>' +
             '<p class="reviews-attribution"><i class="fab fa-google me-1"></i>Reviews from Google</p>' +
             '<div class="text-center mt-4">' +
             '<a href="https://g.page/r/CSBdm8qyxasfEAE/review" target="_blank" rel="noopener" class="btn btn-brand rounded-pill px-4">' +
@@ -452,45 +449,63 @@ function highlightAllergens(ingredients, allergens) {
             '</section>';
     }
 
-    // Swaps the fallback cards for the live Google reviews. On any failure the
-    // fallback stays in place.
-    function loadLiveReviews(section) {
+    function renderReviews(section, reviews, rating, ratingText) {
+        var grid = section.querySelector('.reviews-grid');
+        grid.innerHTML = reviews.map(reviewCardHtml).join('');
+        grid.classList.remove('reviews-grid--loading');
+        grid.removeAttribute('aria-busy');
+
+        section.querySelector('.reviews-stars').innerHTML = starsHtml(rating);
+        section.querySelector('.reviews-rating-text').textContent = ratingText;
+        section.querySelector('.reviews-stars-header').hidden = false;
+    }
+
+    // Shows the live Google reviews. Falls back to the hand-picked ones only if
+    // the request fails, returns nothing, or takes longer than the timeout — and
+    // if live reviews arrive after a timeout fallback, they still replace it.
+    function loadReviews(section) {
+        var showingLive = false;
+        var showingFallback = false;
+
+        function showFallback() {
+            if (showingLive || showingFallback) return;
+            showingFallback = true;
+            renderReviews(section, HAND_PICKED_REVIEWS.slice(0, FALLBACK_REVIEWS_TO_SHOW), 5, '5.0 on Google');
+        }
+
+        var timeout = setTimeout(showFallback, LIVE_REVIEWS_TIMEOUT_MS);
+
         fetch('/.netlify/functions/get-reviews')
             .then(function (res) {
                 if (!res.ok) throw new Error('get-reviews HTTP ' + res.status);
                 return res.json();
             })
             .then(function (data) {
-                if (!data || !Array.isArray(data.reviews) || !data.reviews.length) return;
-
-                // Live first, then hand-picked ones not already shown (matched by name)
-                var shownNames = data.reviews.map(function (r) { return normaliseName(r.name); });
-                var topUp = HAND_PICKED_REVIEWS.filter(function (r) {
-                    return shownNames.indexOf(normaliseName(r.name)) === -1;
-                });
-                var reviews = data.reviews.concat(topUp).slice(0, REVIEWS_TO_SHOW);
-                section.querySelector('.reviews-grid').innerHTML = reviews.map(reviewCardHtml).join('');
-
-                var rating = Number(data.overallRating);
-                var total = Number(data.totalReviews);
-                if (rating) {
-                    section.querySelector('.reviews-stars').innerHTML = starsHtml(rating);
-                    section.querySelector('.reviews-rating-text').textContent =
-                        rating.toFixed(1) + ' on Google' + (total ? ' (' + total + ' reviews)' : '');
+                if (!data || !Array.isArray(data.reviews) || !data.reviews.length) {
+                    throw new Error('get-reviews returned no reviews');
                 }
+                clearTimeout(timeout);
+                showingLive = true;
+
+                var rating = Number(data.overallRating) || 5;
+                var total = Number(data.totalReviews);
+                renderReviews(section, data.reviews, rating,
+                    rating.toFixed(1) + ' on Google' + (total ? ' (' + total + ' reviews)' : ''));
             })
             .catch(function (err) {
+                clearTimeout(timeout);
                 console.warn('Could not load live reviews, showing fallback:', err);
+                showFallback();
             });
     }
 
     // Reviews — home page only. The section is inserted synchronously so the
-    // scroll-reveal observer in index.html finds it; live reviews fill in after.
+    // scroll-reveal observer in index.html finds it; reviews fill in after.
     if (activePage() === 'home') {
         var ctaBanner = document.querySelector('.section-cta');
         if (ctaBanner) {
             ctaBanner.insertAdjacentHTML('beforebegin', buildReviews());
-            loadLiveReviews(document.querySelector('.section-reviews'));
+            loadReviews(document.querySelector('.section-reviews'));
         }
     }
 

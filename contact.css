@@ -733,27 +733,43 @@ textarea.form-control {
     grid-column: 1 / -1;
 }
 
-/* Featured (seasonal) card — soft brand tint so it stands out without
-   looking already-selected */
+/* Christmas card — matches the homepage callout: white, red writing,
+   candy-cane border */
 .topic-card--featured {
-    background: linear-gradient(135deg, var(--cream) 0%, #f3e2fb 100%);
-    border-color: rgba(171, 29, 121, 0.45);
+    border: 6px solid transparent;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        var(--candy-cane) border-box;
 }
 
 .topic-card--featured .topic-title {
-    color: var(--pink-dark);
-    font-size: 1.1rem;
+    font-family: 'Grandstander', 'Lato', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--xmas-red);
 }
 
-.topic-card--featured:hover {
-    background: linear-gradient(135deg, var(--cream) 0%, #f3e2fb 100%);
-    border-color: var(--pink);
+.topic-card--featured:hover,
+.topic-card--featured.selected {
+    /* keep the border transparent so the candy-cane stripes show through
+       (the shared .topic-card hover/selected states set a solid pink border) */
+    border-color: transparent;
+    background:
+        linear-gradient(var(--xmas-red-tint), var(--xmas-red-tint)) padding-box,
+        var(--candy-cane) border-box;
 }
 
 .topic-card--featured.selected {
-    background: linear-gradient(135deg, var(--cream) 0%, #f3e2fb 100%);
-    border-color: var(--pink);
-    box-shadow: 0 0 0 4px rgba(171, 29, 121, 0.15), 0 4px 18px rgba(171, 29, 121, 0.18);
+    box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.18), 0 4px 18px rgba(200, 16, 46, 0.2);
+}
+
+.topic-card--featured .topic-check {
+    border-color: rgba(200, 16, 46, 0.35);
+}
+
+.topic-card--featured.selected .topic-check {
+    background: var(--xmas-red);
+    border-color: var(--xmas-red);
 }
 
 .topic-badge {
@@ -763,36 +779,52 @@ textarea.form-control {
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    background: var(--pink);
+    background: var(--xmas-red);
     color: white;
     border-radius: 50px;
     padding: 4px 12px;
     margin-bottom: 10px;
 }
 
-/* Key dates banner */
+/* Details step heading when a Christmas order is being built */
+.is-xmas #step2Title {
+    font-family: 'Grandstander', 'Lato', sans-serif;
+    font-weight: 800;
+    color: var(--xmas-red);
+}
+
+/* Key dates banner — solid Christmas green so the dates can't be missed */
 .xmas-note {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    background: var(--cream);
-    border: 2px solid var(--pink-light);
+    flex-direction: column;
+    gap: 10px;
+    background: var(--xmas-green);
     border-radius: 14px;
-    padding: 14px 18px;
+    padding: 16px 20px;
     margin-bottom: 24px;
     font-family: 'Lato', sans-serif;
-    font-size: 0.9rem;
-    color: var(--body-text);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 6px 18px rgba(30, 123, 60, 0.25);
+}
+
+.xmas-note__row {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
 }
 
 .xmas-note i {
-    color: var(--pink);
+    color: #e2c27a; /* gold */
     width: 18px;
-    margin-right: 4px;
+    flex-shrink: 0;
+    text-align: center;
 }
 
 .xmas-note strong {
-    color: var(--deep);
+    color: #fff;
+    white-space: nowrap;
 }
 
 .xmas-hint {
@@ -841,7 +873,7 @@ textarea.form-control {
 }
 
 .xmas-product__toggle:focus-visible {
-    outline: 2px solid var(--pink);
+    outline: 2px solid var(--xmas-red);
     outline-offset: -2px;
 }
 
@@ -879,7 +911,7 @@ textarea.form-control {
 .xmas-product__from {
     font-family: 'Lato', sans-serif;
     font-weight: 700;
-    color: var(--pink-dark);
+    color: var(--xmas-red);
     white-space: nowrap;
 }
 
@@ -888,7 +920,7 @@ textarea.form-control {
     font-family: 'Lato', sans-serif;
     font-size: 0.75rem;
     font-weight: 700;
-    background: var(--pink);
+    background: var(--xmas-green);
     color: white;
     border-radius: 50px;
     padding: 2px 10px;
@@ -900,7 +932,7 @@ textarea.form-control {
 }
 
 .xmas-product__chevron {
-    color: var(--pink);
+    color: var(--xmas-red);
     transition: transform 0.2s ease;
 }
 
@@ -925,8 +957,29 @@ textarea.form-control {
 }
 
 .xmas-option.has-qty {
-    border-left-color: var(--pink);
-    background: #fdf5ff;
+    border-left-color: var(--xmas-red);
+    background: var(--xmas-red-tint);
+}
+
+.xmas-menu .serving-btn {
+    color: var(--xmas-red);
+}
+
+.xmas-menu .serving-btn:hover,
+.xmas-product__toggle:hover {
+    background: var(--xmas-red-tint);
+}
+
+/* Collection day pills in Christmas red */
+#xmasCollection .pill-option:hover {
+    border-color: var(--xmas-red);
+    color: var(--xmas-red);
+}
+
+#xmasCollection .pill-option.selected {
+    background: var(--xmas-red);
+    border-color: var(--xmas-red);
+    color: white;
 }
 
 /* Single-option products: name, price and counter on one row */
@@ -940,7 +993,7 @@ textarea.form-control {
         row-gap: 10px;
     }
 
-    .xmas-option--inline .xmas-product__info {
+    .xmas-option--inline .xmas-product__main {
         grid-column: 1 / -1;
     }
 }
@@ -954,7 +1007,7 @@ textarea.form-control {
 .xmas-option__price {
     font-family: 'Lato', sans-serif;
     font-weight: 700;
-    color: var(--pink-dark);
+    color: var(--xmas-red);
 }
 
 /* Compact version of the shared serving counter */
@@ -975,7 +1028,8 @@ textarea.form-control {
     align-items: center;
     margin-top: 12px;
     padding: 12px 18px;
-    background: var(--cream);
+    background: var(--xmas-red-tint);
+    border: 2px solid rgba(200, 16, 46, 0.2);
     border-radius: 12px;
     font-family: 'Lato', sans-serif;
     font-weight: 700;
@@ -983,6 +1037,283 @@ textarea.form-control {
 }
 
 .xmas-total strong {
+    font-family: 'Grandstander', 'Lato', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: var(--xmas-red);
+}
+
+
+/* ── Christmas: candy-cane frame + elf around the whole form ──────────────
+   --xmas-season (while preorders are open): reserves the border + elf space
+   so nothing jumps. --xmas (Christmas topic selected): shows the stripes. */
+.form-card--xmas-season {
+    --elf-w: 92px;
+    position: relative;
+    border: 10px solid transparent;
+    /* headroom so the elf doesn't sit on the step indicator */
+    margin-top: 48px;
+}
+
+.form-card--xmas {
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        var(--candy-cane) border-box;
+}
+
+.form-card__elf {
+    position: absolute;
+    right: -20px;
+    /* seat line (96% of width) sits on the frame's top edge */
+    top: calc(-10px - var(--elf-w) * 0.96);
+    width: var(--elf-w);
+    height: calc(var(--elf-w) * 1.3);
+    pointer-events: none;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.form-card__elf[hidden] {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .form-card--xmas-season {
+        --elf-w: 64px;
+        border-width: 7px;
+        margin-top: 36px;
+    }
+
+    .form-card__elf {
+        right: -8px;
+        top: calc(-7px - var(--elf-w) * 0.96);
+    }
+}
+
+/* Product photo + name/description */
+.xmas-product__main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+}
+
+.xmas-product__img {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(42, 26, 46, 0.15);
+}
+
+@media (max-width: 500px) {
+    .xmas-product__img {
+        width: 56px;
+        height: 56px;
+    }
+}
+
+.xmas-photo-note {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #999;
+    margin: 8px 0 0;
+}
+
+/* Custom Christmas cake add-on */
+.xmas-cake {
+    border: 2px dashed rgba(200, 16, 46, 0.4);
+    border-radius: 16px;
+    margin-top: 20px;
+    background: var(--xmas-red-tint);
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.xmas-cake.is-on {
+    border-style: solid;
+    border-color: var(--xmas-red);
+    background: #fff;
+}
+
+.xmas-cake__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+}
+
+.xmas-cake__icon {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.xmas-cake__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.xmas-cake__title {
+    font-family: 'Grandstander', 'Lato', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--xmas-red);
+}
+
+.xmas-cake__desc {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.xmas-cake__toggle {
+    flex-shrink: 0;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--xmas-red);
+    background: #fff;
+    border: 2px solid var(--xmas-red);
+    border-radius: 50px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.xmas-cake__toggle:hover {
+    background: var(--xmas-red-tint);
+}
+
+.xmas-cake__toggle[aria-pressed="true"] {
+    background: var(--xmas-green);
+    border-color: var(--xmas-green);
+    color: #fff;
+}
+
+.xmas-cake__fields {
+    padding: 4px 16px 8px;
+    border-top: 1px solid rgba(200, 16, 46, 0.2);
+    padding-top: 20px;
+}
+
+#xmasCakeFlavour .pill-option:hover {
+    border-color: var(--xmas-red);
+    color: var(--xmas-red);
+}
+
+#xmasCakeFlavour .pill-option.selected {
+    background: var(--xmas-red);
+    border-color: var(--xmas-red);
+    color: #fff;
+}
+
+@media (max-width: 500px) {
+    .xmas-cake__head {
+        flex-wrap: wrap;
+    }
+
+    .xmas-cake__toggle {
+        width: 100%;
+    }
+}
+
+/* Total: price plus "+ custom cake" note */
+.xmas-total {
+    margin-top: 20px;
+}
+
+.xmas-total__value {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.xmas-total__value small {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.xmas-total__value small[hidden] {
+    display: none;
+}
+
+/* Star item (e.g. Becca's Christmas Bundle) — warm gold highlight + badge */
+.xmas-product--featured {
+    background: linear-gradient(135deg, #fffaf0 0%, #fff1d6 100%);
+    box-shadow: inset 4px 0 0 #e2b04a;
+}
+
+.xmas-product--featured .xmas-option.has-qty {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.xmas-product--featured .xmas-product__img {
+    width: 84px;
+    height: 84px;
+    border: 3px solid #e2b04a;
+}
+
+.xmas-product--featured .xmas-product__name {
     font-size: 1.15rem;
-    color: var(--pink-dark);
+    font-weight: 700;
+}
+
+.xmas-product__badge {
+    align-self: flex-start;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--xmas-red);
+    color: #fff;
+    border-radius: 50px;
+    padding: 3px 10px;
+    margin-bottom: 5px;
+}
+
+.xmas-product__badge i {
+    color: #f5d77a;
+}
+
+@media (max-width: 500px) {
+    .xmas-product--featured .xmas-product__img {
+        width: 68px;
+        height: 68px;
+    }
+}
+
+/* Cupcake box sizes: "Box of 4 · £14" heading with a counter per flavour */
+.xmas-size {
+    padding: 6px 0;
+}
+
+.xmas-size + .xmas-size {
+    border-top: 1px dashed var(--pink-light);
+}
+
+.xmas-size__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0 2px 12px;
+}
+
+.xmas-size__head .xmas-option__label {
+    font-weight: 700;
+    color: var(--deep);
+}
+
+.xmas-option--flavour {
+    grid-template-columns: 1fr auto;
+    padding-left: 28px;
+}
+
+.xmas-option--flavour .xmas-option__label {
+    font-size: 0.88rem;
 }

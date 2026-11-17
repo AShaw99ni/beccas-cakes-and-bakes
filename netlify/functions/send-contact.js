@@ -1,20 +1,21 @@
 const nodemailer = require('nodemailer');
 const CHRISTMAS_MENU = require('../../christmas-menu.js');
 
-// Re-price a Christmas order from the menu file — never trust prices from the browser.
-// Returns { lines, total } or { error } if the order is invalid.
-function priceChristmasOrder(items, collection) {
+// Check + re-price a Christmas order from the menu file — never trust prices from the browser.
+// Returns { lines, total, slot, cake } or { error } if the order is invalid.
+function priceChristmasOrder(items, collectionId, cakeInput) {
     if (Date.now() >= Date.parse(CHRISTMAS_MENU.CLOSES_AT)) {
         return { error: 'Christmas preorders have now closed.' };
     }
-    if (!CHRISTMAS_MENU.COLLECTION_DAYS.includes(collection)) {
-        return { error: 'Please choose a valid collection day.' };
+
+    const slot = CHRISTMAS_MENU.COLLECTION_SLOTS.find(s => s.id === collectionId);
+    if (!slot) {
+        return { error: 'Please choose a valid collection slot.' };
     }
 
+    // Every orderable unit, incl. cupcake boxes per flavour (e.g. "cupcake-12:mix")
     const options = {};
-    CHRISTMAS_MENU.PRODUCTS.forEach(p =>
-        p.options.forEach(o => { options[o.id] = { ...o, product: p.name }; })
-    );
+    CHRISTMAS_MENU.listOrderOptions().forEach(u => { options[u.id] = u; });
 
     const lines = (Array.isArray(items) ? items : [])
         .map(item => {
@@ -25,12 +26,31 @@ function priceChristmasOrder(items, collection) {
         })
         .filter(Boolean);
 
-    if (!lines.length) {
-        return { error: 'Please add at least one item to your Christmas order.' };
+    // Optional custom Christmas cake — same required fields as the form
+    let cake = null;
+    if (cakeInput) {
+        const spec = CHRISTMAS_MENU.CUSTOM_CAKE;
+        const servings = Number(cakeInput.servings);
+        const design = String(cakeInput.design || '').trim().slice(0, 2000);
+        // A listed flavour, or the customer's own via "Other"
+        const flavour = String(cakeInput.flavour || '').trim().slice(0, 100);
+        if (!Number.isInteger(servings) || servings < 1 || servings > spec.MAX_SERVINGS ||
+            !flavour || !design) {
+            return { error: 'Please complete all the custom Christmas cake details.' };
+        }
+        cake = { servings, flavour, design };
     }
 
-    return { lines, total: lines.reduce((sum, l) => sum + l.lineTotal, 0) };
+    if (!lines.length && !cake) {
+        return { error: 'Please add at least one item or a custom Christmas cake to your order.' };
+    }
+
+    return { lines, total: lines.reduce((sum, l) => sum + l.lineTotal, 0), slot, cake };
 }
+
+// Free-text from customers goes into HTML emails — escape it
+const escapeHtml = str => String(str).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const formatPrice = n => '£' + (Number.isInteger(n) ? n : n.toFixed(2));
 
@@ -50,12 +70,12 @@ exports.handler = async function (event) {
         bakeTypes, cakeServings, cakeFlavour, cakeDesign,
         cupcakeServings, cupcakeFlavours, cupcakeDesign,
         traybakeItems, traybakeDate,
-        xmasItems, xmasCollection,
+        xmasItems, xmasCollection, xmasCake,
         message, images } = payload;
 
     let xmasOrder = null;
     if (topic === 'christmas') {
-        xmasOrder = priceChristmasOrder(xmasItems, xmasCollection);
+        xmasOrder = priceChristmasOrder(xmasItems, xmasCollection, xmasCake);
         if (xmasOrder.error) {
             return { statusCode: 400, body: JSON.stringify({ error: xmasOrder.error }) };
         }
@@ -199,7 +219,7 @@ exports.handler = async function (event) {
                 <strong style="font-family:Arial,sans-serif;font-size:13px;color:${pink};">🎂 Cake</strong>
             </td></tr>`;
             orderRows += row('Servings', cakeServings);
-            orderRows += row('Flavour', cakeFlavour);
+            orderRows += row('Flavour', cakeFlavour && escapeHtml(cakeFlavour));
             orderRows += designBlock('Design ideas', cakeDesign);
         }
 
@@ -240,8 +260,21 @@ exports.handler = async function (event) {
                     ${formatPrice(xmasOrder.total)}
                 </td>
             </tr>`;
-        detailRows = section('Christmas order', xmasRows) +
-            section('Collection', row('Where', CHRISTMAS_MENU.COLLECTION_LOCATION) + row('When', xmasCollection));
+        const { slot, cake } = xmasOrder;
+        detailRows = '';
+        if (xmasOrder.lines.length) {
+            detailRows += section('Christmas order', xmasRows);
+        }
+        if (cake) {
+            detailRows += section(`🎂 ${CHRISTMAS_MENU.CUSTOM_CAKE.name}`,
+                row('Servings', cake.servings) +
+                row('Flavour', escapeHtml(cake.flavour)) +
+                row('Price', 'On request — Becca will quote') +
+                designBlock('Design ideas', escapeHtml(cake.design)));
+        }
+        detailRows += section('Collection',
+            row('Where', CHRISTMAS_MENU.COLLECTION_LOCATION) +
+            row('When', `${slot.day}, ${slot.hours}`));
     }
 
     const messageBlock = message ? section('Message',
@@ -305,11 +338,19 @@ exports.handler = async function (event) {
         textLines.push(`Date: ${traybakeDate || '—'}`);
     }
     if (xmasOrder) {
-        textLines.push('', '🎄 Christmas order');
-        xmasOrder.lines.forEach(l =>
-            textLines.push(`  ${l.qty} × ${l.product} (${l.label}) — ${formatPrice(l.lineTotal)}`));
-        textLines.push(`  Total: ${formatPrice(xmasOrder.total)}`, '',
-            `Collection: ${CHRISTMAS_MENU.COLLECTION_LOCATION}, ${xmasCollection}`);
+        if (xmasOrder.lines.length) {
+            textLines.push('', '🎄 Christmas order');
+            xmasOrder.lines.forEach(l =>
+                textLines.push(`  ${l.qty} × ${l.product} (${l.label}) — ${formatPrice(l.lineTotal)}`));
+            textLines.push(`  Total: ${formatPrice(xmasOrder.total)}`);
+        }
+        if (xmasOrder.cake) {
+            textLines.push('', `🎂 ${CHRISTMAS_MENU.CUSTOM_CAKE.name} (price on request)`,
+                `  Servings: ${xmasOrder.cake.servings}`,
+                `  Flavour:  ${xmasOrder.cake.flavour}`,
+                `  Design:   ${xmasOrder.cake.design}`);
+        }
+        textLines.push('', `Collection: ${CHRISTMAS_MENU.COLLECTION_LOCATION}, ${xmasOrder.slot.day}, ${xmasOrder.slot.hours}`);
     }
     if (message) textLines.push('', `Message:`, message);
 

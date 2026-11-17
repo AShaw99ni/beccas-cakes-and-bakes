@@ -1,4 +1,38 @@
 const nodemailer = require('nodemailer');
+const CHRISTMAS_MENU = require('../../christmas-menu.js');
+
+// Re-price a Christmas order from the menu file — never trust prices from the browser.
+// Returns { lines, total } or { error } if the order is invalid.
+function priceChristmasOrder(items, collection) {
+    if (Date.now() >= Date.parse(CHRISTMAS_MENU.CLOSES_AT)) {
+        return { error: 'Christmas preorders have now closed.' };
+    }
+    if (!CHRISTMAS_MENU.COLLECTION_DAYS.includes(collection)) {
+        return { error: 'Please choose a valid collection day.' };
+    }
+
+    const options = {};
+    CHRISTMAS_MENU.PRODUCTS.forEach(p =>
+        p.options.forEach(o => { options[o.id] = { ...o, product: p.name }; })
+    );
+
+    const lines = (Array.isArray(items) ? items : [])
+        .map(item => {
+            const option = options[item && item.id];
+            const qty = Number(item && item.qty);
+            if (!option || !Number.isInteger(qty) || qty < 1 || qty > CHRISTMAS_MENU.MAX_QTY) return null;
+            return { ...option, qty, lineTotal: option.price * qty };
+        })
+        .filter(Boolean);
+
+    if (!lines.length) {
+        return { error: 'Please add at least one item to your Christmas order.' };
+    }
+
+    return { lines, total: lines.reduce((sum, l) => sum + l.lineTotal, 0) };
+}
+
+const formatPrice = n => '£' + (Number.isInteger(n) ? n : n.toFixed(2));
 
 exports.handler = async function (event) {
     if (event.httpMethod !== 'POST') {
@@ -16,7 +50,16 @@ exports.handler = async function (event) {
         bakeTypes, cakeServings, cakeFlavour, cakeDesign,
         cupcakeServings, cupcakeFlavours, cupcakeDesign,
         traybakeItems, traybakeDate,
+        xmasItems, xmasCollection,
         message, images } = payload;
+
+    let xmasOrder = null;
+    if (topic === 'christmas') {
+        xmasOrder = priceChristmasOrder(xmasItems, xmasCollection);
+        if (xmasOrder.error) {
+            return { statusCode: 400, body: JSON.stringify({ error: xmasOrder.error }) };
+        }
+    }
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -183,6 +226,24 @@ exports.handler = async function (event) {
         detailRows = section('Event details', traybakeRows);
     }
 
+    if (xmasOrder) {
+        const cell = `font-family:Arial,sans-serif;font-size:15px;color:${deep};padding:8px 0;vertical-align:top;`;
+        let xmasRows = xmasOrder.lines.map(l => `
+            <tr>
+                <td style="${cell}">${l.qty} &times; ${l.product} <span style="color:${muted};">(${l.label})</span></td>
+                <td align="right" style="${cell}white-space:nowrap;">${formatPrice(l.lineTotal)}</td>
+            </tr>`).join('');
+        xmasRows += `
+            <tr>
+                <td style="${cell}font-weight:700;border-top:1px solid ${pinkLight};">Total</td>
+                <td align="right" style="${cell}font-weight:700;color:${pink};border-top:1px solid ${pinkLight};">
+                    ${formatPrice(xmasOrder.total)}
+                </td>
+            </tr>`;
+        detailRows = section('Christmas order', xmasRows) +
+            section('Collection', row('Where', CHRISTMAS_MENU.COLLECTION_LOCATION) + row('When', xmasCollection));
+    }
+
     const messageBlock = message ? section('Message',
         `<tr><td colspan="2" style="padding:12px 0;font-family:Arial,sans-serif;
             font-size:15px;color:${deep};line-height:1.65;white-space:pre-wrap;">
@@ -242,6 +303,13 @@ exports.handler = async function (event) {
             traybakeItems.forEach(item => textLines.push(`  ${item.name}: ${item.qty} servings`));
         }
         textLines.push(`Date: ${traybakeDate || '—'}`);
+    }
+    if (xmasOrder) {
+        textLines.push('', '🎄 Christmas order');
+        xmasOrder.lines.forEach(l =>
+            textLines.push(`  ${l.qty} × ${l.product} (${l.label}) — ${formatPrice(l.lineTotal)}`));
+        textLines.push(`  Total: ${formatPrice(xmasOrder.total)}`, '',
+            `Collection: ${CHRISTMAS_MENU.COLLECTION_LOCATION}, ${xmasCollection}`);
     }
     if (message) textLines.push('', `Message:`, message);
 
@@ -312,7 +380,7 @@ exports.handler = async function (event) {
         await transporter.sendMail({
             from: `"Becca's Cakes and Bakes" <${process.env.NOTIFY_EMAIL_USER}>`,
             to: email,
-            subject: `We've received your enquiry! 🎂`,
+            subject: xmasOrder ? `We've received your Christmas preorder! 🎄` : `We've received your enquiry! 🎂`,
             text: [`Hi ${fname},`, '', `Thanks for getting in touch! Becca has received your enquiry and will get back to you within 72 hours.`, '', ...textLines, '', 'Becca x'].join('\n'),
             html: emailWrapper(`We've got your enquiry, ${fname}!`, customerBody),
         });

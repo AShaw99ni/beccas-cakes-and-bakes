@@ -93,6 +93,16 @@
                                 drop us a message.</div>
                             <div class="topic-check"><i class="fas fa-check"></i></div>
                         </div>
+                        <!-- Removed automatically once CHRISTMAS_MENU.CLOSES_AT has passed -->
+                        <div class="topic-card topic-card--wide topic-card--featured" data-topic="christmas" tabindex="0">
+                            <span class="topic-badge">Limited time · Closes 20th Dec</span>
+                            <span class="topic-icon">🎄</span>
+                            <div class="topic-title">Christmas Preorders</div>
+                            <div class="topic-desc">Pick &amp; mix treat boxes, cupcake boxes, fruit cake and Becca's
+                                Christmas Bundle. Order by midnight 20th December · Collect from Comber on 23rd &amp;
+                                24th December.</div>
+                            <div class="topic-check"><i class="fas fa-check"></i></div>
+                        </div>
                     </div>
 
                     <div class="form-nav form-nav--end">
@@ -312,6 +322,39 @@
                         </div>
                     </div>
 
+                    <!-- Christmas preorder fields (shown only for christmas topic) -->
+                    <div id="extraFields-christmas" class="extra-fields">
+                        <hr class="field-divider">
+
+                        <div class="xmas-note">
+                            <div><i class="far fa-calendar-alt"></i> Preorders close at <strong>midnight on 20th
+                                    December</strong></div>
+                            <div><i class="fas fa-map-marker-alt"></i> Collection from <strong>Comber</strong> on
+                                <strong>23rd &amp; 24th December</strong></div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Your order <span class="req">*</span></label>
+                            <p class="xmas-hint">Tap a box to see its sizes, then use + and − to add as many as you'd like.</p>
+                            <!-- Products rendered from christmas-menu.js -->
+                            <div id="xmasItems" class="xmas-menu"></div>
+                            <div class="xmas-total">
+                                <span>Order total</span>
+                                <strong id="xmasTotal">£0</strong>
+                            </div>
+                            <div class="error-msg" id="err-xmasItems">Please add at least one item to your order.
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Collection day <span class="req">*</span></label>
+                            <div class="pill-group" id="xmasCollection"></div>
+                            <div class="error-msg" id="err-xmasCollection">Please choose a collection day.</div>
+                        </div>
+
+                        <p class="xmas-hint">Nothing is charged now — Becca will be in touch to confirm your order.</p>
+                    </div>
+
                     <!-- Message (always shown) -->
                     <div class="field-group field-group--top-gap">
                         <label for="message" id="messageLabel">Your message <span
@@ -372,6 +415,7 @@
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./site-config.js"></script>
+    <script src="./christmas-menu.js"></script>
     <script src="./components.js"></script>
 
     <script>
@@ -380,7 +424,11 @@
             traybake: '🏢 Corporate Event',
             event: '🎉 Collaboration / Market Enquiry',
             other: '💬 General Enquiry',
+            christmas: '🎄 Christmas Preorder',
         };
+
+        // Topics where the message box is optional (the form fields cover what Becca needs)
+        const OPTIONAL_MESSAGE_TOPICS = ['custom', 'christmas'];
 
         let state = {
             topic: null,
@@ -389,6 +437,8 @@
             cakeFlavour: null,
             cupcakeFlavours: [],
             traybakeItems: [],
+            xmasQty: {},          // { optionId: qty } — see christmas-menu.js
+            xmasCollection: null,
             images: []
         };
 
@@ -435,10 +485,9 @@
             state.topic = card.dataset.topic;
         });
 
-        document.getElementById('step1Next').addEventListener('click', () => {
-            if (!state.topic) return;
-
-            ['custom', 'traybake'].forEach(t => {
+        // Show the right extra fields, title and message label for the chosen topic
+        function applyTopic() {
+            ['custom', 'traybake', 'christmas'].forEach(t => {
                 const el = document.getElementById(`extraFields-${t}`);
                 if (el) el.style.display = state.topic === t ? 'block' : 'none';
             });
@@ -448,17 +497,22 @@
                 traybake: 'Tell us about your event',
                 event: 'Tell us about the collaboration',
                 other: 'What would you like to know?',
+                christmas: 'Build your Christmas order',
             };
 
-            document.getElementById('step2Title').textContent = titles[state.topic];
+            document.getElementById('step2Title').textContent = titles[state.topic] || 'Tell us more';
 
             const msgLabel = document.getElementById('messageLabel');
-            if (state.topic === 'custom') {
+            if (OPTIONAL_MESSAGE_TOPICS.includes(state.topic)) {
                 msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
             } else {
                 msgLabel.innerHTML = 'Your message <span class="req">*</span>';
             }
+        }
 
+        document.getElementById('step1Next').addEventListener('click', () => {
+            if (!state.topic) return;
+            applyTopic();
             goTo(2);
         });
 
@@ -651,6 +705,132 @@
         setupPills('cakeFlavourPills', false, 'cakeFlavour');
         setupPills('cupcakeFlavourPills', true, 'cupcakeFlavours');
 
+        /* ─────────────────────────────
+           CHRISTMAS PREORDERS
+           Menu, prices and dates come from christmas-menu.js
+        ───────────────────────────── */
+        const XMAS_OPEN = Date.now() < Date.parse(CHRISTMAS_MENU.CLOSES_AT);
+        const formatPrice = n => '£' + (Number.isInteger(n) ? n : n.toFixed(2));
+
+        // Flat list of every orderable option, with its product name attached
+        const XMAS_OPTIONS = CHRISTMAS_MENU.PRODUCTS.flatMap(p =>
+            p.options.map(o => ({ ...o, product: p.name }))
+        );
+
+        // [{ product, label, price, qty, lineTotal }] for every option with qty > 0
+        function xmasOrderLines() {
+            return XMAS_OPTIONS
+                .filter(o => state.xmasQty[o.id] > 0)
+                .map(o => ({ ...o, qty: state.xmasQty[o.id], lineTotal: o.price * state.xmasQty[o.id] }));
+        }
+
+        const xmasOrderTotal = () => xmasOrderLines().reduce((sum, l) => sum + l.lineTotal, 0);
+
+        if (!XMAS_OPEN) {
+            // Preorders closed — take the option away entirely
+            document.querySelector('.topic-card[data-topic="christmas"]')?.remove();
+        } else {
+            const menuEl = document.getElementById('xmasItems');
+            const picker = (p, o) => `
+                <div class="serving-picker serving-picker--sm">
+                    <button type="button" class="serving-btn" data-action="dec" aria-label="Remove one ${p.name} ${o.label}">−</button>
+                    <span class="serving-val" aria-live="polite">0</span>
+                    <button type="button" class="serving-btn" data-action="inc" aria-label="Add one ${p.name} ${o.label}">+</button>
+                </div>`;
+
+            const info = p => `
+                <span class="xmas-product__info">
+                    <span class="xmas-product__name">${p.name}</span>
+                    <span class="xmas-product__desc">${p.desc}</span>
+                </span>`;
+
+            menuEl.innerHTML = CHRISTMAS_MENU.PRODUCTS.map((p, i) => {
+                // Single-option products (fruit cake, bundle): price + counter inline, nothing to expand
+                if (p.options.length === 1) {
+                    const o = p.options[0];
+                    return `
+                        <div class="xmas-product xmas-product--single">
+                            <div class="xmas-option xmas-option--inline" data-id="${o.id}">
+                                ${info(p)}
+                                <span class="xmas-option__price">${formatPrice(o.price)}</span>
+                                ${picker(p, o)}
+                            </div>
+                        </div>`;
+                }
+
+                // Multi-size products: collapsed header showing "From £x", sizes revealed on tap
+                const from = Math.min(...p.options.map(o => o.price));
+                return `
+                    <div class="xmas-product">
+                        <button type="button" class="xmas-product__toggle" aria-expanded="false" aria-controls="xmas-opts-${i}">
+                            ${info(p)}
+                            <span class="xmas-product__meta">
+                                <span class="xmas-product__count" hidden></span>
+                                <span class="xmas-product__from">From ${formatPrice(from)}</span>
+                                <i class="fas fa-chevron-down xmas-product__chevron" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                        <div class="xmas-product__options" id="xmas-opts-${i}" hidden>
+                            ${p.options.map(o => `
+                                <div class="xmas-option" data-id="${o.id}">
+                                    <span class="xmas-option__label">${o.label}</span>
+                                    <span class="xmas-option__price">${formatPrice(o.price)}</span>
+                                    ${picker(p, o)}
+                                </div>`).join('')}
+                        </div>
+                    </div>`;
+            }).join('');
+
+            // Badge on a collapsed header so added items stay visible, e.g. "2 added"
+            function updateProductCount(productEl) {
+                const badge = productEl.querySelector('.xmas-product__count');
+                if (!badge) return;
+                const n = [...productEl.querySelectorAll('.xmas-option')]
+                    .reduce((sum, r) => sum + (state.xmasQty[r.dataset.id] || 0), 0);
+                badge.textContent = `${n} added`;
+                badge.hidden = n === 0;
+            }
+
+            menuEl.addEventListener('click', e => {
+                const toggle = e.target.closest('.xmas-product__toggle');
+                if (toggle) {
+                    const open = toggle.getAttribute('aria-expanded') !== 'true';
+                    toggle.setAttribute('aria-expanded', open);
+                    toggle.closest('.xmas-product').classList.toggle('is-open', open);
+                    document.getElementById(toggle.getAttribute('aria-controls')).hidden = !open;
+                    return;
+                }
+
+                const btn = e.target.closest('.serving-btn');
+                if (!btn) return;
+                const row = btn.closest('.xmas-option');
+                const id = row.dataset.id;
+                const current = state.xmasQty[id] || 0;
+                const next = btn.dataset.action === 'inc'
+                    ? Math.min(current + 1, CHRISTMAS_MENU.MAX_QTY)
+                    : Math.max(current - 1, 0);
+
+                state.xmasQty[id] = next;
+                row.querySelector('.serving-val').textContent = next;
+                row.classList.toggle('has-qty', next > 0);
+                updateProductCount(row.closest('.xmas-product'));
+                document.getElementById('xmasTotal').textContent = formatPrice(xmasOrderTotal());
+
+                if (next > 0) {
+                    menuEl.classList.remove('error');
+                    document.getElementById('err-xmasItems').classList.remove('show');
+                }
+            });
+
+            const collectionEl = document.getElementById('xmasCollection');
+            collectionEl.innerHTML = CHRISTMAS_MENU.COLLECTION_DAYS
+                .map(d => `<div class="pill-option" data-val="${d}">${d}</div>`).join('');
+
+            setupPills('xmasCollection', false, 'xmasCollection', () => {
+                document.getElementById('err-xmasCollection').classList.remove('show');
+            });
+        }
+
         const validators = {
             fname: { rules: ["required"] },
             lname: { rules: ["required"] },
@@ -693,8 +873,16 @@
                 rules: ["requiredIfTraybake"]
             },
 
+            xmasItems: {
+                rules: ["requiredIfXmasItems"]
+            },
+
+            xmasCollection: {
+                rules: ["requiredIfXmasCollection"]
+            },
+
             message: {
-                rules: ["requiredIfNotCustom"]
+                rules: ["requiredIfMessageNeeded"]
             }
         };
 
@@ -719,6 +907,8 @@
                 cupcakeFlavours: "err-cupcakeFlavours",
                 cupcakeDesign: "err-cupcakeDesign",
                 traybakeDate: "err-traybakeDate",
+                xmasItems: "err-xmasItems",
+                xmasCollection: "err-xmasCollection",
                 message: "err-message"
             };
 
@@ -743,8 +933,14 @@
                 requiredIfCustom: (id) =>
                     state.topic !== 'custom' || !!document.getElementById(id)?.value?.trim(),
 
-                requiredIfNotCustom: (id) =>
-                    state.topic === 'custom' || !!document.getElementById(id)?.value?.trim(),
+                requiredIfMessageNeeded: (id) =>
+                    OPTIONAL_MESSAGE_TOPICS.includes(state.topic) || !!document.getElementById(id)?.value?.trim(),
+
+                requiredIfXmasItems: () =>
+                    state.topic !== 'christmas' || xmasOrderLines().length > 0,
+
+                requiredIfXmasCollection: () =>
+                    state.topic !== 'christmas' || !!state.xmasCollection,
 
                 requiredIfTraybake: (id) =>
                     state.topic !== 'traybake' || !!document.getElementById(id)?.value?.trim(),
@@ -857,6 +1053,12 @@
                 payload.traybakeDate = g('traybakeDate');
             }
 
+            if (state.topic === 'christmas') {
+                // Only ids + quantities are sent — the server re-prices from christmas-menu.js
+                payload.xmasItems = xmasOrderLines().map(l => ({ id: l.id, qty: l.qty }));
+                payload.xmasCollection = state.xmasCollection;
+            }
+
             try {
                 const res = await fetch('/.netlify/functions/send-contact', {
                     method: 'POST',
@@ -938,6 +1140,18 @@
                 if (trayDate) lines.push('', `📅 Date: ${trayDate}`);
             }
 
+            if (state.topic === 'christmas') {
+                lines.push('', '🎄 Your order:');
+                xmasOrderLines().forEach(l => {
+                    lines.push(`   ${l.qty} × ${l.product} (${l.label}) — ${formatPrice(l.lineTotal)}`);
+                });
+                lines.push(
+                    `   Total: ${formatPrice(xmasOrderTotal())}`,
+                    '',
+                    `📍 Collection: ${CHRISTMAS_MENU.COLLECTION_LOCATION}, ${state.xmasCollection}`
+                );
+            }
+
             const messageVal = document.getElementById('message')?.value?.trim();
             lines.push('', `💬 Message:\n${messageVal || '—'}`);
 
@@ -962,26 +1176,7 @@
             card.classList.add('selected');
             state.topic = topic;
 
-            ['custom', 'traybake'].forEach(t => {
-                const el = document.getElementById(`extraFields-${t}`);
-                if (el) el.style.display = state.topic === t ? 'block' : 'none';
-            });
-
-            const titles = {
-                custom: 'Tell us about your occasion',
-                traybake: 'Tell us about your event',
-                event: 'Tell us about the collaboration',
-                other: 'What would you like to know?',
-            };
-            document.getElementById('step2Title').textContent = titles[topic] || 'Tell us more';
-
-            const msgLabel = document.getElementById('messageLabel');
-            if (topic === 'custom') {
-                msgLabel.innerHTML = 'Your message <span class="optional">(optional)</span>';
-            } else {
-                msgLabel.innerHTML = 'Your message <span class="req">*</span>';
-            }
-
+            applyTopic();
             goTo(2);
 
             if (occasion) {

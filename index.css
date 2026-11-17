@@ -172,6 +172,71 @@
     color: white;
 }
 
+/* Christmas preorders callout — frosted card below the hero buttons */
+.hero__xmas {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.75rem;
+    padding: 0.7rem 0.75rem 0.7rem 1.1rem;
+    max-width: 560px;
+    text-align: left;
+    text-decoration: none;
+    color: var(--deep);
+    background: var(--cream);
+    border: 2px solid var(--pink-light);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(42, 26, 46, 0.45);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.85s both;
+}
+
+.hero__xmas:hover,
+.hero__xmas:focus-visible {
+    color: var(--deep);
+    border-color: var(--pink);
+    box-shadow: 0 14px 34px rgba(42, 26, 46, 0.55);
+    transform: translateY(-2px);
+}
+
+.hero__xmas-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.hero__xmas-text {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    color: var(--body-text);
+    line-height: 1.35;
+}
+
+.hero__xmas-text strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--pink-dark);
+}
+
+/* Brand pink pill, matching the Shop Now button */
+.hero__xmas-cta {
+    flex-shrink: 0;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    background: var(--pink);
+    color: white;
+    border-radius: 50px;
+    padding: 0.55rem 1.1rem;
+    white-space: nowrap;
+}
+
+.hero__xmas:hover .hero__xmas-cta {
+    background: var(--pink-dark);
+}
+
 /* Animated scroll cue at the bottom */
 .hero__scroll-cue {
     position: absolute;
@@ -234,6 +299,23 @@
         text-align: center;
     }
 
+    .hero__xmas {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        max-width: 320px;
+        margin-top: 1.25rem;
+        padding: 0.9rem 1rem;
+    }
+
+    .hero__xmas-text {
+        flex-basis: calc(100% - 2.5rem);
+    }
+
+    .hero__xmas-cta {
+        width: 100%;
+    }
+
     /* Scroll cue hidden — content pushing the fold makes it redundant */
     .hero__scroll-cue {
         display: none;
@@ -258,6 +340,11 @@
     .hero__tagline {
         font-size: 0.9rem;
         margin-bottom: 1rem;
+    }
+
+    .hero__xmas {
+        margin-top: 1rem;
+        padding: 0.5rem 0.6rem 0.5rem 0.9rem;
     }
 }
 

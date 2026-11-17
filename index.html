@@ -41,6 +41,17 @@
                 <a href="./shop.html" class="btn btn-brand rounded-pill px-4">Shop Now</a>
                 <a href="./contact.html" class="hero__ghost-btn">Custom Orders</a>
             </div>
+
+            <!-- Christmas preorders callout — auto-hides after data-expires (see script at bottom) -->
+            <a href="./contact.html?topic=other" class="hero__xmas" data-expires="2026-12-21T00:00:00">
+                <span class="hero__xmas-icon" aria-hidden="true">🎄</span>
+                <span class="hero__xmas-text">
+                    <strong>Christmas preorders are now open</strong>
+                    <span>Order by midnight 20th Dec</span>
+                    <span>Collect from Comber 23rd &amp; 24th Dec</span>
+                </span>
+                <span class="hero__xmas-cta">Preorder <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+            </a>
         </div>
         <a href="#about" class="hero__scroll-cue" aria-label="Scroll down">
             <i class="fas fa-chevron-down"></i>
@@ -408,6 +419,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./site-config.js"></script>
     <script src="./components.js"></script>
+
+    <!-- Hide seasonal callouts once their data-expires date has passed -->
+    <script>
+        document.querySelectorAll('[data-expires]').forEach(function (el) {
+            if (new Date() >= new Date(el.getAttribute('data-expires'))) el.remove();
+        });
+    </script>
 
     <!-- Scroll reveal -->
     <script>

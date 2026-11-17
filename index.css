@@ -176,9 +176,9 @@
 .hero__xmas {
     display: inline-flex;
     align-items: center;
-    gap: 0.9rem;
-    margin-top: 1.75rem;
-    padding: 0.7rem 0.75rem 0.7rem 1.1rem;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 1.1rem 1.25rem 1.1rem 1.75rem;
     max-width: 560px;
     text-align: left;
     text-decoration: none;
@@ -200,24 +200,21 @@
     transform: translateY(-2px);
 }
 
-.hero__xmas-icon {
-    font-size: 1.6rem;
-    line-height: 1;
-}
-
 .hero__xmas-text {
     display: flex;
     flex-direction: column;
     font-family: 'Lato', sans-serif;
     font-size: 0.85rem;
     color: var(--body-text);
-    line-height: 1.35;
+    line-height: 1.5;
+    gap: 0.15rem;
 }
 
 .hero__xmas-text strong {
     font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--pink-dark);
+    margin-bottom: 0.3rem;
 }
 
 /* Brand pink pill, matching the Shop Now button */
@@ -304,12 +301,13 @@
         justify-content: center;
         text-align: center;
         max-width: 320px;
-        margin-top: 1.25rem;
-        padding: 0.9rem 1rem;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding: 1.25rem 1.25rem;
     }
 
     .hero__xmas-text {
-        flex-basis: calc(100% - 2.5rem);
+        flex-basis: 100%;
     }
 
     .hero__xmas-cta {
@@ -343,8 +341,9 @@
     }
 
     .hero__xmas {
+        gap: 1.5rem;
         margin-top: 1rem;
-        padding: 0.5rem 0.6rem 0.5rem 0.9rem;
+        padding: 0.7rem 0.9rem 0.7rem 1.25rem;
     }
 }
 

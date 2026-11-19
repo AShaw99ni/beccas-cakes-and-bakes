@@ -12,6 +12,17 @@ var CUPCAKE_FLAVOURS = [
 ];
 var CUPCAKE_MIX = { id: 'mix', label: 'Vanilla & chocolate mix' };
 
+// Treats customers choose from to fill pick & mix boxes (and the 4 treats in the Bundle).
+// Any combination is allowed — the only rule is a box holds exactly its number of treats.
+var PICK_MIX_TREATS = [
+    { id: 'choc-orange-brownie', name: 'Chocolate Orange Brownies', image: 'img/christmas/treats/choc-orange-brownies.jpg' },
+    { id: 'old-school-cake', name: 'Old School Cake', image: 'img/christmas/treats/old-school-cake.jpg' },
+    { id: 'christmas-cookie', name: 'Christmas Cookies', image: 'img/christmas/treats/christmas-cookies.jpg' },
+    { id: 'cinnamon-blondie', name: 'Cinnamon Roll Blondies', image: 'img/christmas/treats/cinnamon-roll-blondies.jpg' },
+    { id: 'candy-cane-krispie', name: 'Candy Cane Rice Krispie Bars', note: 'White chocolate', image: 'img/christmas/treats/candy-cane-krispie-bars.jpg' },
+    { id: 'brookie', name: 'Brookies', image: 'img/christmas/treats/brookies.jpg' },
+];
+
 var CHRISTMAS_MENU = {
     // Preorders close at midnight on 20th December (UK time = UTC in winter)
     CLOSES_AT: '2026-12-21T00:00:00Z',
@@ -28,6 +39,8 @@ var CHRISTMAS_MENU = {
     // Max of any single option per order — anything bigger, Becca can arrange by message
     MAX_QTY: 20,
 
+    PICK_MIX_TREATS: PICK_MIX_TREATS,
+
     PRODUCTS: [
         {
             name: 'Becca\'s Christmas Bundle',
@@ -36,18 +49,20 @@ var CHRISTMAS_MENU = {
             // Star item: shown first, highlighted, with a badge
             featured: true,
             badge: 'Star item',
+            // picks = how many pick & mix treats the customer chooses per bundle
             options: [
-                { id: 'bundle', label: 'Bundle', price: 35 },
+                { id: 'bundle', label: 'Bundle', price: 35, picks: 4 },
             ],
         },
         {
             name: 'Christmas Pick & Mix Treat Box',
-            desc: 'A festive mix of Becca\'s treats.',
+            desc: 'Choose your own festive favourites to fill the box.',
             image: 'img/christmas/pick-mix.jpg',
+            // picks = how many treats the customer chooses for each box
             options: [
-                { id: 'pickmix-4', label: 'Box of 4', price: 13 },
-                { id: 'pickmix-6', label: 'Box of 6', price: 19 },
-                { id: 'pickmix-8', label: 'Box of 8', price: 25 },
+                { id: 'pickmix-4', label: 'Box of 4', price: 13, picks: 4 },
+                { id: 'pickmix-6', label: 'Box of 6', price: 19, picks: 6 },
+                { id: 'pickmix-8', label: 'Box of 8', price: 25, picks: 8 },
             ],
         },
         {
@@ -97,6 +112,7 @@ var CHRISTMAS_MENU = {
                         product: p.name,
                         label: f ? o.label + ', ' + f.label : o.label,
                         price: o.price,
+                        picks: o.picks || 0, // > 0 = customer fills each box with this many treats
                     });
                 });
             });

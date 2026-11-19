@@ -340,6 +340,8 @@
                             <p class="xmas-hint">Tap a box to see its sizes, then use + and − to add as many as you'd like.</p>
                             <!-- Products rendered from christmas-menu.js -->
                             <div id="xmasItems" class="xmas-menu"></div>
+                            <div class="error-msg" id="err-xmasBoxes">Please fill every pick &amp; mix box — each one
+                                needs its full number of treats.</div>
                             <p class="xmas-photo-note">Photos are for illustration — every bake is handmade, so yours
                                 will be lovingly unique.</p>
                         </div>
@@ -490,6 +492,7 @@
             cupcakeFlavours: [],
             traybakeItems: [],
             xmasQty: {},          // { optionId: qty } — see christmas-menu.js
+            xmasBoxes: {},        // { optionId: [ { treatId: count }, … ] } — one entry per pick & mix box / bundle
             xmasCollection: null, // collection slot id
             xmasCustomOn: false,  // custom Christmas cake added?
             xmasCakeFlavour: null,
@@ -813,8 +816,26 @@
         function xmasOrderLines() {
             return XMAS_OPTIONS
                 .filter(o => state.xmasQty[o.id] > 0)
-                .map(o => ({ ...o, qty: state.xmasQty[o.id], lineTotal: o.price * state.xmasQty[o.id] }));
+                .map(o => ({
+                    ...o,
+                    qty: state.xmasQty[o.id],
+                    lineTotal: o.price * state.xmasQty[o.id],
+                    boxes: o.picks ? (state.xmasBoxes[o.id] || []) : undefined,
+                }));
         }
+
+        // Pick & mix: customers fill each box (and each bundle's 4 treats) with any mix of treats
+        const XMAS_TREATS = CHRISTMAS_MENU.PICK_MIX_TREATS;
+        const boxCount = box => Object.values(box).reduce((sum, n) => sum + n, 0);
+
+        // Every pick & mix box / bundle in the order has exactly its number of treats
+        const xmasBoxesComplete = () =>
+            xmasOrderLines().every(l => !l.picks || l.boxes.every(b => boxCount(b) === l.picks));
+
+        // "2 × Brookies, 2 × Christmas Cookies"
+        const describeBox = box => XMAS_TREATS
+            .filter(t => box[t.id] > 0)
+            .map(t => `${box[t.id]} × ${t.name}`).join(', ');
 
         const xmasOrderTotal = () => xmasOrderLines().reduce((sum, l) => sum + l.lineTotal, 0);
 
@@ -867,6 +888,7 @@
                                 <span class="xmas-option__price">${formatPrice(o.price)}</span>
                                 ${picker(p, o)}
                             </div>
+                            ${o.picks ? `<div class="xmas-boxes" data-boxes-for="${o.id}"></div>` : ''}
                         </div>`;
                 }
 
@@ -899,10 +921,52 @@
                                     <span class="xmas-option__label">${o.label}</span>
                                     <span class="xmas-option__price">${formatPrice(o.price)}</span>
                                     ${picker(p, o)}
-                                </div>`).join('')}
+                                </div>
+                                ${o.picks ? `<div class="xmas-boxes" data-boxes-for="${o.id}"></div>` : ''}`).join('')}
                         </div>
                     </div>`;
             }).join('');
+
+            // "Choose your treats" panel for each pick & mix box / bundle of one option
+            function renderBoxes(unitId) {
+                const unit = XMAS_OPTIONS.find(u => u.id === unitId);
+                const boxes = state.xmasBoxes[unitId] || [];
+                const container = menuEl.querySelector(`[data-boxes-for="${unitId}"]`);
+
+                container.innerHTML = boxes.map((box, b) => {
+                    const count = boxCount(box);
+                    const full = count === unit.picks;
+                    const title = boxes.length > 1 ? `${unit.label} #${b + 1}` : unit.label;
+                    return `
+                        <div class="xmas-box${full ? ' is-full' : ''}">
+                            <div class="xmas-box__head">
+                                <span class="xmas-box__title">${title} — choose ${unit.picks} treats</span>
+                                <span class="xmas-box__status">${full
+                                    ? '<i class="fas fa-check" aria-hidden="true"></i> Full'
+                                    : `${count} of ${unit.picks} chosen`}</span>
+                            </div>
+                            <div class="xmas-treats">
+                                ${XMAS_TREATS.map(t => {
+                                    const n = box[t.id] || 0;
+                                    return `
+                                        <div class="xmas-treat${n ? ' has-qty' : ''}">
+                                            <img class="xmas-treat__img" src="./${t.image}" alt="" width="44" height="44" loading="lazy">
+                                            <span class="xmas-treat__name">${t.name}${t.note ? `<small>${t.note}</small>` : ''}</span>
+                                            <div class="serving-picker serving-picker--xs">
+                                                <button type="button" class="serving-btn" data-treat="${t.id}" data-unit="${unitId}"
+                                                    data-box="${b}" data-action="dec" ${n === 0 ? 'disabled' : ''}
+                                                    aria-label="Remove one ${t.name} from ${title}">−</button>
+                                                <span class="serving-val">${n}</span>
+                                                <button type="button" class="serving-btn" data-treat="${t.id}" data-unit="${unitId}"
+                                                    data-box="${b}" data-action="inc" ${full ? 'disabled' : ''}
+                                                    aria-label="Add one ${t.name} to ${title}">+</button>
+                                            </div>
+                                        </div>`;
+                                }).join('')}
+                            </div>
+                        </div>`;
+                }).join('');
+            }
 
             // Badge on a collapsed header so added items stay visible, e.g. "2 added"
             function updateProductCount(productEl) {
@@ -924,6 +988,24 @@
                     return;
                 }
 
+                // Treat counters inside a pick & mix box — never more than the box holds
+                const treatBtn = e.target.closest('[data-treat]');
+                if (treatBtn) {
+                    const { unit, box, treat, action } = treatBtn.dataset;
+                    const contents = state.xmasBoxes[unit][Number(box)];
+                    const picks = XMAS_OPTIONS.find(u => u.id === unit).picks;
+                    const n = contents[treat] || 0;
+
+                    if (action === 'inc' && boxCount(contents) < picks) contents[treat] = n + 1;
+                    if (action === 'dec' && n > 0) {
+                        if (n === 1) delete contents[treat]; else contents[treat] = n - 1;
+                    }
+
+                    renderBoxes(unit);
+                    if (xmasBoxesComplete()) document.getElementById('err-xmasBoxes').classList.remove('show');
+                    return;
+                }
+
                 const btn = e.target.closest('.serving-btn');
                 if (!btn) return;
                 const row = btn.closest('.xmas-option');
@@ -935,6 +1017,14 @@
 
                 state.xmasQty[id] = next;
                 row.querySelector('.serving-val').textContent = next;
+
+                // One "choose your treats" panel per box: add an empty one, or drop the last
+                if (XMAS_OPTIONS.find(u => u.id === id).picks) {
+                    const boxes = state.xmasBoxes[id] = state.xmasBoxes[id] || [];
+                    while (boxes.length < next) boxes.push({});
+                    boxes.length = next;
+                    renderBoxes(id);
+                }
                 row.classList.toggle('has-qty', next > 0);
                 updateProductCount(row.closest('.xmas-product'));
                 updateXmasTotal();
@@ -1044,6 +1134,10 @@
                 rules: ["requiredIfXmasItems"]
             },
 
+            xmasBoxes: {
+                rules: ["requiredIfXmasBoxesFull"]
+            },
+
             xmasCakeServings: {
                 rules: ["requiredIfXmasCake"]
             },
@@ -1087,6 +1181,7 @@
                 cupcakeDesign: "err-cupcakeDesign",
                 traybakeDate: "err-traybakeDate",
                 xmasItems: "err-xmasItems",
+                xmasBoxes: "err-xmasBoxes",
                 xmasCakeServings: "err-xmasCakeServings",
                 xmasCakeFlavour: "err-xmasCakeFlavour",
                 xmasCakeDesign: "err-xmasCakeDesign",
@@ -1120,6 +1215,17 @@
 
                 requiredIfXmasItems: () =>
                     state.topic !== 'christmas' || xmasOrderLines().length > 0 || state.xmasCustomOn,
+
+                requiredIfXmasBoxesFull: () => {
+                    if (state.topic !== 'christmas' || xmasBoxesComplete()) return true;
+                    // Open any collapsed product that still has a box to fill, so it's easy to find
+                    document.querySelectorAll('.xmas-box:not(.is-full)').forEach(box => {
+                        const product = box.closest('.xmas-product');
+                        const toggle = product.querySelector('.xmas-product__toggle');
+                        if (toggle && toggle.getAttribute('aria-expanded') !== 'true') toggle.click();
+                    });
+                    return false;
+                },
 
                 requiredIfXmasCake: (id) =>
                     !xmasCustomActive() || !!document.getElementById(id)?.value?.trim(),
@@ -1245,7 +1351,9 @@
 
             if (state.topic === 'christmas') {
                 // Only ids + quantities are sent — the server re-prices from christmas-menu.js
-                payload.xmasItems = xmasOrderLines().map(l => ({ id: l.id, qty: l.qty }));
+                payload.xmasItems = xmasOrderLines().map(l => (
+                    l.picks ? { id: l.id, qty: l.qty, boxes: l.boxes } : { id: l.id, qty: l.qty }
+                ));
                 payload.xmasCollection = state.xmasCollection;
                 payload.xmasCake = xmasCustomActive() ? {
                     servings: g('xmasCakeServings'),
@@ -1341,6 +1449,10 @@
                     lines.push('', '🎄 Your order:');
                     orderLines.forEach(l => {
                         lines.push(`   ${l.qty} × ${l.product} (${l.label}) — ${formatPrice(l.lineTotal)}`);
+                        (l.boxes || []).forEach((box, b) => {
+                            const name = l.boxes.length > 1 ? `${l.label} #${b + 1}` : l.label;
+                            lines.push(`      ${name}: ${describeBox(box)}`);
+                        });
                     });
                     lines.push(`   Total: ${formatPrice(xmasOrderTotal())}`);
                 }

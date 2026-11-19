@@ -1317,3 +1317,129 @@ textarea.form-control {
 .xmas-option--flavour .xmas-option__label {
     font-size: 0.88rem;
 }
+
+/* ── Pick & mix: "choose your treats" panel for each box / bundle ───────── */
+.xmas-boxes:empty {
+    display: none;
+}
+
+.xmas-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 4px 0 10px 12px;
+}
+
+.xmas-product--single .xmas-boxes {
+    padding: 0 16px 16px;
+}
+
+.xmas-box {
+    background: #fff;
+    border: 2px solid rgba(226, 176, 74, 0.6); /* soft gold while filling */
+    border-radius: 14px;
+    padding: 12px;
+    transition: border-color 0.2s;
+}
+
+.xmas-box.is-full {
+    border-color: var(--xmas-green);
+}
+
+.xmas-box__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin-bottom: 10px;
+}
+
+.xmas-box__title {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--deep);
+}
+
+.xmas-box__status {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #b7791f; /* amber: still choosing */
+    white-space: nowrap;
+}
+
+.xmas-box.is-full .xmas-box__status {
+    color: var(--xmas-green);
+}
+
+/* Treat list: 2 columns on wider screens, 1 on phones */
+.xmas-treats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+@media (max-width: 560px) {
+    .xmas-treats {
+        grid-template-columns: 1fr;
+    }
+}
+
+.xmas-treat {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--pink-light);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.xmas-treat.has-qty {
+    background: var(--xmas-red-tint);
+    border-color: rgba(200, 16, 46, 0.35);
+}
+
+.xmas-treat__img {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.xmas-treat__name {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.25;
+    color: var(--body-text);
+}
+
+.xmas-treat__name small {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-style: italic;
+}
+
+/* Extra-compact counter for treats */
+.serving-picker--xs .serving-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+}
+
+.serving-picker--xs .serving-val {
+    min-width: 30px;
+    line-height: 30px;
+    padding: 0 6px;
+    font-size: 0.9rem;
+}
+
+.xmas-menu .serving-btn:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    background: #fff;
+}

@@ -22,9 +22,39 @@ function priceChristmasOrder(items, collectionId, cakeInput) {
             const option = options[item && item.id];
             const qty = Number(item && item.qty);
             if (!option || !Number.isInteger(qty) || qty < 1 || qty > CHRISTMAS_MENU.MAX_QTY) return null;
-            return { ...option, qty, lineTotal: option.price * qty };
+            return { ...option, qty, lineTotal: option.price * qty, rawBoxes: item.boxes };
         })
         .filter(Boolean);
+
+    // Pick & mix boxes / bundles: one box per item ordered, each holding exactly `picks` real treats
+    const treatNames = {};
+    CHRISTMAS_MENU.PICK_MIX_TREATS.forEach(t => { treatNames[t.id] = t.name; });
+
+    for (const line of lines) {
+        const raw = line.rawBoxes;
+        delete line.rawBoxes;
+        if (!line.picks) continue;
+
+        if (!Array.isArray(raw) || raw.length !== line.qty) {
+            return { error: 'Please choose the treats for every pick & mix box.' };
+        }
+        line.boxes = [];
+        for (const box of raw) {
+            const contents = [];
+            let count = 0;
+            for (const [treatId, n] of Object.entries(box || {})) {
+                if (!treatNames[treatId] || !Number.isInteger(n) || n < 0) {
+                    return { error: 'Please choose the treats for every pick & mix box.' };
+                }
+                if (n > 0) contents.push({ name: treatNames[treatId], count: n });
+                count += n;
+            }
+            if (count !== line.picks) {
+                return { error: `Each ${line.label.toLowerCase()} needs exactly ${line.picks} treats.` };
+            }
+            line.boxes.push(contents);
+        }
+    }
 
     // Optional custom Christmas cake — same required fields as the form
     let cake = null;
@@ -47,6 +77,12 @@ function priceChristmasOrder(items, collectionId, cakeInput) {
 
     return { lines, total: lines.reduce((sum, l) => sum + l.lineTotal, 0), slot, cake };
 }
+
+// [{ name, count }] → "2 × Brookies, 2 × Christmas Cookies"
+const describeBox = contents => contents.map(c => `${c.count} × ${c.name}`).join(', ');
+
+// "Box of 6 #2" when there's more than one box of that kind, else just "Box of 6"
+const boxName = (line, i) => line.boxes.length > 1 ? `${line.label} #${i + 1}` : line.label;
 
 // Free-text from customers goes into HTML emails — escape it
 const escapeHtml = str => String(str).replace(/[&<>"']/g, c =>
@@ -248,11 +284,15 @@ exports.handler = async function (event) {
 
     if (xmasOrder) {
         const cell = `font-family:Arial,sans-serif;font-size:15px;color:${deep};padding:8px 0;vertical-align:top;`;
+        const boxCell = `font-family:Arial,sans-serif;font-size:13px;color:${muted};padding:0 0 8px 16px;line-height:1.5;`;
         let xmasRows = xmasOrder.lines.map(l => `
             <tr>
                 <td style="${cell}">${l.qty} &times; ${l.product} <span style="color:${muted};">(${l.label})</span></td>
                 <td align="right" style="${cell}white-space:nowrap;">${formatPrice(l.lineTotal)}</td>
-            </tr>`).join('');
+            </tr>` + (l.boxes || []).map((box, i) => `
+            <tr>
+                <td colspan="2" style="${boxCell}"><strong>${boxName(l, i)}:</strong> ${describeBox(box)}</td>
+            </tr>`).join('')).join('');
         xmasRows += `
             <tr>
                 <td style="${cell}font-weight:700;border-top:1px solid ${pinkLight};">Total</td>
@@ -340,8 +380,10 @@ exports.handler = async function (event) {
     if (xmasOrder) {
         if (xmasOrder.lines.length) {
             textLines.push('', '🎄 Christmas order');
-            xmasOrder.lines.forEach(l =>
-                textLines.push(`  ${l.qty} × ${l.product} (${l.label}) — ${formatPrice(l.lineTotal)}`));
+            xmasOrder.lines.forEach(l => {
+                textLines.push(`  ${l.qty} × ${l.product} (${l.label}) — ${formatPrice(l.lineTotal)}`);
+                (l.boxes || []).forEach((box, i) => textLines.push(`      ${boxName(l, i)}: ${describeBox(box)}`));
+            });
             textLines.push(`  Total: ${formatPrice(xmasOrder.total)}`);
         }
         if (xmasOrder.cake) {

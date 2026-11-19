@@ -18,6 +18,13 @@
     --body-text: #4a3a52;
     --muted: #5a3a6e;
     --navbar-bg: rgba(226, 196, 249, 0.85);
+
+    /* Christmas (seasonal) — homepage callout + contact form preorders */
+    --xmas-red: #c8102e;
+    --xmas-green: #1e7b3c;
+    --xmas-red-tint: #fff4f5;
+    --candy-cane: repeating-linear-gradient(-45deg,
+            #c8102e 0 12px, #fff 12px 20px, #1e7b3c 20px 32px, #fff 32px 40px);
 }
 
 

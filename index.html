@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Grandstander:wght@800&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="shared.css">
@@ -41,6 +41,14 @@
                 <a href="./shop.html" class="btn btn-brand rounded-pill px-4">Shop Now</a>
                 <a href="./contact.html" class="hero__ghost-btn">Custom Orders</a>
             </div>
+
+            <!-- Christmas preorders callout — auto-hides after data-expires (see script at bottom) -->
+            <a href="./contact.html?topic=christmas" class="hero__xmas" data-expires="2026-12-21T00:00:00">
+                <span class="hero__xmas-text">Click here for Christmas preorders</span>
+                <span class="hero__xmas-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                <!-- Elf sitting on the top-left corner (shared illustration) -->
+                <img class="hero__xmas-elf" src="./img/christmas/elf.svg" alt="">
+            </a>
         </div>
         <a href="#about" class="hero__scroll-cue" aria-label="Scroll down">
             <i class="fas fa-chevron-down"></i>
@@ -408,6 +416,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./site-config.js"></script>
     <script src="./components.js"></script>
+
+    <!-- Hide seasonal callouts once their data-expires date has passed -->
+    <script>
+        document.querySelectorAll('[data-expires]').forEach(function (el) {
+            if (new Date() >= new Date(el.getAttribute('data-expires'))) el.remove();
+        });
+    </script>
 
     <!-- Scroll reveal -->
     <script>
